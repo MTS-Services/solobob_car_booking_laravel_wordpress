@@ -21,7 +21,7 @@
 
                     {{-- Right Side - Car Image --}}
                     <div class="flex-1 flex justify-start items-center">
-                        <div class="max-w-[600px] -translate-x-8">
+                        <div class="max-w-[550px] -translate-x-8">
                             <img src="{{ asset('assets/images/banner_car.png') }}" alt="Gray SUV Car"
                                 class="w-full h-auto drop-shadow-2xl" />
                         </div>
