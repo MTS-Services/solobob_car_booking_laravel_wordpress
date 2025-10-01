@@ -1,4 +1,4 @@
-    <section>
+<section>
         {{-- inner banner --}}
         <div class="relative w-full h-[50vh] bg-cover bg-center bg-no-repeat overflow-hidden"
             style="background-image: url('{{ asset('assets/images/inner_banner_bg.png') }}');">
@@ -119,11 +119,47 @@
                 @endforeach
             </div>
 
-            <!-- Custom Pagination -->
+            <!-- Dynamic Pagination -->
             <div class="flex justify-center items-center mt-8 mb-4 space-x-2">
                 @php
                     $currentPage = $this->getPage();
                     $totalPages = $this->totalPages;
+                    
+                    // Calculate page range to display - matching second image pattern
+                    $rangeWithDots = [];
+                    
+                    if ($totalPages <= 5) {
+                        // Show all pages if 5 or less
+                        for ($i = 1; $i <= $totalPages; $i++) {
+                            $rangeWithDots[] = $i;
+                        }
+                    } else {
+                        // Pattern: < 1 ... 3 4 5 ... 7 || >
+                        // Always show first page
+                        $rangeWithDots[] = 1;
+                        
+                        // Determine which pages to show around current page
+                        $start = max(2, $currentPage - 1);
+                        $end = min($totalPages - 1, $currentPage + 1);
+                        
+                        // Add left ellipsis if needed
+                        if ($start > 2) {
+                            $rangeWithDots[] = '...';
+                        }
+                        
+                        // Add pages around current page
+                        for ($i = $start; $i <= $end; $i++) {
+                            $rangeWithDots[] = $i;
+                        }
+                        
+                        // Add right ellipsis if needed
+                        if ($end < $totalPages - 1) {
+                            $rangeWithDots[] = '...';
+                        }
+                        
+                        // Always show last page
+                        $rangeWithDots[] = $totalPages;
+                    }
                 @endphp
 
                 <!-- Previous Button -->
@@ -134,35 +170,29 @@
                     </svg>
                 </button>
 
-                <!-- Page 1 -->
-                <button wire:click="gotoPage(1)"
-                    class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
-                @if ($currentPage === 1) bg-zinc-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
-                    1
-                </button>
+                <!-- Page Numbers -->
+                @foreach ($rangeWithDots as $page)
+                    @if ($page === '...')
+                        <button disabled
+                            class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-400 cursor-default">
+                            ...
+                        </button>
+                    @else
+                        <button wire:click="gotoPage({{ $page }})"
+                            class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
+                        @if ($currentPage === $page) bg-zinc-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
+                            {{ $page }}
+                        </button>
+                    @endif
+                @endforeach
 
-                <!-- Page 2 -->
-                <button wire:click="gotoPage(2)"
-                    class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
-                @if ($currentPage === 2) bg-zinc-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
-                    2
-                </button>
-
-                <!-- Ellipsis (if needed for more pages) -->
-                @if ($totalPages > 3)
-                    <button disabled
-                        class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-400 cursor-default">
-                        ...
-                    </button>
-                @endif
-
-                <!-- Pause Button (matching your design) -->
+                {{-- <!-- Pause Button -->
                 <button
                     class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 transition duration-150">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
                     </svg>
-                </button>
+                </button> --}}
 
                 <!-- Next Button -->
                 <button wire:click="nextPage" @if ($currentPage === $totalPages) disabled @endif

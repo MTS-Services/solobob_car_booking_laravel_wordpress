@@ -9,13 +9,46 @@ class Product extends Component
 {
     use WithPagination;
 
+    public $perPage = 12; // Items per page
+
     /**
      * Get paginated products data.
      */
     public function getProductsProperty()
     {
         // All products data
-        $allProducts = [
+        $allProducts = $this->getAllProductsData();
+
+        // Calculate pagination
+        $currentPage = $this->getPage();
+        $offset = ($currentPage - 1) * $this->perPage;
+        
+        return collect($allProducts)->slice($offset, $this->perPage)->values()->all();
+    }
+
+    /**
+     * Get total number of pages
+     */
+    public function getTotalPagesProperty()
+    {
+        $allProducts = $this->getAllProductsData();
+        return (int) ceil(count($allProducts) / $this->perPage);
+    }
+
+    /**
+     * Get total number of products
+     */
+    public function getTotalProductsProperty()
+    {
+        return count($this->getAllProductsData());
+    }
+
+    /**
+     * All products data - centralized method
+     */
+    public function getAllProductsData()
+    {
+        return [
             [
                 'id' => 1,
                 'name' => '2025 Nissan Kicks S',
@@ -48,6 +81,17 @@ class Product extends Component
                 'features' => ['Sunroof'],
                 'trips' => 7,
                 'image_name' => 'car (3).avif',
+            ],
+            [
+                'id' => 4,
+                'name' => '2022 Ford Mustang GT',
+                'price_per_day' => 180,
+                'location' => 'San Antonio, Texas',
+                'persons' => 4,
+                'tags' => 'Sports Car, Weekend',
+                'features' => ['V8 Engine'],
+                'trips' => 2,
+                'image_name' => 'car (4).avif',
             ],
             [
                 'id' => 5,
@@ -138,29 +182,19 @@ class Product extends Component
                 'image_name' => 'car (12).avif',
             ],
             [
-                'id' => 4,
-                'name' => '2022 Ford Mustang GT',
-                'price_per_day' => 180,
-                'location' => 'San Antonio, Texas',
-                'persons' => 4,
-                'tags' => 'Sports Car, Weekend',
-                'features' => ['V8 Engine'],
-                'trips' => 2,
-                'image_name' => 'car (4).avif',
+                'id' => 13,
+                'name' => '2024 Hyundai Tucson',
+                'price_per_day' => 92,
+                'location' => 'Boston, Massachusetts',
+                'persons' => 5,
+                'tags' => 'SUV, Efficient',
+                'features' => ['Lane Assist'],
+                'trips' => 11,
+                'image_name' => 'car (13).avif',
             ],
+            // Add more products here as needed
+            // The pagination will automatically handle any amount of data
         ];
-
-        // Simulate pagination manually (8 items per page)
-        $perPage = 8;
-        $currentPage = $this->getPage();
-        $offset = ($currentPage - 1) * $perPage;
-        
-        return collect($allProducts)->slice($offset, $perPage)->values()->all();
-    }
-
-    public function getTotalPagesProperty()
-    {
-        return 2; // Since we have 13 products and 8 per page = 2 pages
     }
 
     public function render()
