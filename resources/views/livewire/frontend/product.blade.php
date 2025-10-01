@@ -90,7 +90,7 @@
                         <div class="flex flex-col md:flex-row gap-3 mt-4 sm:mt-6">
 
                             <button
-                                class="flex-1 flex items-center justify-center bg-accent text-white py-2! px-2! text-sm rounded-lg font-semibold shadow-md hover:bg-zinc-700 transition duration-150 transform hover:scale-[1.01]">
+                                class="flex-1 flex items-center justify-center bg-accent  text-white py-2! px-2! text-sm rounded-lg font-semibold shadow-md hover:bg-accent/90 transition duration-150 transform hover:scale-[1.01]">
                                 <flux:icon.book-open class="w-5 h-5 mr-2" />
                                 Book
                             </button>
