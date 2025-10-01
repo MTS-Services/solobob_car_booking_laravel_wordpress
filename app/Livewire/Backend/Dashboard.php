@@ -6,7 +6,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout(
-    'layouts.authenticated',
+    'app',
     [
         'title' => 'Admin Dashboard',
         'breadcrumb' => 'Admin Dashboard',

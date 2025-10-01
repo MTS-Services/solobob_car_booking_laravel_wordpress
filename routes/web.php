@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 // });
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
-require __DIR__.'/frontend.php';
-
+require __DIR__ . '/auth.php';
+require __DIR__ . '/user.php';
+require __DIR__ . '/admin.php';
+require __DIR__ . '/frontend.php';
