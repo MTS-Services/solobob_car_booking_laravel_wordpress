@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder; // Import for Scopes
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /* ================================================================
      * *** MODEL CONSTANTS ***
@@ -52,8 +53,11 @@ class User extends Authenticatable
     public $appends = [
         'created_at_human',
         'updated_at_human',
+        'deleted_at_human',
+
         'created_at_formatted',
         'updated_at_formatted',
+        'deleted_at_formatted',
     ];
 
 
@@ -61,7 +65,21 @@ class User extends Authenticatable
      * *** RELATIONS ***
      ================================================================ */
 
-    //
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by')->select('id', 'name');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by')->select('id', 'name');
+    }
+
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
+    }
+
 
     /* ================================================================
      * *** SCOPES ***
@@ -105,6 +123,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Accessor for human-readable 'deleted_at' time.
+     */
+    public function getDeletedAtHumanAttribute(): string
+    {
+        return $this->deleted_at->diffForHumans();
+    }
+
+    /**
      * Accessor for formatted 'created_at' date (e.g., "01 Jan, 2024 10:30 AM").
      */
     public function getCreatedAtFormattedAttribute(): string
@@ -118,6 +144,13 @@ class User extends Authenticatable
     public function getUpdatedAtFormattedAttribute(): string
     {
         return Carbon::parse($this->updated_at)->format('d M, Y h:i A');
+    }
+    /**
+     * Accessor for formatted 'deleted_at' date.
+     */
+    public function getDeletedAtFormattedAttribute(): string
+    {
+        return Carbon::parse($this->deleted_at)->format('d M, Y h:i A');
     }
 
 

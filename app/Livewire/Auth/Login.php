@@ -26,7 +26,7 @@ class Login extends Component
     /**
      * Handle an incoming authentication request.
      */
-    public function login(): void
+    public function login()
     {
         $this->validate();
 
@@ -44,10 +44,9 @@ class Login extends Component
         Session::regenerate();
 
         if (Auth::user()->is_admin) {
-            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+            return $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
         }
-
-        $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        return $this->redirectIntended(default: route('user.profile', absolute: false), navigate: true);
     }
 
     /**
