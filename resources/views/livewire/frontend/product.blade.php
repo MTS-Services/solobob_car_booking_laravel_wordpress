@@ -25,12 +25,11 @@
                 </div>
             </div>
         </div>
-
         <div class="max-w-7xl bg-white mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 xxs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
                 <!-- Loop through the dynamic products data -->
-                @foreach ($products as $product)
+                @foreach ($this->products as $product)
                     <div
                         class="w-full bg-white rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition duration-300 ease-in-out">
 
@@ -118,6 +117,60 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
+
+            <!-- Custom Pagination -->
+            <div class="flex justify-center items-center mt-8 mb-4 space-x-2">
+                @php
+                    $currentPage = $this->getPage();
+                    $totalPages = $this->totalPages;
+                @endphp
+
+                <!-- Previous Button -->
+                <button wire:click="previousPage" @if ($currentPage === 1) disabled @endif
+                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <!-- Page 1 -->
+                <button wire:click="gotoPage(1)"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
+                @if ($currentPage === 1) bg-cyan-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
+                    1
+                </button>
+
+                <!-- Page 2 -->
+                <button wire:click="gotoPage(2)"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
+                @if ($currentPage === 2) bg-cyan-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
+                    2
+                </button>
+
+                <!-- Ellipsis (if needed for more pages) -->
+                @if ($totalPages > 3)
+                    <button disabled
+                        class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-400 cursor-default">
+                        ...
+                    </button>
+                @endif
+
+                <!-- Pause Button (matching your design) -->
+                <button
+                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 transition duration-150">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />
+                    </svg>
+                </button>
+
+                <!-- Next Button -->
+                <button wire:click="nextPage" @if ($currentPage === $totalPages) disabled @endif
+                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </div>
 

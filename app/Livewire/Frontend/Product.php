@@ -3,19 +3,19 @@
 namespace App\Livewire\Frontend;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Product extends Component
 {
-    // Public property to hold the list of products for the view
-    public $products = [];
+    use WithPagination;
 
     /**
-     * Initialize dummy product data using the car image names provided.
+     * Get paginated products data.
      */
-    public function mount()
+    public function getProductsProperty()
     {
-        // Dummy data for products, assuming images are in assets/images/
-        $this->products = [
+        // All products data
+        $allProducts = [
             [
                 'id' => 1,
                 'name' => '2025 Nissan Kicks S',
@@ -49,7 +49,6 @@ class Product extends Component
                 'trips' => 7,
                 'image_name' => 'car (3).avif',
             ],
-            
             [
                 'id' => 5,
                 'name' => '2025 Tesla Model 3',
@@ -72,7 +71,6 @@ class Product extends Component
                 'trips' => 6,
                 'image_name' => 'car (6).avif',
             ],
-            // 6 NEW ENTRIES ADDED BELOW
             [
                 'id' => 7,
                 'name' => '2024 Subaru Outback',
@@ -151,6 +149,18 @@ class Product extends Component
                 'image_name' => 'car (4).avif',
             ],
         ];
+
+        // Simulate pagination manually (8 items per page)
+        $perPage = 8;
+        $currentPage = $this->getPage();
+        $offset = ($currentPage - 1) * $perPage;
+        
+        return collect($allProducts)->slice($offset, $perPage)->values()->all();
+    }
+
+    public function getTotalPagesProperty()
+    {
+        return 2; // Since we have 13 products and 8 per page = 2 pages
     }
 
     public function render()
