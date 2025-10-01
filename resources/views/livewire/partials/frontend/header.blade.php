@@ -15,6 +15,9 @@
         <flux:navbar.item icon="home" href="{{ route('home') }}" wire:navigate>
             Home
         </flux:navbar.item>
+        <flux:navbar.item icon="cube" href="{{ route('products') }}" wire:navigate>
+            Product
+        </flux:navbar.item>
         <flux:navbar.item icon="rectangle-group" href="{{ route('buttons') }}" wire:navigate>
             Buttons
         </flux:navbar.item>
