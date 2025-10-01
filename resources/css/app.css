@@ -25,23 +25,23 @@
     --color-black: #000000;
     --color-white: #ffffff;
 
-    --color-primary-50: #fff9f6;
-    --color-primary-100: #fff1e9;
-    --color-primary-200: #ffe4d4;
-    --color-primary-300: #ffd3ba;
-    --color-primary-400: #ffbc98;
-    --color-primary-500: #ff9d68;
-    --color-primary-600: #d67a4e;
-    --color-primary-700: #a65f3f;
-    --color-primary-800: #7a4630;
-    --color-primary-900: #573024;
-    --color-primary-950: #301a11;
+    --color-primary-50: #fcf8ef;
+    --color-primary-100: #f8f0db;
+    --color-primary-200: #f0e0b3;
+    --color-primary-300: #e5cd84;
+    --color-primary-400: #dcb65a;
+    --color-primary-500: #B79347;
+    --color-primary-600: #977534;
+    --color-primary-700: #755927;
+    --color-primary-800: #55401c;
+    --color-primary-900: #382a12;
+    --color-primary-950: #1e1608;
 
-    --color-accent-light: #FF9D68;
+    --color-accent-light: #B79347;
     --color-accent-content-light: #7A4630;
     --color-accent-foreground-light: #fffcfb;
 
-    --color-accent-dark: #FFD3BA;
+    --color-accent-dark: #B79347;
     --color-accent-content-dark: #573024;
     --color-accent-foreground-dark: #1a1a1a;
 
@@ -243,11 +243,11 @@
     }
 
     .animated-bg {
-        @apply bg-[length:400%_400%] animate-gradientBG bg-gradient-to-br from-bg-tertiary via-bg-primary to-bg-tertiary;
+        @apply bg-[length: 400%_400%] animate-gradientBG bg-gradient-to-br from-bg-tertiary via-bg-primary to-bg-tertiary;
     }
 
     .dark .animated-bg {
-        @apply bg-[length:400%_400%] animate-gradientBG bg-gradient-to-br from-bg-primary via-bg-primary to-bg-primary;
+        @apply bg-[length: 400%_400%] animate-gradientBG bg-gradient-to-br from-bg-primary via-bg-primary to-bg-primary;
     }
 }
 
@@ -256,7 +256,7 @@
 }
 
 [data-flux-label] {
-    @apply !mb-0 !leading-tight;
+    @apply  !mb-0 !leading-tight;
 }
 
 input:focus[data-flux-control],
