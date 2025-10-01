@@ -1,7 +1,7 @@
     <section>
         {{-- inner banner --}}
         <div class=" w-full bg-gray-50 overflow-hidden h-[65vh]">
-        {{-- <div class="relative w-full h-[65vh] bg-cover bg-center bg-no-repeat overflow-hidden"
+              {{-- <div class="relative w-full h-[65vh] bg-cover bg-center bg-no-repeat overflow-hidden"
             style="background-image: url('{{ asset('assets/images/inner_banner_bg.png') }}');"> --}}
 
             {{-- Overlay (optional, if you want a soft white tint on the image) --}}
