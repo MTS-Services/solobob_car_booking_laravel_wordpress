@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Frontend\Pages;
+namespace App\Livewire\Frontend;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -15,6 +15,6 @@ class Home extends Component
 {
     public function render()
     {
-        return view('livewire.frontend.pages.home');
+        return view('livewire.frontend.home');
     }
 }

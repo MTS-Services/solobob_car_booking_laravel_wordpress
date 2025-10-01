@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Livewire\Backend\UserManagement;
+namespace App\Livewire\Backend\Admin\UserManagement;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout(
-    'layouts.authenticated',
+    'app',
     [
         'title' => 'User Management',
         'breadcrumb' => 'Users',
@@ -17,6 +17,6 @@ class User extends Component
 {
     public function render()
     {
-        return view('livewire.backend.user-management.user');
+        return view('livewire.backend.admin.user-management.user');
     }
 }
