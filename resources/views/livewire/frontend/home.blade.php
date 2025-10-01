@@ -27,7 +27,7 @@
 
         <div class="w-full lg:w-1/2 flex flex-col-reverse lg:flex-row">
             <div class="w-full lg:w-2/3 bg-white flex items-start justify-center p-8 sm:p-12">
-                <div class="w-full max-w-xl">
+                <div class="w-full max-w-xl shadow-lg p-6 rounded-lg border border-gray-200">
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
                     <form class="space-y-4">
@@ -144,7 +144,7 @@
                 <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
                                 <path
                                     d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
                             </svg>
@@ -160,7 +160,7 @@
                 <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
                                 <path
                                     d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                             </svg>
@@ -176,7 +176,7 @@
                 <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
                                 <path
                                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                             </svg>
