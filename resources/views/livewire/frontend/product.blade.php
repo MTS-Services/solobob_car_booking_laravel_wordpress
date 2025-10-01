@@ -137,14 +137,14 @@
                 <!-- Page 1 -->
                 <button wire:click="gotoPage(1)"
                     class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
-                @if ($currentPage === 1) bg-cyan-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
+                @if ($currentPage === 1) bg-zinc-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
                     1
                 </button>
 
                 <!-- Page 2 -->
                 <button wire:click="gotoPage(2)"
                     class="w-10 h-10 flex items-center justify-center rounded-lg font-medium transition duration-150
-                @if ($currentPage === 2) bg-cyan-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
+                @if ($currentPage === 2) bg-zinc-500 text-white @else border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 @endif">
                     2
                 </button>
 
