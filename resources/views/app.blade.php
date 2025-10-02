@@ -75,7 +75,7 @@
                 <livewire:partials.frontend.header />
                 <div class="flex flex-1">
                     <livewire:partials.frontend.sidebar />
-                    <main class="flex-grow p-6">
+                   
                         @if (request()->routeIs('user.*'))
                             <div class="container mx-auto px-1 xs:px-4 pt-8">
                                 <div class="flex gap-4 mb-8">
