@@ -18,7 +18,6 @@ use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 final class UserTable extends PowerGridComponent
 {
     public string $tableName = 'user-table-ugjsxf-table';
-     public string $type = 'user'; 
 
     use WithExport;
 
@@ -44,11 +43,8 @@ final class UserTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        if ($this->type === 'admin') {
-            return User::query()->where('is_admin', true);
-        }
-
         return User::query()->where('is_admin', false);
+        
     }
 
     public function relationSearch(): array
