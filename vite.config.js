@@ -14,5 +14,12 @@ export default defineConfig({
     ],
     server: {
         cors: true,
+        host: '0.0.0.0',
+        port: 3333,
+        strictPort: true,
+        hmr: {
+            host: '192.168.100.30',
+        }
+
     },
 });
