@@ -49,7 +49,7 @@
                                     class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black">
                                 <span class="ml-2 text-gray-600">Keep me logged in</span>
                             </label>
-                            <a href="#" class="text-black font-medium hover:underline">Forgot your password?</a>
+                            <a href="{{ route('password.request') }}" class="text-black font-medium hover:underline">Forgot your password?</a>
                         </div>
 
                         <!-- Sign In Button -->
@@ -126,4 +126,10 @@
             @endif
         </div>
     </div> --}}
+    
 </div>
+
+
+
+
+ 
