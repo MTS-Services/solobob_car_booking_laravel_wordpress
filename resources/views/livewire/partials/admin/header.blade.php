@@ -78,7 +78,7 @@
                         <x-admin.profile-navlink route="#" name="{{ __('Settings') }}" />
                         <x-admin.profile-navlink route="{{ route('logout') }}" logout='true'
                             name="{{ __('Sign Out') }}" /> --}}
-                        {{-- <a href="#"
+                        {{-- <a href="{{route('admin.profile')}}"
                          class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Profile</a>
                      <a href="#"
                          class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a>
