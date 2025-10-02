@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
     [
         'title' => 'Dashboard',
         'breadcrumb' => 'Dashboard',
-        'page_slug' => 'dashboard'
+        'page_slug' => 'user-dashboard'
     ]
 )]
 class Dashboard extends Component
