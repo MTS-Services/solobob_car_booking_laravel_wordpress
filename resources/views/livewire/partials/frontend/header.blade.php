@@ -1,5 +1,5 @@
 <!-- Header -->
-<header x-data="{ toggleMenu: false }" class="bg-white border-b border-gray-200">
+<header x-data="{ toggleMenu: false }" class="bg-white shadow-md w-full">
     <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
 
