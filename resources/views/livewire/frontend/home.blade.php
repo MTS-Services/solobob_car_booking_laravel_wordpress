@@ -1,52 +1,52 @@
 <div class="bg-white max-w[1950px] mx-auto oiverflow-hidden">
-    <div class="flex flex-col lg:flex-row min-h-screen">
-        <div class="w-full lg:w-1/2 bg-gray-100 flex items-center justify-center p-8 sm:p-12">
-            <div class="max-w-xl w-full">
-                <h1 class="text-xl sm:text-5xl font-bold text-black mb-4 sm:mb-4 text-center lg:text-left">
-                    FLEXIBLE CAR RENTALS<br>
-                    FOR GIG WORKERS &<br>
-                    <span class="text-zinc-500">LOCAL BUSINESSES</span>
-                </h1>
-                <p class="text-sm sm:text-lg text-gray-700 mb-6 sm:mb-8 text-center lg:text-left">
-                    Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the
-                    day, we offers a wide range of vehicles to suit your needs.
-                </p>
+    <section class="relative">
+        <div class="container flex flex-col lg:flex-row min-h-screen">
+            <div class="w-full bg-gray-100 flex items-center justify-center px-4">
+                <div class="max-w-xl w-full">
+                    <h1 class="text-xl sm:text-5xl font-bold text-black mb-4 sm:mb-4 text-center lg:text-left">
+                        FLEXIBLE CAR RENTALS<br>
+                        FOR GIG WORKERS &<br>
+                        <span class="text-zinc-500">LOCAL BUSINESSES</span>
+                    </h1>
+                    <p class="text-sm sm:text-lg text-gray-700 mb-6 sm:mb-8 text-center lg:text-left">
+                        Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the
+                        day, we offers a wide range of vehicles to suit your needs.
+                    </p>
 
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <button
-                        class="bg-zinc-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-zinc-600 transition w-full sm:w-auto">
-                        APPLY NOW
-                    </button>
-                    <button
-                        class="bg-white text-black px-8 py-3 rounded-full font-semibold border border-zinc-500 hover:bg-gray-50 transition w-full sm:w-auto">
-                        SEE PRICING & AVAILABILITY
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button
+                            class="bg-zinc-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-zinc-600 transition w-full sm:w-auto">
+                            APPLY NOW
+                        </button>
+                        <button
+                            class="bg-white text-black px-8 py-3 rounded-full font-semibold border border-zinc-500 hover:bg-gray-50 transition w-full sm:w-auto">
+                            SEE PRICING & AVAILABILITY
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="w-full lg:w-1/2 flex flex-col-reverse lg:flex-row">
-            <div class="w-full lg:w-2/3 bg-white flex items-start justify-center p-8 sm:p-12">
-                <div class="w-full max-w-xl shadow-lg p-6 rounded-lg border border-gray-200">
+            <div class="w-full bg-white flex items-start justify-center px-4 z-1">
+                <div class="w-full max-w-xl py-8">
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
                     <form class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <input type="text" placeholder="First Name"
-                                class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                             <input type="text" placeholder="Last Name"
-                                class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <input type="email" placeholder="Email"
-                                class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                             <input type="tel" placeholder="Phone Number"
-                                class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                         </div>
 
                         <textarea placeholder="Message" rows="4"
-                            class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600"></textarea>
+                            class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600"></textarea>
                         <button type="submit"
                             class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
                             SUBMIT
@@ -56,12 +56,12 @@
                             <div>
                                 <label class="block text-zinc-500 font-semibold mb-2">Full Name</label>
                                 <input type="text"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                             </div>
                             <div>
                                 <label class="block text-zinc-500 font-semibold mb-2">Phone Number</label>
                                 <input type="tel"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                             </div>
                         </div>
 
@@ -69,27 +69,28 @@
                             <div>
                                 <label class="block text-zinc-500 font-semibold mb-2">Email Address</label>
                                 <input type="email"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                             </div>
                             <div>
                                 <label class="block text-zinc-500 font-semibold mb-2">Driving License Number</label>
                                 <input type="text"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Upload Driver's License</label>
+                                <label class="block text-zinc-500 font-semibold mb-2">Upload Driver's
+                                    License</label>
                                 <input type="file"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300">
                                 <p class="text-xs text-zinc-500 mt-1">Maximum file size: 2 GB</p>
                             </div>
                             <div>
                                 <label class="block text-zinc-500 font-semibold mb-2">Upload Uber/Lyft Profile
                                     Screenshot</label>
                                 <input type="file"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300">
                                 <p class="text-xs text-zinc-500 mt-1">Maximum file size: 2 GB</p>
                             </div>
                         </div>
@@ -114,19 +115,12 @@
             </div>
 
             <div
-                class="hidden lg:block w-full lg:w-1/3  relative flex items-center justify-center overflow-hidden h-64 lg:h-auto">
-                <div class="absolute inset-0 flex items-end justify-center">
-                    <img src="{{ asset('assets/images/hero-aside.png') }}" alt="City Skyline Illustration"
-                        class="w-full h-full" />
-                </div>
-
-                <div class="absolute bottom-4 left-4 text-white/50 text-base font-sans">
-                    <p>Activate Windows</p>
-                    <p class="text-sm">Go to Settings to activate Windows.</p>
-                </div>
+                class="hidden w-1/3 absolute right-0 top-0 lg:flex items-center justify-center overflow-hidden h-full z-0">
+                <img src="{{ asset('assets/images/hero-aside.png') }}" alt="City Skyline Illustration"
+                    class="w-full h-full object-cover" />
             </div>
         </div>
-    </div>
+    </section>
 
 
     <section class="py-12 px-4 md:px-8 lg:px-16">
@@ -332,7 +326,7 @@
                     <div class="flex gap-4 flex-row-reverse lg:flex-row">
                         <div class="flex-shrink-0 order-first lg:order-last">
                             <div class="w-12 h-12 bg-zinc-500  rounded-lg flex items-center justify-center">
-                                <flux:icon name="credit-card" class="w-7 h-7 text-white"  stroke="white" />
+                                <flux:icon name="credit-card" class="w-7 h-7 text-white" stroke="white" />
                             </div>
                         </div>
                         <div class="text-left lg:text-right">
@@ -363,7 +357,7 @@
             </h2>
 
             <!-- Swiper container -->
-            <div class="swiper mx-4">
+            <div class="swiper mx-4 testimonial-swiper">
                 <div class="swiper-wrapper !pb-8">
                     @foreach ($testimonials as $testimonial)
                         <div class="swiper-slide flex justify-center px-4 sm:px-6 md:px-8">
@@ -392,4 +386,36 @@
         </div>
     </section>
     <!-- End of Testimonials Section -->
+
+    @push('scripts')
+        <script>
+            document.addEventListener('livewire:initialized', function() {
+                const swiper = new Swiper('.testimonial-swiper', {
+                    loop: true,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    breakpoints: {
+                        640: {
+                            slidesPerView: 1,
+                        },
+                        768: {
+                            slidesPerView: 2,
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                        },
+                    },
+                });
+
+            });
+        </script>
+    @endpush
 </div>

@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Frontend;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -53,6 +55,14 @@ class Home extends Component
                 'title' => 'Tester',
             ],
         ];
+    }
+
+    public function logout()
+    {
+        Auth::guard('web')->logout();
+        Session::invalidate();
+        Session::regenerateToken();
+        return $this->redirectRoute('home', navigate: true);
     }
 
     public function render()
