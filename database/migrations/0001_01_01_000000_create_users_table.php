@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Traits\AuditColumnsTrait;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    use SoftDeletes;
+    use AuditColumnsTrait, SoftDeletes;
     /**
      * Run the migrations.
      */
@@ -18,9 +19,15 @@ return new class extends Migration
             $table->id();
             $table->string('name')->index();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('number')->nullable()->index();
+            $table->string('date_of_birth')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('status')->default(User::STATUS_ACTIVE)->index();
             $table->boolean('is_admin')->default(User::ROLE_USER)->index();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('number_verified_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
 
 

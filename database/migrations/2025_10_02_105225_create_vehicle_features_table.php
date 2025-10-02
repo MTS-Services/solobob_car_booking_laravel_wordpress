@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Traits\AuditColumnsTrait;
+use App\Models\VehicleFeature;
 
 return new class extends Migration
 {
@@ -15,9 +16,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('{{ table }}', function (Blueprint $table) {
+        Schema::create('vehicle_features', function (Blueprint $table) {
             $table->id();
 
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('icon')->nullable();
+            $table->tinyInteger('feature_category')->default(VehicleFeature::FEATURE_CATEGORY_OTHER);
 
             
             $table->timestamps();
@@ -31,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('{{ table }}');
+        Schema::dropIfExists('vehicle_features');
     }
 };
