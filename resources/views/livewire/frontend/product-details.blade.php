@@ -1,6 +1,5 @@
 <section class="relative h-full font-sans text-sm m-0 p-0" x-data="{ showModal: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
     @push('styles')
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
         <style>
             /* Hide default Swiper arrows */
             .swiper-button-next::after,
@@ -342,7 +341,6 @@
         </div>
     </div>
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
         <script>
             var swiper = new Swiper(".details-swiper", {
