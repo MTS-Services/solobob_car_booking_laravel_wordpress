@@ -36,9 +36,17 @@
 
                 <!-- Call-to-Action + Mobile Menu Button -->
                 <div class="flex items-center gap-4">
-                    <a href="/register"
-                        class="bg-zinc-700 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full font-medium">
+                    <a href="{{ route('home') }}" wire:navigate
+                        class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full font-medium">
                         EXPLORE OUR CAR
+                    </a>
+                    <a href="{{ route('login') }}" wire:navigate
+                        class="bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                        Sign In
+                    </a>
+                    <a href="{{ route('register') }}" wire:navigate
+                        class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                        Sign Up
                     </a>
 
                     <!-- Mobile Menu Button (Visible only on small screens) -->
