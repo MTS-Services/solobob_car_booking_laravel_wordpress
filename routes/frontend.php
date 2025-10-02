@@ -15,3 +15,4 @@ Route::get('/products/details',ProductDetails::class)->name('product-details');
 
 Route::get('/booking',Booking::class)->name('booking');
 
+ 
