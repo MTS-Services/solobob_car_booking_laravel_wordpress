@@ -10,7 +10,7 @@
             <div class=" text-white text-base bg-accent w-fit px-3 rounded-md">
                 <!-- Dynamic Price -->
                 $99.00 <span
-                    class="text-xs sm:text-sm font-medium text-white ml-1">/Day</span>
+                    class="text-xs sm:text-sm font-medium text-white">/Day</span>
             </div>
         </div>
         <div class="font-bold">
