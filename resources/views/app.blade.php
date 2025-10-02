@@ -38,7 +38,7 @@
     @stack('styles')
 </head>
 
-<body class="h-full max-h-screen antialiased" x-data>
+<body class="h-full max-h-screen antialiased !bg-white" x-data>
 
     @auth
         @if (request()->routeIs('admin.*'))
