@@ -12,9 +12,13 @@
             <div class="flex items-center gap-8">
                 <!-- Navigation Links (Desktop only) -->
                 <nav class="hidden lg:flex items-center gap-8">
-                    <a href="#"
+                    <a href="{{ route('home') }}" wire:navigate
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         HOME
+                    </a>
+                    <a href="{{ route('products') }}" wire:navigate
+                        class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                        PRODUCT
                     </a>
                     <a href="/"
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
