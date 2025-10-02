@@ -80,9 +80,9 @@
                             <div class="container mx-auto px-1 xs:px-4 pt-8">
                                 <div class="flex gap-4 mb-8">
                                     <!-- My Bookings -->
-                                    <a href="{{ route('user.dashboard') }}" wire:navigate
+                                    <a href="{{ route('user.my-bookings') }}" wire:navigate
                                         class="flex-1 text-center lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
-                                            {{ $page_slug === 'user-dashboard' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                            {{ $page_slug === 'user-my-bookings' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
                                         My Bookings
                                     </a>
 
