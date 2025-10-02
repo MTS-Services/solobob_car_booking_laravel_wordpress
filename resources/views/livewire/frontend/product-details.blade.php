@@ -1,4 +1,4 @@
-<section class="relative h-full font-sans text-sm m-0 p-0" x-data="{ showModal: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
+<section class="bg-white" x-data="{ showModal: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
     @push('styles')
         <style>
             /* Hide default Swiper arrows */
@@ -9,7 +9,7 @@
         </style>
     @endpush
     {{-- header section --}}
-    <div class="container mx-auto bg-white flex justify-between items-center py-4 px-3 lg:px-4 xl:px-6 2xl:px-0">
+    <div class="container mx-auto bg-white flex justify-between items-center py-4 px-3 lg:px-4 xl:px-6 2xl:px-2">
         <div class="flex flex-col space-y-2">
             <div class="flex items-center gap-2">
                 <flux:icon name="arrow-left" class="w-5 h-5 cursor-pointer" wire:click="back" />
@@ -24,10 +24,10 @@
             <flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />
         </div>
     </div>
-    <div class="bg-gray-50 pb-10 container mx-auto">
+    <div class=" pb-10 container mx-auto">
         <div class="flex flex-col w-full xl:flex-row gap-6">
             {{-- Left Side - Image Slider --}}
-            <div class="w-full xl:w-2/3">
+            <div class="w-full xl:w-2/3 shadow-lg bg-white px-2 ">
                 <div
                     class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px]  lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
@@ -137,7 +137,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div x-show="showModal" x-transition.opacity.duration.300ms @keydown.escape.window="showModal = false"
         class="fixed inset-0  z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true"
@@ -341,14 +340,16 @@
         </div>
     </div>
     @push('scripts')
-
         <script>
-            var swiper = new Swiper(".details-swiper", {
-                loop: true,
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
+            document.addEventListener('livewire:initialized', function() {
+                const swiper = new Swiper(".details-swiper", {
+                    loop: true,
+                    
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                });
             });
         </script>
         <script>

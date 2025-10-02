@@ -75,7 +75,7 @@
                 <livewire:partials.frontend.header />
                 <div class="flex flex-1">
                     <livewire:partials.frontend.sidebar />
-                    <main class="flex-grow p-6">
+                    <main class="flex-grow bg-white">
                         {{ $slot }}
                     </main>
                 </div>
