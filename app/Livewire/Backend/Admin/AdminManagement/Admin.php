@@ -25,6 +25,8 @@ class Admin extends Component
     public $search = '';
     public $showModal = false;
     public $showDeleteModal = false;
+    public $showDetailsModal = false;
+    public $detailsAdmin = null; // Add this line
     public $editMode = false;
 
     // Form fields
@@ -51,6 +53,16 @@ class Admin extends Component
     {
         $this->resetFields();
         $this->showModal = true;
+    }
+    public function openDetailsModal($id)
+    {
+        $this->detailsAdmin = User::with(['createdBy', 'updatedBy'])->findOrFail($id);
+        $this->showDetailsModal = true;
+    }
+    public function closeDetailsModal()
+    {
+        $this->showDetailsModal = false;
+        $this->detailsAdmin = null;
     }
 
     public function openEditModal($id)
