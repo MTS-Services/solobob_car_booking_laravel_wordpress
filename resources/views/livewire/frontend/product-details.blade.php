@@ -10,7 +10,7 @@
         </style>
     @endpush
     {{-- header section --}}
-    <div class="max-w-7xl mx-auto bg-white flex justify-between items-center py-4">
+    <div class="container mx-auto bg-white flex justify-between items-center py-4 px-3 lg:px-4 xl:px-6 2xl:px-0">
         <div class="flex flex-col space-y-2">
             <div class="flex items-center gap-2">
                 <flux:icon name="arrow-left" class="w-5 h-5 cursor-pointer" wire:click="back" />
@@ -25,11 +25,12 @@
             <flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />
         </div>
     </div>
-    <div class="bg-gray-50 pb-10">
-        <div class="max-w-7xl mx-auto flex  flex-col lg:flex-row gap-6">
+    <div class="bg-gray-50 pb-10 container mx-auto">
+        <div class="flex flex-col w-full xl:flex-row gap-6">
             {{-- Left Side - Image Slider --}}
-            <div class="w-full lg:w-2/3">
-                <div class="swiper mySwiper bg-gray-100 w-full h-96 rounded-lg overflow-hidden relative">
+            <div class="w-full xl:w-2/3">
+                <div
+                    class="swiper mySwiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px]  lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&h=600&fit=crop"
@@ -53,43 +54,40 @@
                         </div>
                     </div>
                     <div
-                        class="swiper-button-next w-10! h-10! bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
-                        <flux:icon name="arrow-right" class="w-5! !h-5 text-gray-800" />
+                        class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                        <flux:icon name="arrow-right" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
                     </div>
                     <div
-                        class="swiper-button-prev w-10! h-10! bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
-                        <flux:icon name="arrow-left" class="w-5! !h-5 text-gray-800" />
+                        class="swiper-button-prev !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                        <flux:icon name="arrow-left" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
                     </div>
                 </div>
 
                 {{-- Price and Details Section --}}
-                <div class="mt-6 space-y-4">
-                    <div class="flex items-center gap-3 text-gray-900">
-                        <span class="text-xl font-semibold">Price $99.00 per day</span>
+                <div class="mt-4 xs:mt-5 px-3 lg:px-4 xl:px-6 2xl:px-0 sm:mt-6 space-y-3 xs:space-y-4">
+                    <div class="flex items-center gap-2 xs:gap-3 text-gray-900">
+                        <span class="text-lg xs:text-xl font-semibold">Price $99.00 per day</span>
                     </div>
 
-                    <div class="flex items-start gap-2 text-gray-700">
-                        <flux:icon name="map-pin" class="w-5 h-5 mt-1 flex-shrink-0" />
-                        <span>Pickup @ 1425 W Airport Fwy Irving TX 75062</span>
+                    <div class="flex items-start gap-1 xs:gap-2 text-gray-700">
+                        <flux:icon name="map-pin" class="w-4 h-4 xs:w-5 xs:h-5 mt-1 flex-shrink-0" />
+                        <span class="text-sm xs:text-base">Pickup @ 1425 W Airport Fwy Irving TX 75062</span>
                     </div>
 
-                    <div class="space-y-2">
-                        <h3 class="font-semibold text-gray-900">Details :</h3>
-                        <p class="text-gray-700">Daily payouts as per Uber Earnings Clock- No waiting weeks—your
-                            earnings hit your account every day.</p>
+                    <div class="space-y-1 xs:space-y-2">
+                        <h3 class="font-semibold text-gray-900 text-sm xs:text-base">Details :</h3>
+                        <p class="text-gray-700 text-sm xs:text-base">Daily payouts as per Uber Earnings Clock- No
+                            waiting weeks—your earnings hit your account every day.</p>
                     </div>
 
-                    <div class="text-gray-700 leading-relaxed">
+                    <div class="text-gray-700 leading-relaxed text-sm xs:text-base">
                         <p>2025 Nissan Sentra qualifies for Courier, Share, UberX ride tiers and rents for $99/day with
                             a $200 refundable deposit. Commercial rideshare insurance covering liability and damage
                             protection is included.</p>
                     </div>
 
-                    <div class="text-gray-700 relative group" x-data="{ expanded: false, showButton: false }" x-init="$nextTick(() => {
-                        showButton = $refs.text.scrollHeight > $refs.text.clientHeight;
-                    })">
-
-                        <!-- Text block with clamp -->
+                    <div class="text-gray-700 relative group text-sm xs:text-base" x-data="{ expanded: false, showButton: false }"
+                        x-init="$nextTick(() => { showButton = $refs.text.scrollHeight > $refs.text.clientHeight; })">
                         <div :class="expanded ? '' : 'line-clamp-1'" x-ref="text">
                             <p>
                                 Designed for cost-effective shifts with regular maintenance, this vehicle ensures
@@ -98,45 +96,41 @@
                                 interior, and modern safety features that make it ideal for daily rideshare operations.
                             </p>
                         </div>
-
-                        <!-- Read More / Read Less button -->
                         <template x-if="showButton">
                             <button @click="expanded = !expanded"
-                                class="text-zinc-600 hover:text-zinc-700 font-medium mt-1 transition-opacity duration-300">
-                                <span x-text="expanded ? 'Read Less' : 'Read More...'"></span>
+                                class="text-zinc-600 hover:text-zinc-700 font-medium mt-1 transition-opacity duration-300 text-sm xs:text-base">
+                                <span class="text-zinc-500" x-text="expanded ? 'Read Less' : 'Read More...'"></span>
                             </button>
                         </template>
                     </div>
-
                 </div>
-
             </div>
 
             {{-- Right Side - Booking Section --}}
-            <div class="w-full lg:w-1/3">
-                <div class="bg-white border border-gray-200 rounded-lg p-6 sticky top-0">
-                    <div class="space-y-4">
-                        <div class="text-sm text-gray-600">
+            <div class="w-full xl:w-1/3 mt-6 2xl:mt-0">
+                <div class="bg-white border border-gray-200 rounded-lg p-4 xs:p-5 sm:p-6 sticky top-0">
+                    <div class="space-y-3 xs:space-y-4">
+                        <div class="text-sm xs:text-base text-gray-600">
                             Oct 02 08:00 - Nov 01 23:30
                         </div>
 
                         <button
-                            class="w-full bg-zinc-500 hover:bg-zinc-600 text-white font-semibold py-3 rounded-lg transition-colors">
+                            class="w-full bg-zinc-500 hover:bg-zinc-600 text-white font-semibold py-2.5 xs:py-3 rounded-lg transition-colors text-sm xs:text-base">
                             Book
                         </button>
 
                         <button
-                            class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 rounded-lg transition-colors">
+                            class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 xs:py-3 rounded-lg transition-colors text-sm xs:text-base">
                             Get in touch
                         </button>
 
-                        <div class="pt-4 border-t border-gray-200">
-                            <h3 class="font-semibold text-gray-900 mb-3">Policies</h3>
-                            <p class="text-sm text-gray-600 leading-relaxed">
+                        <div class="pt-3 xs:pt-4 border-t border-gray-200">
+                            <h3 class="font-semibold text-gray-900 mb-2 xs:mb-3 text-sm xs:text-base">Policies</h3>
+                            <p class="text-sm xs:text-base text-gray-600 leading-relaxed">
                                 I hereby agree to the terms and conditions of the Lease Agreement with Host
                             </p>
                             <button @click="showModal = true"
-                                class="text-zinc-600 hover:text-zinc-700 text-sm font-medium mt-2 transition-colors">
+                                class="text-zinc-600 hover:text-zinc-700 text-sm xs:text-base font-medium mt-1 xs:mt-2 transition-colors">
                                 View Details
                             </button>
                         </div>
@@ -144,6 +138,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     <div x-show="showModal" x-transition.opacity.duration.300ms @keydown.escape.window="showModal = false"
         class="fixed inset-0  z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true"
