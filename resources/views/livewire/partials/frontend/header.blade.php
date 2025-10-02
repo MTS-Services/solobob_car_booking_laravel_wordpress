@@ -42,7 +42,7 @@
                         EXPLORE OUR CAR
                     </a>
                     @auth
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" class="hidden lg:block">
                             @csrf
                             <button type="submit"
                                 class="bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
@@ -51,11 +51,11 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" wire:navigate
-                            class="bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                            class="hidden lg:block bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
                             Sign In
                         </a>
                         <a href="{{ route('register') }}" wire:navigate
-                            class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                            class="hidden lg:block bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
                             Sign Up
                         </a>
                     @endauth
@@ -110,8 +110,23 @@
                     class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Profile</a>
                 <a href="/dashboard"
                     class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Dashboard</a>
-                <button
-                    class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Logout</button>
+                @auth
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-left block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <!-- If user is not authenticated -->
+                    <a href="{{ route('login') }}" wire:navigate
+                        class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Sign
+                        In</a>
+                    <a href="{{ route('register') }}" wire:navigate
+                        class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Sign
+                        Up</a>
+                @endauth
             </nav>
         </div>
         </a>

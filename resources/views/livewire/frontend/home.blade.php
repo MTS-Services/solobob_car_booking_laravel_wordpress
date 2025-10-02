@@ -1,7 +1,7 @@
 <div class="bg-white max-w[1950px] mx-auto oiverflow-hidden">
     <section class="relative">
         <div class="container flex flex-col lg:flex-row min-h-screen">
-            <div class="w-full bg-gray-100 flex items-center justify-center">
+            <div class="w-full bg-gray-100 flex items-center justify-center px-4">
                 <div class="max-w-xl w-full">
                     <h1 class="text-xl sm:text-5xl font-bold text-black mb-4 sm:mb-4 text-center lg:text-left">
                         FLEXIBLE CAR RENTALS<br>
@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="w-full bg-white flex items-start justify-center z-1">
+            <div class="w-full bg-white flex items-start justify-center px-4 z-1">
                 <div class="w-full max-w-xl py-8">
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
@@ -357,7 +357,7 @@
             </h2>
 
             <!-- Swiper container -->
-            <div class="swiper mx-4">
+            <div class="swiper mx-4 testimonial-swiper">
                 <div class="swiper-wrapper !pb-8">
                     @foreach ($testimonials as $testimonial)
                         <div class="swiper-slide flex justify-center px-4 sm:px-6 md:px-8">
@@ -386,4 +386,36 @@
         </div>
     </section>
     <!-- End of Testimonials Section -->
+
+    @push('scripts')
+        <script>
+            document.addEventListener('livewire:initialized', function() {
+                const swiper = new Swiper('.testimonial-swiper', {
+                    loop: true,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    breakpoints: {
+                        640: {
+                            slidesPerView: 1,
+                        },
+                        768: {
+                            slidesPerView: 2,
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                        },
+                    },
+                });
+
+            });
+        </script>
+    @endpush
 </div>
