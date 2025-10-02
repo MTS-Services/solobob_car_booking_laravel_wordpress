@@ -1,4 +1,4 @@
-<section class="bg-white" x-data="{ showModal: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
+<section class="bg-white" x-data="{ showModal: false, modalOpen: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
     @push('styles')
         <style>
             /* Hide default Swiper arrows */
@@ -27,7 +27,7 @@
     <div class=" pb-10 container mx-auto">
         <div class="flex flex-col w-full xl:flex-row gap-6">
             {{-- Left Side - Image Slider --}}
-            <div class="w-full xl:w-2/3 shadow-lg bg-white px-2 ">
+            <div class="w-full xl:w-2/3 shadow-lg bg-white sm:px-2 ">
                 <div
                     class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px]  lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
@@ -118,11 +118,10 @@
                             Book
                         </button>
 
-                        <button
+                        <button  @click="modalOpen = true; document.body.classList.add('overflow-hidden')"
                             class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 xs:py-3 rounded-lg transition-colors text-sm xs:text-base">
                             Get in touch
                         </button>
-
                         <div class="pt-3 xs:pt-4 border-t border-gray-200">
                             <h3 class="font-semibold text-gray-900 mb-2 xs:mb-3 text-sm xs:text-base">Policies</h3>
                             <p class="text-sm xs:text-base text-gray-600 leading-relaxed">
@@ -133,6 +132,112 @@
                                 View Details
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div x-show="modalOpen" x-cloak @click="modalOpen = false"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
+        style="display: none;">
+
+        {{-- Modal Container --}}
+        <div @click.stop x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform scale-90"
+            x-transition:enter-end="opacity-100 transform scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform scale-100"
+            x-transition:leave-end="opacity-0 transform scale-90"
+            class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+
+            {{-- Close Button --}}
+            <div class="relative">
+                <button @click="modalOpen = false" type="button"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-light leading-none z-10">
+                    &times;
+                </button>
+            </div>
+
+            {{-- Modal Content --}}
+            <div class="p-6 md:p-8">
+                {{-- Modal Title --}}
+                <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
+                    2025 NISSAN SENTRA S
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    {{-- Left Column - Car Image --}}
+                    <div class="w-full">
+                        <img src="{{ asset('assets/images/car (1).avif') }}" alt="2025 Nissan Sentra S"
+                            class="w-full h-64 md:h-80 object-cover rounded-lg">
+                    </div>
+
+                    {{-- Right Column - Contact Form --}}
+                    <div class="space-y-4">
+                        <form action="#) }}" method="POST">
+                            @csrf
+
+                            {{-- Name Input --}}
+                            <div class="mb-4">
+                                <input type="text" name="name" id="name" placeholder="Coby Pollard"
+                                    value="{{ old('name') }}"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('name') border-red-500 @enderror">
+                                @error('name')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Phone Input --}}
+                            <div class="mb-4">
+                                <input type="tel" name="phone" id="phone" placeholder="93"
+                                    value="{{ old('phone') }}"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('phone') border-red-500 @enderror">
+                                @error('phone')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Email Input --}}
+                            <div class="mb-4">
+                                <input type="email" name="email" id="email"
+                                    placeholder="qapupuru@mailinator.com" value="{{ old('email') }}"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent @error('email') border-red-500 @enderror">
+                                @error('email')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Message Textarea --}}
+                            <div class="mb-4">
+                                <textarea name="message" id="message" placeholder="Message *" rows="4"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none @error('message') border-red-500 @enderror">{{ old('message') }}</textarea>
+                                @error('message')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- SMS Alerts Checkbox --}}
+                            <div class="flex items-start space-x-2 mb-4">
+                                <input type="checkbox" name="sms_alerts" id="sms-alerts"
+                                    {{ old('sms_alerts') ? 'checked' : '' }}
+                                    class="mt-1 w-4 h-4 text-cyan-500 border-gray-300 rounded focus:ring-cyan-500">
+                                <label for="sms-alerts" class="text-sm text-gray-700 leading-tight">
+                                    Yes, I'd like to receive SMS alerts from Fairental for booking confirmations,
+                                    payment updates, support messages, and important reminders.
+                                </label>
+                            </div>
+
+                            {{-- Disclaimer Text --}}
+                            <p class="text-xs text-gray-500 italic mb-6">
+                                Message and data rates may apply. Reply STOP to unsubscribe.
+                            </p>
+
+                            {{-- Submit Button --}}
+                            <button type="submit"
+                                class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors">
+                                Get in touch
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -344,7 +449,7 @@
             document.addEventListener('livewire:initialized', function() {
                 const swiper = new Swiper(".details-swiper", {
                     loop: true,
-                    
+
                     navigation: {
                         nextEl: ".swiper-button-next",
                         prevEl: ".swiper-button-prev",
