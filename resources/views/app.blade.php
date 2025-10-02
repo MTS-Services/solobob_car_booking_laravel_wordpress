@@ -103,6 +103,7 @@
                         @endif
 
 
+                    <main class="flex-grow bg-white">
                         {{ $slot }}
                     </main>
                 </div>
