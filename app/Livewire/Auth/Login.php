@@ -46,7 +46,7 @@ class Login extends Component
         if (Auth::user()->is_admin) {
             return $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
         }
-        return $this->redirectIntended(default: route('user.profile', absolute: false), navigate: true);
+        return $this->redirectIntended(default: route('user.dashboard', absolute: false), navigate: true);
     }
 
     /**
