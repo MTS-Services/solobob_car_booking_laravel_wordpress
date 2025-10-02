@@ -15,6 +15,19 @@ use Livewire\Attributes\Layout;
 )]
 class ProductDetails extends Component
 {
+
+    public $showModal = false;
+
+    public function openModal()
+    {
+        $this->showModal = true;
+        $this->dispatch('modal-opened');
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
     public function render()
     {
         return view('livewire.frontend.product-details');
