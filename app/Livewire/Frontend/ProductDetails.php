@@ -8,9 +8,9 @@ use Livewire\Attributes\Layout;
 #[Layout(
     'app',
     [
-        'title' => 'livewire.frontend.product-details',
-        'breadcrumb' => 'livewire.frontend.product-details',
-        'page_slug' => 'livewire.frontend.product-details'
+        'title' => 'Product-details',
+        'breadcrumb' => 'Product-details',
+        'page_slug' => 'product-details'
     ]
 )]
 class ProductDetails extends Component

@@ -4,7 +4,16 @@ namespace App\Livewire\Frontend;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 
+#[Layout(
+    'app',
+    [
+        'title' => 'Product',
+        'breadcrumb' => 'Product',
+        'page_slug' => 'product'
+    ]
+)]
 class Product extends Component
 {
     use WithPagination;
