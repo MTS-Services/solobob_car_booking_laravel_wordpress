@@ -47,18 +47,18 @@
                         'icon' => 'user-circle',
                         'active' => 'admin',
                     ],
-                    [
-                        'name' => 'Roles',
-                        'route' => '#',
-                        'icon' => 'shield-exclamation',
-                        'active' => 'role',
-                    ],
-                    [
-                        'name' => 'Permissions',
-                        'route' => '#',
-                        'icon' => 'shield-check',
-                        'active' => 'permission',
-                    ],
+                    // [
+                    //     'name' => 'Roles',
+                    //     'route' => '#',
+                    //     'icon' => 'shield-exclamation',
+                    //     'active' => 'role',
+                    // ],
+                    // [
+                    //     'name' => 'Permissions',
+                    //     'route' => '#',
+                    //     'icon' => 'shield-check',
+                    //     'active' => 'permission',
+                    // ],
                 ]" />
 
             <x-backend.navlink type="dropdown" icon="user-group" name="User Management" :page_slug="$active"
