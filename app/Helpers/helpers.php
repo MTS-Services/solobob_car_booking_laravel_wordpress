@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 if (! function_exists('site_name')) {
     function site_name()
     {
@@ -19,3 +21,10 @@ if (! function_exists('site_tagline')) {
         return config('app.tagline', 'Laravel Application Tagline');
     }
 }
+if (! function_exists('user')) {
+    function user()
+    {
+        return Auth::user();
+    }
+}
+
