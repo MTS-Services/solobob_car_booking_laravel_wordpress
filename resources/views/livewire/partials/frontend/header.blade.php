@@ -1,11 +1,11 @@
 <!-- Header -->
 <header x-data="{ toggleMenu: false }" class="bg-white shadow-md w-full">
-    <div class="container mx-auto px-4 py-4">
+    <div class="container">
         <div class="flex items-center justify-between">
 
             <!-- Logo -->
             <a href="/" class="flex items-center">
-                <img src="{{ asset('assets/logo/transparent-resizing-logo.png') }}" alt="Logo" class="h-12 md:h-16 w-auto" />
+                <img src="{{ asset('assets/logo/transparent-resizing-logo.png') }}" alt="Logo" class="h-12 md:h-20 w-auto" />
             </a>
 
             <!-- Navigation + Button -->
