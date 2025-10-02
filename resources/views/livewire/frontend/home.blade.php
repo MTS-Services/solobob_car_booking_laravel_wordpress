@@ -1,4 +1,4 @@
-<div class="bg-white max-w[1950px] mx-auto oiverflow-hidden -mt-7">
+<div class="bg-white max-w[1950px] mx-auto oiverflow-hidden">
     <div class="flex flex-col lg:flex-row min-h-screen">
         <div class="w-full lg:w-1/2 bg-gray-100 flex items-center justify-center p-8 sm:p-12">
             <div class="max-w-xl w-full">
