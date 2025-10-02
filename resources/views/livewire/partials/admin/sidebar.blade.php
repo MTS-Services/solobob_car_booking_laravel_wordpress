@@ -43,7 +43,7 @@
                 :items="[
                     [
                         'name' => 'Admins',
-                        'route' => '#',
+                        'route' => route('admin.admins'),
                         'icon' => 'user-circle',
                         'active' => 'admin',
                     ],
