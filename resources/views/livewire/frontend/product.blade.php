@@ -48,9 +48,11 @@
 
                         <div class="h-58">
                             <!-- Dynamic Image Source -->
-                            <img class="w-full h-full object-cover"
-                                src="{{ asset('assets/images/' . $product['image_name']) }}"
-                                alt="{{ $product['name'] }} Image">
+                            <a href="{{ route('product-details') }}" wire:navigate>
+                                <img class="w-full h-full object-cover"
+                                    src="{{ asset('assets/images/' . $product['image_name']) }}"
+                                    alt="{{ $product['name'] }} Image">
+                            </a>
                         </div>
 
                         <!-- Dynamic Tags -->
