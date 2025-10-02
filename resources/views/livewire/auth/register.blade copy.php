@@ -20,7 +20,7 @@
                     autocomplete="new-password" :placeholder="__('Confirm password')" viewable />
 
                 <div class="flex items-center justify-end">
-                    <flux:button type="submit" variant="primary" class="w-full">
+                    <flux:button  type="submit" variant="primary" class="w-full">
                         {{ __('Create account') }}
                     </flux:button>
                 </div>
