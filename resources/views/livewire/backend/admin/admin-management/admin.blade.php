@@ -57,23 +57,43 @@
                         <tr>
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">Email</th>
+                            <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">Created At</th>
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">Created By</th>
                             <th class="px-6 text-white py-4 text-right text-xs font-semibold uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-700/50 ">
+                    <tbody class="divide-y divide-zinc-700/50">
                         @forelse ($admins as $admin)
                             <tr class="bg-zinc-50 transition-colors duration-150">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
-                                            {{ $admin->initials() }}
-                                        </div>
+                                        @if($admin->avatar)
+                                            <img src="{{ Storage::url($admin->avatar) }}" 
+                                                 alt="{{ $admin->name }}"
+                                                 class="w-10 h-10 rounded-full object-cover border-2 border-zinc-300">
+                                        @else
+                                            <div class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
+                                                {{ $admin->initials() }}
+                                            </div>
+                                        @endif
                                         <span class="text-accent font-medium">{{ $admin->name }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-accent">{{ $admin->email }}</td>
+                                <td class="px-6 py-4">
+                                    @php
+                                        $statusColors = [
+                                            \App\Models\User::STATUS_ACTIVE => 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                                            \App\Models\User::STATUS_SUSPENDED => 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+                                            \App\Models\User::STATUS_DELETED => 'bg-red-500/20 text-red-400 border-red-500/30',
+                                        ];
+                                        $colorClass = $statusColors[$admin->status] ?? 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
+                                    @endphp
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                        {{ $admin->status_label }}
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4">
                                     <div class="flex flex-col">
                                         <span class="text-accent text-sm">{{ $admin->created_at_formatted }}</span>
@@ -113,7 +133,7 @@
                                                     <button 
                                                         wire:click="openDetailsModal({{ $admin->id }})"
                                                         @click="open = false"
-                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm  hover:bg-zinc-400 hover:text-white transition-colors">
+                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm hover:bg-zinc-400 hover:text-white transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <circle cx="12" cy="12" r="10"></circle>
                                                             <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -124,7 +144,7 @@
                                                     <button 
                                                         wire:click="openEditModal({{ $admin->id }})"
                                                         @click="open = false"
-                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-accent  hover:bg-zinc-400 hover:text-white transition-colors">
+                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-accent hover:bg-zinc-400 hover:text-white transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -149,7 +169,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center">
+                                <td colspan="6" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center justify-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-zinc-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
@@ -198,9 +218,15 @@
                     <div class="px-6 py-6 space-y-6">
                         {{-- Profile Section --}}
                         <div class="flex items-center gap-4">
-                            <div class="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-bold text-2xl">
-                                {{ $detailsAdmin->initials() }}
-                            </div>
+                            @if($detailsAdmin->avatar)
+                                <img src="{{ Storage::url($detailsAdmin->avatar) }}" 
+                                     alt="{{ $detailsAdmin->name }}"
+                                     class="w-20 h-20 rounded-full object-cover border-4 border-zinc-700">
+                            @else
+                                <div class="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-bold text-2xl">
+                                    {{ $detailsAdmin->initials() }}
+                                </div>
+                            @endif
                             <div>
                                 <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsAdmin->name }}</h4>
                                 <p class="text-zinc-400">{{ $detailsAdmin->email }}</p>
@@ -209,6 +235,26 @@
 
                         {{-- Information Grid --}}
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
+                                <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Status</p>
+                                @php
+                                    $statusColors = [
+                                        \App\Models\User::STATUS_ACTIVE => 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                                        \App\Models\User::STATUS_SUSPENDED => 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+                                        \App\Models\User::STATUS_DELETED => 'bg-red-500/20 text-red-400 border-red-500/30',
+                                    ];
+                                    $colorClass = $statusColors[$detailsAdmin->status] ?? 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
+                                @endphp
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                    {{ $detailsAdmin->status_label }}
+                                </span>
+                            </div>
+
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
                                 <p class="text-zinc-200 font-medium">{{ $detailsAdmin->created_at_formatted }}</p>
@@ -226,8 +272,8 @@
                             @if($detailsAdmin->updated_at && $detailsAdmin->updated_at != $detailsAdmin->created_at)
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated At</p>
-                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updated_at->format('M d, Y H:i') }}</p>
-                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updated_at->diffForHumans() }}</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updated_at_formatted }}</p>
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updated_at_human }}</p>
                                 </div>
 
                                 @if($detailsAdmin->updatedBy)
@@ -239,17 +285,21 @@
                                 @endif
                             @endif
 
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
-                            </div>
+                            @if($detailsAdmin->deleted_at)
+                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted At</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deleted_at_formatted }}</p>
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deleted_at_human }}</p>
+                                </div>
 
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Role</p>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                                    Admin
-                                </span>
-                            </div>
+                                @if($detailsAdmin->deletedBy)
+                                    <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                        <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted By</p>
+                                        <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deletedBy->name }}</p>
+                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deletedBy->email }}</p>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
 
@@ -285,6 +335,65 @@
 
                         {{-- Body --}}
                         <div class="px-6 py-4 space-y-4">
+                            {{-- Avatar Upload --}}
+                            <div>
+                                <label class="block text-sm font-medium text-zinc-300 mb-2">Profile Picture</label>
+                                <div class="flex items-center gap-4">
+                                    {{-- Preview --}}
+                                    <div class="flex-shrink-0">
+                                        @if ($avatar)
+                                            <img src="{{ $avatar->temporaryUrl() }}" 
+                                                 alt="Preview"
+                                                 class="w-20 h-20 rounded-full object-cover border-4 border-zinc-700">
+                                        @elseif ($existingAvatar)
+                                            <img src="{{ Storage::url($existingAvatar) }}" 
+                                                 alt="Current avatar"
+                                                 class="w-20 h-20 rounded-full object-cover border-4 border-zinc-700">
+                                        @else
+                                            <div class="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-bold text-2xl border-4 border-zinc-600">
+                                                {{ $name ? Str::of($name)->explode(' ')->take(2)->map(fn($word) => Str::substr($word, 0, 1))->implode('') : '?' }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Upload Controls --}}
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2">
+                                            <label class="cursor-pointer px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200 inline-flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                                </svg>
+                                                Choose Image
+                                                <input type="file" wire:model="avatar" accept="image/*" class="hidden">
+                                            </label>
+                                            @if ($avatar || $existingAvatar)
+                                                <button 
+                                                    type="button"
+                                                    wire:click="removeAvatar"
+                                                    class="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors duration-200">
+                                                    Remove
+                                                </button>
+                                            @endif
+                                        </div>
+                                        <p class="text-xs text-zinc-500 mt-2">PNG, JPG up to 2MB</p>
+                                        @error('avatar') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                        
+                                        {{-- Loading Indicator --}}
+                                        <div wire:loading wire:target="avatar" class="mt-2">
+                                            <div class="flex items-center gap-2 text-zinc-400 text-sm">
+                                                <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                Uploading...
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {{-- Name --}}
                             <div>
                                 <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
@@ -307,6 +416,19 @@
                                     placeholder="Enter email address"
                                 >
                                 @error('email') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
+                            {{-- Status --}}
+                            <div>
+                                <label class="block text-sm font-medium text-zinc-300 mb-2">Status *</label>
+                                <select 
+                                    wire:model="status"
+                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
+                                    @foreach($statuses as $key => $label)
+                                        <option value="{{ $key }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                @error('status') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             {{-- Password --}}
@@ -371,7 +493,7 @@
 
                     {{-- Body --}}
                     <div class="px-6 py-4">
-                        <p class="text-zinc-300">Are you sure you want to delete this admin? This action cannot be undone.</p>
+                        <p class="text-zinc-300">Are you sure you want to delete this admin? This action will soft delete the record.</p>
                     </div>
 
                     {{-- Footer --}}
