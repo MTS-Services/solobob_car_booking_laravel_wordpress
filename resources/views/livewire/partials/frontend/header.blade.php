@@ -5,7 +5,8 @@
 
             <!-- Logo -->
             <a href="/" class="flex items-center">
-                <img src="{{ asset('assets/logo/transparent-resizing-logo.png') }}" alt="Logo" class="h-12 md:h-20 w-auto" />
+                <img src="{{ asset('assets/logo/transparent-resizing-logo.png') }}" alt="Logo"
+                    class="h-12 md:h-20 w-auto" />
             </a>
 
             <!-- Navigation + Button -->
@@ -40,14 +41,25 @@
                         class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full font-medium">
                         EXPLORE OUR CAR
                     </a>
-                    <a href="{{ route('login') }}" wire:navigate
-                        class="bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
-                        Sign In
-                    </a>
-                    <a href="{{ route('register') }}" wire:navigate
-                        class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
-                        Sign Up
-                    </a>
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                                Logout
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" wire:navigate
+                            class="bg-zinc-400 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                            Sign In
+                        </a>
+                        <a href="{{ route('register') }}" wire:navigate
+                            class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-md font-medium uppercase">
+                            Sign Up
+                        </a>
+                    @endauth
+
 
                     <!-- Mobile Menu Button (Visible only on small screens) -->
                     <button @click="toggleMenu = !toggleMenu"
@@ -65,9 +77,7 @@
     </div>
     <!-- Sidebar -->
     {{-- transition left to right using alipine --}}
-    <aside x-show="toggleMenu" x-transition 
-        x-on:click.outside="toggleMenu = false"
-
+    <aside x-show="toggleMenu" x-transition x-on:click.outside="toggleMenu = false"
         class="fixed top-0 right-0 z-50 p-2 h-screen transition-transform overflow-y-auto lg:hidden">
         <div class="p-4 w-full max-w-72 bg-zinc-50 rounded-lg shadow h-full ml-auto">
 
