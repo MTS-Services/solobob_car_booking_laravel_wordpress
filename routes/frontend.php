@@ -10,8 +10,8 @@ use App\Livewire\Frontend\Booking;
 Route::get('/', Home::class)->name('home');
 Route::get('/buttons', Buttons::class)->name('buttons');
 Route::get('/products',Product::class)->name('products');
-<<<<<<< Updated upstream
+
 Route::get('/products/details',ProductDetails::class)->name('product-details');
-=======
+
 Route::get('/booking',Booking::class)->name('booking');
->>>>>>> Stashed changes
+
