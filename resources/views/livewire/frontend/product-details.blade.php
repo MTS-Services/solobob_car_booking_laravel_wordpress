@@ -30,7 +30,7 @@
             {{-- Left Side - Image Slider --}}
             <div class="w-full xl:w-2/3">
                 <div
-                    class="swiper mySwiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px]  lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
+                    class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px]  lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&h=600&fit=crop"
@@ -345,7 +345,8 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
         <script>
-            var swiper = new Swiper(".mySwiper", {
+            var swiper = new Swiper(".details-swiper", {
+                loop: true,
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
