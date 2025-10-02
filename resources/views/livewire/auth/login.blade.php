@@ -14,14 +14,14 @@
                     </h2>
                 </div>
             </div>
-
+                 
             <!-- Right Side - Login Form -->
             <div class="w-full md:w-1/2 bg-white p-8 md:p-10">
                 <div class="max-w-md mx-auto">
                     <h1 class="text-3xl md:text-2xl font-semibold mb-2">YOUR GATEWAY TO</h1>
                     <h2 class="text-3xl md:text-2xl font-semibold mb-2">UNFORGETTABLE JOURNEYS</h2>
                     <h3 class="text-xl md:text-2xl font-semibold mb-6 text-[#B79347]">Login to Your Account</h3>
-
+                    
                     <p class="text-gray-600 text-sm mb-8">
                         From the buzz of iconic cities to the tranquility of hidden gems, we bring the world to your
                         fingertips. Start exploring today
@@ -31,10 +31,10 @@
                         <!-- Email Input -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input   wire:model="email" type="email" placeholder="enter your email"  required  autofocus  autocomplete="email"
+                            <input wire:model="email" type="email" placeholder="enter your email"  required  autofocus  autocomplete="email"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
                         </div>
-
+                            
                         <!-- Password Input -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
@@ -67,14 +67,10 @@
                         </div>
                         <!-- Sign Up Link -->
                         <p class="text-center text-sm text-gray-600">
-                            Don't have an account? <a href="#" class="text-black font-medium hover:underline">Sign
+                            Don't have an account? <a href="{{ route('register') }}" class="text-black font-medium hover:underline">Sign
                                 Up</a>
                         </p>
-
-
                         <!-- Divider -->
-                       
-
                     </form>
                 </div>
             </div>
