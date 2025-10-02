@@ -18,8 +18,8 @@ return new class extends Migration
     {
         Schema::create('user_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained('users')->cascadeOnDelete();
-                
+            $table->unsignedBigInteger('user_id');
+            
             $table->string('licence')->nullable();
             $table->string('selfe_licence')->nullable();
             $table->string('address_proof')->nullable();
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->dateTime('expiry_date')->nullable();
             $table->tinyInteger('verification_status')->default(UserDocuments::VERIFICATION_PENDING);
             $table->timestamp('verified_at')->nullable();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             
             $table->timestamps();
             $table->softDeletes();

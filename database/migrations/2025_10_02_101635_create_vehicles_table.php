@@ -17,11 +17,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vehicles', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->id();
 
-            // Relations
-            $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->unsignedBigInteger('owner_id');
+            $table->unsignedBigInteger('category_id');
 
             // Vehicle info
             $table->string('title');
@@ -55,6 +54,9 @@ return new class extends Migration
 
             $table->tinyInteger('approval_status')
                 ->default(Vehicle::APPROVAL_PENDING);
+
+            $table->foreign('owner_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
             $table->softDeletes();

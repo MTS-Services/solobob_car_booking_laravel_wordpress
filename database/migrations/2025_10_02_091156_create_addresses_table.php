@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained('users')->cascadeOnDelete();
-
+            $table->unsignedBigInteger('user_id');
+            
             // Address info
             $table->tinyInteger('address_type')->default(0)->comment('0 = Personal, 1 = Residential, 2 = Parking');
             $table->string('address', 255);
@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('postal_code', 20);
             $table->boolean('is_default')->default(false);
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
             $table->softDeletes();
