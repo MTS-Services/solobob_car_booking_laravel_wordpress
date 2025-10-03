@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class VerifyEmailController extends Controller
 {
@@ -13,12 +15,27 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('admin.dashboard', absolute: false).'?verified=1');
+        dd('test');
+        $user = $request->user();
+        
+        // Ensure user is authenticated
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        dd($user ,'is_admin');
+        // Determine the correct dashboard route
+        $defaultRoute = $user->is_admin 
+            ? route('admin.dashboard', absolute: false) 
+            : route('user.my-bookings', absolute: false);
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect($defaultRoute . '?verified=1');
         }
 
-        $request->fulfill();
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
 
-        return redirect()->intended(route('admin.dashboard', absolute: false).'?verified=1');
+        return redirect($defaultRoute . '?verified=1');
     }
 }
