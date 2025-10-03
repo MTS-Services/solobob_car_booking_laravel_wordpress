@@ -1,6 +1,6 @@
 <div class="flex items-center justify-center min-h-screen p-4 sm:p-0">
 
-     <div class="bg-black max-w-7xl mx-auto rounded-lg overflow-hidden shadow-2xl border-4 ">
+    <div class="bg-black max-w-7xl mx-auto rounded-lg overflow-hidden shadow-2xl border-4 ">
         <div class="flex flex-col md:flex-row">
             <!-- Left Side - Car Image -->
             <div class="w-full md:w-1/2 relative h-64 md:h-auto">
@@ -31,14 +31,16 @@
                         <!-- Email Input -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input   wire:model="email" type="email" placeholder="enter your email"  required  autofocus  autocomplete="email"
+                            <input wire:model="email" type="email" placeholder="enter your email" required autofocus
+                                autocomplete="email"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
                         </div>
 
                         <!-- Password Input -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                            <input  wire:model="password" type="password" placeholder="password"  type="password"  required autocomplete="current-password"
+                            <input wire:model="password" type="password" placeholder="password" type="password" required
+                                autocomplete="current-password"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
                         </div>
 
@@ -49,7 +51,8 @@
                                     class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black">
                                 <span class="ml-2 text-gray-600">Keep me logged in</span>
                             </label>
-                            <a href="#" class="text-black font-medium hover:underline">Forgot your password?</a>
+                            <a href="{{ route('password.request') }}"
+                                class="text-black font-medium hover:underline">Forgot your password?</a>
                         </div>
 
                         <!-- Sign In Button -->
@@ -57,7 +60,7 @@
                             class="w-full bg-[#B79347] text-white py-3 rounded-md font-semibold hover:bg-gray-800 transition duration-200">
                             Log In
                         </button>
-                         <div class="relative my-6">
+                        <div class="relative my-6">
                             <div class="absolute inset-0 flex items-center">
                                 <div class="w-full border-t border-gray-300"></div>
                             </div>
@@ -67,14 +70,11 @@
                         </div>
                         <!-- Sign Up Link -->
                         <p class="text-center text-sm text-gray-600">
-                            Don't have an account? <a href="#" class="text-black font-medium hover:underline">Sign
+                            Don't have an account? <a href="{{ route('register') }}"
+                                class="text-black font-medium hover:underline">Sign
                                 Up</a>
                         </p>
-
-
                         <!-- Divider -->
-                       
-
                     </form>
                 </div>
             </div>
@@ -130,4 +130,5 @@
             @endif
         </div>
     </div> --}}
+
 </div>

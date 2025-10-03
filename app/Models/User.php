@@ -28,6 +28,17 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'number',
+        'last_login_at',
+        'email_verified_at',
+        'number_verified_at',
+        'date_of_birth',
+        'status',
+        'avatar',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [
@@ -61,6 +72,38 @@ class User extends Authenticatable
     ];
 
 
+    /* ================================================================
+     * *** STATUS ***
+     ================================================================ */
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_SUSPENDED = 0;
+    public const STATUS_DELETED = -1;
+
+    public static function getStatus(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_SUSPENDED => 'Suspended',
+            self::STATUS_DELETED => 'Deactivated',
+        ];
+    }
+    public function getStatusLabelAttribute(): string
+    {
+        return self::getStatus()[$this->status] ?? 'Unknown';
+    }
+    public function getIsAdminLabelAttribute(): string
+    {
+        return $this->is_admin ? 'Administrator' : 'User';
+    }
+    public function getStatusColorAttribute(): string
+    {
+         return match ($this->status) {
+            self::STATUS_ACTIVE => 'success',
+            self::STATUS_SUSPENDED => 'warning',
+            self::STATUS_DELETED => 'danger',
+            default => 'secondary',
+        };
+    }
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */

@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Traits\AuditColumnsTrait;
+use App\Models\VehicleAvailabillity;
 
 return new class extends Migration
 {
@@ -15,10 +16,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('{{ table }}', function (Blueprint $table) {
+        Schema::create('vehicle_availabillities', function (Blueprint $table) {
             $table->id();
 
-
+           $table->unsignedBigInteger('vehicle_id');
+           $table->date('unavailable_date')->now();
+           $table->tinyInteger('reason')->default(VehicleAvailabillity::REASON_BOOKED);
+              $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
+            
             
             $table->timestamps();
             $table->softDeletes();
@@ -31,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('{{ table }}');
+        Schema::dropIfExists('vehicle_availabillities');
     }
 };
