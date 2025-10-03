@@ -61,8 +61,8 @@
         </div>
 
         {{-- Table Section --}}
-        <div class="glass-card rounded-2xl overflow-hidden">
-            <div class="overflow-x-auto">
+        <div class="glass-card rounded-2xl">
+            <div>
                 <table class="w-full">
                     <thead class="bg-zinc-600/50 border-b border-zinc-700">
                         <tr>
@@ -84,7 +84,7 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-700/50">
                         @forelse ($admins as $admin)
-                            <tr class="bg-zinc-50 transition-colors duration-150">
+                            <tr class="bg-zinc-50 transition-colors duration-150 ">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         @if ($admin->avatar)
@@ -149,7 +149,7 @@
                                 <td class="px-6 py-4 text-accent">
                                     {{ $admin->createdBy?->name ?? 'System' }}
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 ">
                                     <div class="flex items-center justify-end">
                                         <div class="relative" x-data="{ open: false }">
                                             <button @click="open = !open" @click.away="open = false"
