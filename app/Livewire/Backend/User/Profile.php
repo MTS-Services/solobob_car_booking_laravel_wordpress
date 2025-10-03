@@ -8,8 +8,8 @@ use Livewire\Component;
 #[Layout(
     'app',
     [
-        'title' => 'Profile',
-        'page_slug' => 'profile',
+        'title' => 'User-profile',
+        'page_slug' => 'user-profile',
     ]
 )]
 class Profile extends Component
