@@ -30,8 +30,8 @@ class Profile extends Component
     public $postal_code = '';
     public $address_type = 0; // Default to 'personal'
 
-    // Store original email to check if it changed
-    private $originalEmail = '';
+    // Store original email to track changes
+    public $originalEmail = '';
 
     protected function rules()
     {
@@ -91,8 +91,8 @@ class Profile extends Component
             return redirect()->route('login');
         }
 
-        // Check if email has changed
-        $emailChanged = $this->email !== $this->originalEmail;
+        // Check if email has changed by comparing with the original email
+        $emailChanged = strtolower(trim($this->email)) !== strtolower(trim($this->originalEmail));
 
         // Update user basic information
         $updateData = [
@@ -139,13 +139,15 @@ class Profile extends Component
         }
 
         // If email changed, redirect to email verification page
-        if ($emailChanged) {
+       if ($emailChanged) {
             // Send email verification notification
             $user->sendEmailVerificationNotification();
             
             session()->flash('success', 'Email updated! Please check your inbox to verify your new email address.');
-            return redirect()->route('verification.notice');
+            return $this->redirect(route('verification.notice'), navigate: true);
         }
+        // Update the original email for future comparisons
+        $this->originalEmail = $this->email;
 
         session()->flash('success', 'Profile updated successfully!');
 
