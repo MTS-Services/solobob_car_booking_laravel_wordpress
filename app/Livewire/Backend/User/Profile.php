@@ -4,6 +4,7 @@ namespace App\Livewire\Backend\User;
 
 use App\Models\Addresse;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -28,6 +29,9 @@ class Profile extends Component
     public $state = '';
     public $postal_code = '';
     public $address_type = 0; // Default to 'personal'
+
+    // Store original email to check if it changed
+    private $originalEmail = '';
 
     protected function rules()
     {
@@ -58,6 +62,7 @@ class Profile extends Component
         // Load user basic information
         $this->name = $user->name ?? '';
         $this->email = $user->email ?? '';
+        $this->originalEmail = $user->email ?? ''; // Store original email
         $this->number = $user->number ?? '';
 
         // Load default address if exists
@@ -86,12 +91,22 @@ class Profile extends Component
             return redirect()->route('login');
         }
 
+        // Check if email has changed
+        $emailChanged = $this->email !== $this->originalEmail;
+
         // Update user basic information
-        $user->update([
+        $updateData = [
             'name' => $this->name,
             'email' => $this->email,
             'number' => $this->number,
-        ]);
+        ];
+
+        // If email changed, set email_verified_at to null
+        if ($emailChanged) {
+            $updateData['email_verified_at'] = null;
+        }
+
+        $user->update($updateData);
 
         // Update or create address
         if ($this->address || $this->city || $this->state || $this->postal_code) {
@@ -121,6 +136,15 @@ class Profile extends Component
                     'is_default' => true,
                 ]);
             }
+        }
+
+        // If email changed, redirect to email verification page
+        if ($emailChanged) {
+            // Send email verification notification
+            $user->sendEmailVerificationNotification();
+            
+            session()->flash('success', 'Email updated! Please check your inbox to verify your new email address.');
+            return redirect()->route('verification.notice');
         }
 
         session()->flash('success', 'Profile updated successfully!');
