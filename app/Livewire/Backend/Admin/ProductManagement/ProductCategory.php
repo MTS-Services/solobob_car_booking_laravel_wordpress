@@ -3,7 +3,7 @@
 namespace App\Livewire\Backend\Admin\ProductManagement;
 
 use App\Models\Category;
-use Illuminate\Support\Facades\Hash;use Livewire\Component;
+use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 use Livewire\WithPagination;

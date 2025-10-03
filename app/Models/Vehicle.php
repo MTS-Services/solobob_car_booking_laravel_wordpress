@@ -31,7 +31,20 @@ class Vehicle extends BaseModel
         self::APPROVAL_APPROVED => 'Approved',
         self::APPROVAL_REJECTED => 'Rejected',
     ];
-    
+        public static function getStatus(): array
+    {
+        return [
+            self::STATUS_AVAILABLE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',
+        ];
+    }
+        public static function getApprovalStatus(): array
+    {
+        return [
+            self::APPROVAL_PENDING => 'Active',
+            self::APPROVAL_APPROVED => 'Inactive',
+        ];
+    }
     public function getStatusLabelAttribute()
     {
         return self::STATUS[$this->status] ?? 'Unknown';
@@ -118,6 +131,31 @@ class Vehicle extends BaseModel
      ================================================================ */
 
     //
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
 
     /* ================================================================
      * *** SCOPES ***
