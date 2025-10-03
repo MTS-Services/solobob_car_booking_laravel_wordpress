@@ -27,18 +27,9 @@ class VerifyEmail extends Component
 
         // send email
         $user->sendEmailVerificationNotification();
-
         // flash message
         Session::flash('status', 'verification-link-sent');
 
-        // 🔹 log the action
-        Log::info('Verification email sent', [
-            'user_id' => $user->id,
-            'email'   => $user->email,
-            'time'    => now()->toDateTimeString(),
-            'ip'      => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
     }
 
     public function logout(Logout $logout): void
