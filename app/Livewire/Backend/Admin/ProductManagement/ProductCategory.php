@@ -11,9 +11,9 @@ use Livewire\WithPagination;
 #[Layout(
     'app',
     [
-        'title' => 'livewire.backend.admin.product-management.product-category',
-        'breadcrumb' => 'livewire.backend.admin.product-management.product-category',
-        'page_slug' => 'livewire.backend.admin.product-management.product-category'
+        'title' => 'product-category',
+        'breadcrumb' => 'product-category',
+        'page_slug' => 'product-category'
     ]
 )]
 class ProductCategory extends Component

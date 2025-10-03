@@ -96,12 +96,30 @@
                         'icon' => 'user-plus',
                         'active' => 'vehicle-make',
                     ],
-                    // [
-                    //     'name' => 'Banned Users',
-                    //     'route' => '#',
-                    //     'icon' => 'user-round-x',
-                    //     'active' => 'admin-users-banned',
-                    // ],
+                   [
+                        'name' => 'Vehicle Fuel',
+                        'route' => route('admin.pm.vehicle-fuel'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-fuel',
+                    ],
+                     [
+                        'name' => 'Vehicle Models',
+                        'route' => route('admin.pm.vehicle-model'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-model',
+                    ],
+                     [
+                        'name' => 'Vehicle Transmission',
+                        'route' => route('admin.pm.vehicle-transmission'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-transmission',
+                    ],
+                     [
+                        'name' => 'Vehicle ',
+                        'route' => route('admin.pm.vehicle-product'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-product',
+                    ],
                 ]" />
 
             <div class="pt-4 pb-2">

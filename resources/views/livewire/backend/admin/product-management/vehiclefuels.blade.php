@@ -17,7 +17,7 @@
         {{-- Header Section --}}
         <div class="glass-card rounded-2xl p-6 mb-6">
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-accent">{{ __('Vehicle Makes List') }}</h2>
+                <h2 class="text-xl font-bold text-accent">{{ __('Vehicle Fuels List') }}</h2>
                 <div class="flex items-center gap-2">
                     <x-button href="#" icon="trash-2" type='secondary' permission="product-category-trash" class="text-white">
                         {{ __('Trash') }}
@@ -85,20 +85,20 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-700/50">
-                        @forelse ($vehicleMakes as $vehicleMake)
+                        @forelse ($vehiclefuels as $vehiclefule)
                             <tr class="bg-zinc-50 transition-colors duration-150">
                                
-                                <td class="px-6 py-4 text-accent">{{ $vehicleMake->name }}</td>
-                                <td class="px-6 py-4 text-accent">{{ $vehicleMake->slug }}</td>
+                                <td class="px-6 py-4 text-accent">{{ $vehiclefule->name }}</td>
+                                <td class="px-6 py-4 text-accent">{{ $vehiclefule->slug }}</td>
                                 
                                 <td class="px-6 py-4">
                                     <div class="flex flex-col">
-                                        <span class="text-accent text-sm">{{ $vehicleMake->created_at_formatted }}</span>
-                                        <span class="text-zinc-500 text-xs">{{ $vehicleMake->created_at_human }}</span>
+                                        <span class="text-accent text-sm">{{ $vehiclefule->created_at_formatted }}</span>
+                                        <span class="text-zinc-500 text-xs">{{ $vehiclefule->created_at_human }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-accent">
-                                    {{ $vehicleMake->createdBy?->name ?? 'System' }}
+                                    {{ $vehiclefule->createdBy?->name ?? 'System' }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-end">
@@ -129,7 +129,7 @@
                                                 class="absolute right-0 mt-2 w-48 bg-zinc-100 border border-zinc-300 rounded-lg shadow-xl z-50"
                                                 style="display: none;">
                                                 <div class="py-1">
-                                                    <button wire:click="openDetailsModal({{ $vehicleMake->id }})"
+                                                    <button wire:click="openDetailsModal({{ $vehiclefule->id }})"
                                                         @click="open = false"
                                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm hover:bg-zinc-400 hover:text-white transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -143,7 +143,7 @@
                                                         </svg>
                                                         Details
                                                     </button>
-                                                    <button wire:click="openEditModal({{ $vehicleMake->id }})"
+                                                    <button wire:click="openEditModal({{ $vehiclefule->id }})"
                                                         @click="open = false"
                                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-accent hover:bg-zinc-400 hover:text-white transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -158,7 +158,7 @@
                                                         </svg>
                                                         Edit
                                                     </button>
-                                                    <button wire:click="openDeleteModal({{ $vehicleMake->id }})"
+                                                    <button wire:click="openDeleteModal({{ $vehiclefule->id }})"
                                                         @click="open = false"
                                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-zinc-400 hover:text-red-300 transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -209,7 +209,7 @@
     </section>
 
     {{-- Details Modal --}}
-    @if ($showDetailsModal && $detailsAdmin)
+    @if ($showDetailsModal && $detailsVehicleFuel)
         <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDetailsModal">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
                 {{-- Backdrop --}}
@@ -238,8 +238,8 @@
                         <div class="flex items-center gap-4">
                             
                             <div>
-                                <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsAdmin->name }}</h4>
-                                <p class="text-zinc-400">{{ $detailsAdmin->slug }}</p>
+                                <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsVehicleFuel->name }}</h4>
+                                <p class="text-zinc-400">{{ $detailsVehicleFuel->slug }}</p>
                             </div>
                         </div>
 
@@ -247,54 +247,54 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
+                                <p class="text-zinc-200 font-medium">#{{ $detailsVehicleFuel->id }}</p>
                             </div>
 
                           
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
-                                <p class="text-zinc-200 font-medium">{{ $detailsAdmin->created_at_formatted }}</p>
-                                <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->created_at_human }}</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->created_at_formatted }}</p>
+                                <p class="text-xs text-zinc-400 mt-1">{{ $detailsVehicleFuel->created_at_human }}</p>
                             </div>
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created By</p>
-                                <p class="text-zinc-200 font-medium">{{ $detailsAdmin->createdBy?->name ?? 'System' }}
+                                <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->createdBy?->name ?? 'System' }}
                                 </p>
-                                @if ($detailsAdmin->createdBy)
-                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->createdBy->slug }}</p>
+                                @if ($detailsVehicleFuel->createdBy)
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsVehicleFuel->createdBy->slug }}</p>
                                 @endif
                             </div>
 
-                            @if ($detailsAdmin->updated_at && $detailsAdmin->updated_at != $detailsAdmin->created_at)
+                            @if ($detailsVehicleFuel->updated_at && $detailsVehicleFuel->updated_at != $detailsVehicleFuel->created_at)
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated At</p>
-                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updated_at_formatted }}</p>
-                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updated_at_human }}</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->updated_at_formatted }}</p>
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsVehicleFuel->updated_at_human }}</p>
                                 </div>
 
-                                @if ($detailsAdmin->updatedBy)
+                                @if ($detailsVehicleFuel->updatedBy)
                                     <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                         <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated By</p>
-                                        <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updatedBy->name }}</p>
-                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updatedBy->email }}
+                                        <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->updatedBy->name }}</p>
+                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsVehicleFuel->updatedBy->email }}
                                         </p>
                                     </div>
                                 @endif
                             @endif
 
-                            @if ($detailsAdmin->deleted_at)
+                            @if ($detailsVehicleFuel->deleted_at)
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted At</p>
-                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deleted_at_formatted }}</p>
-                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deleted_at_human }}</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->deleted_at_formatted }}</p>
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsVehicleFuel->deleted_at_human }}</p>
                                 </div>
 
-                                @if ($detailsAdmin->deletedBy)
+                                @if ($detailsVehicleFuel->deletedBy)
                                     <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                         <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted By</p>
-                                        <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deletedBy->name }}</p>
-                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deletedBy->email }}
+                                        <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->deletedBy->name }}</p>
+                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsVehicleFuel->deletedBy->email }}
                                         </p>
                                     </div>
                                 @endif
@@ -421,4 +421,5 @@
 </div>
 
 </div>
+
 

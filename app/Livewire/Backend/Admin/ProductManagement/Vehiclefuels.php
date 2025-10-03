@@ -2,31 +2,30 @@
 
 namespace App\Livewire\Backend\Admin\ProductManagement;
 
-
+use App\Models\VehicleFuel;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
-use App\Models\VehicleMake;
 
 #[Layout(
     'app',
     [
-        'title' => 'vehicle-makes',
-        'breadcrumb' => 'vehicle-makes',
-        'page_slug' => 'vehicle-make'
+        'title' => 'vehiclefuels',
+        'breadcrumb' => 'vehiclefuels',
+        'page_slug' => 'vehicle-fuel'
     ]
 )]
-class VehicleMakes extends Component
+class Vehiclefuels extends Component
 {
 
-
+    
       use WithPagination;
 
     public $search = '';
     public $showModal = false;
     public $showDeleteModal = false;
     public $showDetailsModal = false;
-    public $detailsAdmin = null;
+    public $detailsVehicleFuel = null;
     public $editMode = false;
 
     // Form fields
@@ -64,7 +63,7 @@ class VehicleMakes extends Component
 
     public function openDetailsModal($id)
     {
-        $this->detailsAdmin = VehicleMake::withTrashed()
+        $this->detailsVehicleFuel = VehicleFuel::withTrashed()
             ->with(['createdBy', 'updatedBy', 'deletedBy'])
             ->findOrFail($id);
         $this->showDetailsModal = true;
@@ -73,13 +72,13 @@ class VehicleMakes extends Component
     public function closeDetailsModal()
     {
         $this->showDetailsModal = false;
-        $this->detailsAdmin = null;
+        $this->detailsVehicleFuel = null;
     }
 
     public function openEditModal($id)
     {
         $this->resetFields();
-        $admin = VehicleMake::findOrFail($id);
+        $admin = VehicleFuel::findOrFail($id);
 
         $this->adminId = $admin->id;
         $this->name = $admin->name;
@@ -121,7 +120,7 @@ class VehicleMakes extends Component
         $this->validate($rules);
 
         if ($this->editMode) {
-            $vehicleMake = VehicleMake::findOrFail($this->adminId);
+            $vehiclefule = VehicleFuel::findOrFail($this->adminId);
             
             $updateData = [
                 'name' => $this->name,
@@ -131,7 +130,7 @@ class VehicleMakes extends Component
             ];
 
            
-            $vehicleMake->update($updateData);
+            $vehiclefule->update($updateData);
 
             session()->flash('message', 'category updated successfully.');
         } else {
@@ -145,7 +144,7 @@ class VehicleMakes extends Component
             // Handle avatar upload for new admin
            
 
-            VehicleMake::create($data);
+            VehicleFuel::create($data);
 
             session()->flash('message', 'category created successfully.');
         }
@@ -155,18 +154,18 @@ class VehicleMakes extends Component
 
     public function delete()
     {
-        $vehicleMake = VehicleMake::findOrFail($this->adminId);
+        $vehiclefule = VehicleFuel::findOrFail($this->adminId);
 
         // Prevent deleting yourself
-        if ($vehicleMake->id === user()->id) {
+        if ($vehiclefule->id === user()->id) {
             session()->flash('error', 'You cannot delete your own account.');
             $this->closeDeleteModal();
             return;
         }
 
         // Update deleted_by before soft deleting
-        $vehicleMake->update(['deleted_by' => user()->id]);
-        $vehicleMake->delete(); // This will soft delete due to SoftDeletes trait
+        $vehiclefule->update(['deleted_by' => user()->id]);
+        $vehiclefule->delete(); // This will soft delete due to SoftDeletes trait
 
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();
@@ -174,7 +173,7 @@ class VehicleMakes extends Component
     
     public function render()
     {
-         $vehicleMake = VehicleMake::query()
+         $vehiclefule = VehicleFuel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -185,11 +184,11 @@ class VehicleMakes extends Component
             ->latest()
             ->paginate(10);
      
-        return view('livewire.backend.admin.product-management.vehicle-makes',
+        return view('livewire.backend.admin.product-management.vehiclefuels',
             [
-                'vehicleMakes' => $vehicleMake,
+                'vehiclefuels' => $vehiclefule,
                 
             ]);
     }
-
+   
 }

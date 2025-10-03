@@ -2,31 +2,29 @@
 
 namespace App\Livewire\Backend\Admin\ProductManagement;
 
-
+use App\Models\VehicleModel;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
-use App\Models\VehicleMake;
 
 #[Layout(
     'app',
     [
-        'title' => 'vehicle-makes',
-        'breadcrumb' => 'vehicle-makes',
-        'page_slug' => 'vehicle-make'
+        'title' => 'vehicle-models',
+        'breadcrumb' => 'vehicle-models',
+        'page_slug' => 'vehicle-model'
     ]
 )]
-class VehicleMakes extends Component
+class VehicleModels extends Component
 {
 
-
-      use WithPagination;
+       use WithPagination;
 
     public $search = '';
     public $showModal = false;
     public $showDeleteModal = false;
     public $showDetailsModal = false;
-    public $detailsAdmin = null;
+    public $detailsVehicleModel = null;
     public $editMode = false;
 
     // Form fields
@@ -64,7 +62,7 @@ class VehicleMakes extends Component
 
     public function openDetailsModal($id)
     {
-        $this->detailsAdmin = VehicleMake::withTrashed()
+        $this->detailsVehicleModel = VehicleModel::withTrashed()
             ->with(['createdBy', 'updatedBy', 'deletedBy'])
             ->findOrFail($id);
         $this->showDetailsModal = true;
@@ -73,13 +71,13 @@ class VehicleMakes extends Component
     public function closeDetailsModal()
     {
         $this->showDetailsModal = false;
-        $this->detailsAdmin = null;
+        $this->detailsVehicleModel = null;
     }
 
     public function openEditModal($id)
     {
         $this->resetFields();
-        $admin = VehicleMake::findOrFail($id);
+        $admin = VehicleModel::findOrFail($id);
 
         $this->adminId = $admin->id;
         $this->name = $admin->name;
@@ -121,7 +119,7 @@ class VehicleMakes extends Component
         $this->validate($rules);
 
         if ($this->editMode) {
-            $vehicleMake = VehicleMake::findOrFail($this->adminId);
+            $vehicleModel = VehicleModel::findOrFail($this->adminId);
             
             $updateData = [
                 'name' => $this->name,
@@ -131,7 +129,7 @@ class VehicleMakes extends Component
             ];
 
            
-            $vehicleMake->update($updateData);
+            $vehicleModel->update($updateData);
 
             session()->flash('message', 'category updated successfully.');
         } else {
@@ -145,7 +143,7 @@ class VehicleMakes extends Component
             // Handle avatar upload for new admin
            
 
-            VehicleMake::create($data);
+            VehicleModel::create($data);
 
             session()->flash('message', 'category created successfully.');
         }
@@ -155,18 +153,18 @@ class VehicleMakes extends Component
 
     public function delete()
     {
-        $vehicleMake = VehicleMake::findOrFail($this->adminId);
+        $vehicleModel = VehicleModel::findOrFail($this->adminId);
 
         // Prevent deleting yourself
-        if ($vehicleMake->id === user()->id) {
+        if ($vehicleModel->id === user()->id) {
             session()->flash('error', 'You cannot delete your own account.');
             $this->closeDeleteModal();
             return;
         }
 
         // Update deleted_by before soft deleting
-        $vehicleMake->update(['deleted_by' => user()->id]);
-        $vehicleMake->delete(); // This will soft delete due to SoftDeletes trait
+        $vehicleModel->update(['deleted_by' => user()->id]);
+        $vehicleModel->delete(); // This will soft delete due to SoftDeletes trait
 
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();
@@ -174,7 +172,7 @@ class VehicleMakes extends Component
     
     public function render()
     {
-         $vehicleMake = VehicleMake::query()
+         $vehicleModel = VehicleModel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -185,11 +183,11 @@ class VehicleMakes extends Component
             ->latest()
             ->paginate(10);
      
-        return view('livewire.backend.admin.product-management.vehicle-makes',
+        return view('livewire.backend.admin.product-management.vehicle-models',
             [
-                'vehicleMakes' => $vehicleMake,
+                'vehicleModels' => $vehicleModel,
                 
             ]);
     }
-
+   
 }
