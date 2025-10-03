@@ -5,10 +5,9 @@ namespace App\Livewire\Auth;
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Log; // 🔹 Add this
 use Livewire\Component;
 
-// #[Layout('components.layouts.auth')]
 class VerifyEmail extends Component
 {
     /**
@@ -16,15 +15,27 @@ class VerifyEmail extends Component
      */
     public function sendVerification(): void
     {
-        if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        $user = Auth::user();
 
+        if ($user->hasVerifiedEmail()) {
+            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
             return;
         }
 
-        Auth::user()->sendEmailVerificationNotification();
+        // send email
+        $user->sendEmailVerificationNotification();
 
+        // flash message
         Session::flash('status', 'verification-link-sent');
+
+        // 🔹 log the action
+        Log::info('Verification email sent', [
+            'user_id' => $user->id,
+            'email'   => $user->email,
+            'time'    => now()->toDateTimeString(),
+            'ip'      => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
     }
 
     /**
@@ -33,7 +44,6 @@ class VerifyEmail extends Component
     public function logout(Logout $logout): void
     {
         $logout();
-
         $this->redirect('/', navigate: true);
     }
 }
