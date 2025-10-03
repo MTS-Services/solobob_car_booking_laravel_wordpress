@@ -15,14 +15,12 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        dd('test');
         $user = $request->user();
         
         // Ensure user is authenticated
         if (!$user) {
             return redirect()->route('login');
         }
-        dd($user ,'is_admin');
         // Determine the correct dashboard route
         $defaultRoute = $user->is_admin 
             ? route('admin.dashboard', absolute: false) 
