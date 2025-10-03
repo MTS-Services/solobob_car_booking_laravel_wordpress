@@ -107,7 +107,7 @@
                                     </a>
 
                                     <!-- Security -->
-                                    <a href="#security" wire:navigate
+                                    <a href="{{ route('user.security') }}" wire:navigate
                                         class="flex-1 flex items-center justify-center gap-2 lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
                     {{ $page_slug === 'user-security' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
                                         <flux:icon name="shield" class="w-5 h-5" />
