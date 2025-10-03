@@ -82,6 +82,27 @@
                         'active' => 'admin-users-banned',
                     ],
                 ]" />
+                 <x-backend.navlink type="dropdown" icon="user-group" name="Product Management" :page_slug="$active"
+                :items="[
+                    [
+                        'name' => 'Product category',
+                        'route' => route('admin.pm.product-category'),
+                        'icon' => 'user',
+                        'active' => 'product-category',
+                    ],
+                    [
+                        'name' => 'Vehicle makes',
+                        'route' => route('admin.pm.vehicle-makes'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-make',
+                    ],
+                    // [
+                    //     'name' => 'Banned Users',
+                    //     'route' => '#',
+                    //     'icon' => 'user-round-x',
+                    //     'active' => 'admin-users-banned',
+                    // ],
+                ]" />
 
             <div class="pt-4 pb-2">
                 <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase"
