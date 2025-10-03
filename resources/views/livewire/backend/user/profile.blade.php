@@ -167,9 +167,9 @@
             <button 
                 type="submit"
                 wire:loading.attr="disabled"
-                class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-medium rounded-lg transition duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                class="px-8 py-3 bg-zinc-500 hover:bg-zinc-600 text-white font-medium rounded-lg transition duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-                <span wire:loading.remove wire:target="updateProfile">Save Changes</span>
+                <span wire:loading.remove wire:target="updateProfile" class="text-white">Save Changes</span>
                 <span wire:loading wire:target="updateProfile">Saving...</span>
                 
                 <!-- Loading Spinner -->
