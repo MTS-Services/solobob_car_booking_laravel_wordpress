@@ -1,5 +1,6 @@
 <div>
     <section>
+
         <div class="flex items-center justify-between glass-card rounded-2xl p-6 mb-6">
             <h2 class="text-xl font-bold text-text-primary">{{ __('Order List') }}</h2>
             <div class="flex items-center gap-2">
@@ -61,24 +62,32 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-700/50">
                         @forelse ($orders as $order)
+                            {{-- @php 
+                                echo "<pre>";
+
+                                            print_r($order->timeline);
+
+                                echo "</pre>";
+
+                            @endphp --}}
                             <tr class="bg-zinc-50 transition-colors duration-150 ">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        @if ($order->avatar)
-                                            <img src="{{ Storage::url($order->avatar) }}" alt="{{ $order->name }}"
+                                        @if ($order->user->avatar)
+                                            <img src="{{ Storage::url($order->user->avatar) }}" alt="{{ $order->user->name }}"
                                                 class="w-10 h-10 rounded-full object-cover border-2 border-zinc-300">
                                         @else
                                             <div
                                                 class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
                                                 {{ $order->initials() }}
+                                               
                                             </div>
                                         @endif
-                                        <span class="text-accent font-medium">{{ $order->name }}</span>
-                                    </div>
+                                        <span class="text-accent font-medium">{{ $order->user->name }}
                                 </td>
-                                <td class="px-6 py-4 text-accent">{{ $order->email }}</td>
+                                <td class="px-6 py-4 text-accent">{{ $order->user->email }}</td>
                                 <td class="px-6 py-4">
-                                    @if ($order->email_verified_at)
+                                    @if ($order->user->email_verified_at)
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
@@ -115,12 +124,12 @@
                                                 'bg-red-500/20 text-red-400 border-red-500/30',
                                         ];
                                         $colorClass =
-                                            $statusColors[$order->status] ??
+                                            $statusColors[$order->timeline->booking_status] ??
                                             'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
                                     @endphp
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
-                                        {{ $order->status_label }}
+                                        {{ $order->timeline->booking_status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">

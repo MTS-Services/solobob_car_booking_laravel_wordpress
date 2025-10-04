@@ -86,9 +86,15 @@ class Booking extends BaseModel
         return $this->belongsTo(VehicleLocation::class, 'pickup_location_id');
     }
 
+
     public function auditor()
     {
         return $this->belongsTo(User::class, 'audit_by');
+    }
+
+      public function timeline()
+    {
+        return $this->hasOne(BookingStatusTimeline::class, 'booking_id', 'id');
     }
     /* ================================================================
      * *** SCOPES ***
@@ -105,4 +111,8 @@ class Booking extends BaseModel
     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
+
+     public function initials(){
+        return $this->user ? substr($this->user->name, 0, 1) : null ;
+     }
 }

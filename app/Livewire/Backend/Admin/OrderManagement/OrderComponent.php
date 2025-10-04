@@ -35,7 +35,12 @@ class OrderComponent extends Component
             ->with(['vehicle', 'user','pickupLocation','auditor'])
             ->latest()
             ->paginate(10);
+         
 
+          
+
+
+        
        
         return view('livewire.backend.admin.order-management.order-component', compact('orders'));
     }
