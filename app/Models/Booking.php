@@ -14,30 +14,27 @@ class Booking extends BaseModel
     public const PAYMENT_STATUS_REFUNDED  = 2;
     public const PAYMENT_STATUS_FAILED    = 3;
 
-    // ->comment("0 = pending, 1 = confirmed, 2 = active, 3 = completed, 4 = cancelled, 5 = rejected");
     public const BOOKING_STATUS_PENDING    = 0;
-    public const BOOKING_STATUS_CONFIRMED  = 1;
-    public const BOOKING_STATUS_ACTIVE     = 2;
-    public const BOOKING_STATUS_COMPLETED  = 3;
-    public const BOOKING_STATUS_CANCELLED  = 4;
-    public const BOOKING_STATUS_REJECTED   = 5;
+    public const BOOKING_STATUS_ACCEPTED   = 1;
+    public const BOOKING_STATUS_DEPOSITED  = 2;
+    public const BOOKING_STATUS_DELIVERED  = 3;
+    public const BOOKING_STATUS_RETURNED   = 4;
+    public const BOOKING_STATUS_CANCELLED  = 5;
+    public const BOOKING_STATUS_REJECTED   = 6;
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'vehicle_id',
-        'renter_id',
-        'owner_id',
+        'user_id',
         'booking_reference',
-        'start_date',
-        'end_date',
-        'pickup_time',
-        'return_time',
+        'pickup_date',
+        'return_date',
+        'booking_date',
         'pickup_location_id',
-        'return_location_id',
-        'total_days',
-        'daily_rate',
+        'return_location',
         'subtotal',
         'delivery_fee',
         'service_fee',
@@ -45,33 +42,21 @@ class Booking extends BaseModel
         'security_deposit',
         'total_amount',
         'booking_status',
-        'payment_status',
         'special_requests',
-        'cancellation_reason',
-        'cancelled_by',
-        'cancelled_at',
-        'confirmed_at',
-        'created_by',
-        'updated_by',
-        'deleted_by',
+        'reason',
+        'audit_by',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'pickup_time' => 'datetime:H:i',
-        'return_time' => 'datetime:H:i',
-        'cancelled_at' => 'datetime',
-        'confirmed_at' => 'datetime',
-        'booking_status' => 'integer',
-        'payment_status' => 'integer',
-        'daily_rate' => 'decimal:2',
-        'subtotal' => 'decimal:2',
-        'delivery_fee' => 'decimal:2',
-        'service_fee' => 'decimal:2',
-        'tax_amount' => 'decimal:2',
-        'security_deposit' => 'decimal:2',
-        'total_amount' => 'decimal:2',
+        'pickup_date'       => 'datetime',
+        'return_date'       => 'datetime',
+        'booking_date'      => 'datetime',
+        'subtotal'          => 'decimal:2',
+        'delivery_fee'      => 'decimal:2',
+        'service_fee'       => 'decimal:2',
+        'tax_amount'        => 'decimal:2',
+        'security_deposit'  => 'decimal:2',
+        'total_amount'      => 'decimal:2',
     ];
 
 
@@ -85,19 +70,15 @@ class Booking extends BaseModel
      * *** RELATIONS ***
      ================================================================ */
 
+    // Relations
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function renter()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'renter_id');
-    }
-
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class);
     }
 
     public function pickupLocation()
@@ -105,11 +86,10 @@ class Booking extends BaseModel
         return $this->belongsTo(VehicleLocation::class, 'pickup_location_id');
     }
 
-    public function returnLocation()
+    public function auditor()
     {
-        return $this->belongsTo(VehicleLocation::class, 'return_location_id');
+        return $this->belongsTo(User::class, 'audit_by');
     }
-
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */

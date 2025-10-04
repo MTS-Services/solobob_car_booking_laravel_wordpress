@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('rentalcheckouts', function (Blueprint $table) {
             $table->id();
-
-            // Relation with booking (one-to-one)
+            $table->unsignedBigInteger('sort_order')->default(0);
+            
             $table->unsignedBigInteger('booking_id')->unique();
             $table->foreign('booking_id')
                 ->references('id')->on('bookings')

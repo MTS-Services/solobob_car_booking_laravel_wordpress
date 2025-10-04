@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Traits\AuditColumnsTrait;
-use App\Models\VehicleAvailabillity;
+use App\Models\BookingStatusTimeline;
 
 return new class extends Migration
 {
@@ -16,15 +16,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_availabilities', function (Blueprint $table) {
+        Schema::create('booking_status_timelines', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
 
-           $table->unsignedBigInteger('vehicle_id');
-           $table->date('unavailable_date');
-           $table->tinyInteger('reason')->default(VehicleAvailabillity::REASON_BOOKED);
-              $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
-            
-            
+            $table->unsignedBigInteger('booking_id');
+            $table->tinyInteger('booking_status')
+                ->default(BookingStatusTimeline::STATUS_PENDING);
+
+            // Foreign Keys
+            $table->foreign('booking_id')
+                ->references('id')->on('bookings')
+                ->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
             $table->softDeletes();
             $this->addAdminAuditColumns($table);
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle_availabillities');
+        Schema::dropIfExists('booking_status_timelines');
     }
 };
