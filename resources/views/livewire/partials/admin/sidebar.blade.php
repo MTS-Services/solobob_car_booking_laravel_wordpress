@@ -121,6 +121,12 @@
                         'active' => 'vehicle-product',
                     ],
                 ]" />
+            <x-backend.navlink type="single" icon="currency-dollar" name="Deposit Management" :route="route('admin.deposits')"
+                active="deposit-management" :page_slug="$active" />
+                {{-- order management --}}
+
+            <x-backend.navlink type="single" icon="shopping-cart" name="Order Management" :route="route('admin.orders')"
+                active="order-management" :page_slug="$active" />
 
             <div class="pt-4 pb-2">
                 <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase"
