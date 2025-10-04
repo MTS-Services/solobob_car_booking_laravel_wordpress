@@ -75,8 +75,6 @@
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">
                                 Name</th>
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">
-                                Slug</th>
-                            <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">
                                 Created At</th>
                             <th class="px-6 text-white py-4 text-left text-xs font-semibold uppercase tracking-wider">
                                 Created By</th>
@@ -89,7 +87,6 @@
                             <tr class="bg-zinc-50 transition-colors duration-150">
                                
                                 <td class="px-6 py-4 text-accent">{{ $vehicleMake->name }}</td>
-                                <td class="px-6 py-4 text-accent">{{ $vehicleMake->slug }}</td>
                                 
                                 <td class="px-6 py-4">
                                     <div class="flex flex-col">
@@ -221,7 +218,7 @@
                     class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-2xl w-full border border-zinc-800">
                     {{-- Header --}}
                     <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Category Details') }}</h3>
+                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Vehicle Details') }}</h3>
                         <button wire:click="closeDetailsModal"
                             class="text-zinc-400 hover:text-zinc-300 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24"
@@ -329,7 +326,7 @@
                         {{-- Header --}}
                         <div class="px-6 py-4 border-b border-zinc-800">
                             <h3 class="text-lg font-semibold text-zinc-100">
-                                {{ $editMode ? __('Edit Category') : __('Create New Vehicle Make') }}
+                                {{ $editMode ? __('Edit Vehicle') : __('Create New Vehicle Make') }}
                             </h3>
                         </div>
 
@@ -341,23 +338,14 @@
                                 <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
                                 <input wire:model="name" type="text"
                                     class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter category name">
+                                    placeholder="Enter vehicle name">
                                 @error('name')
                                     <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                                 @enderror
                             </div>
 
                             {{-- Email --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Slug *</label>
-                                <input wire:model="slug" type="text"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter email address">
-                                @error('slug')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
-                            </div>
-
+                          
                             {{-- Status --}}
                             <
 
@@ -399,7 +387,7 @@
 
                     {{-- Body --}}
                     <div class="px-6 py-4">
-                        <p class="text-zinc-300">Are you sure you want to delete this category? This action will soft
+                        <p class="text-zinc-300">Are you sure you want to delete this Vehicle? This action will soft
                             delete the record.</p>
                     </div>
 

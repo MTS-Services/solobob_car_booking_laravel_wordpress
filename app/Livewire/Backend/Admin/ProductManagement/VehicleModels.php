@@ -46,9 +46,7 @@ class VehicleModels extends Component
     {
         $this->reset([
             'name', 
-            'slug',
            
-       
         ]);
        
         $this->resetValidation();
@@ -109,8 +107,7 @@ class VehicleModels extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug,' . ($this->editMode ? $this->adminId : 'NULL') . ',id',
-           
+          
            
         ];
 
@@ -123,7 +120,7 @@ class VehicleModels extends Component
             
             $updateData = [
                 'name' => $this->name,
-                'slug' => $this->slug,
+               
               
                 'updated_by' => user()->id,
             ];
@@ -135,7 +132,7 @@ class VehicleModels extends Component
         } else {
             $data = [
                 'name' => $this->name,
-                'slug' => $this->slug,
+              
                
                 'created_by' => user()->id,
             ];

@@ -111,8 +111,7 @@ class VehicleMakes extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug,' . ($this->editMode ? $this->adminId : 'NULL') . ',id',
-           
+                    
            
         ];
 
@@ -125,8 +124,6 @@ class VehicleMakes extends Component
             
             $updateData = [
                 'name' => $this->name,
-                'slug' => $this->slug,
-              
                 'updated_by' => user()->id,
             ];
 
@@ -137,7 +134,6 @@ class VehicleMakes extends Component
         } else {
             $data = [
                 'name' => $this->name,
-                'slug' => $this->slug,
                
                 'created_by' => user()->id,
             ];
