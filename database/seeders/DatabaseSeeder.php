@@ -34,7 +34,6 @@ class DatabaseSeeder extends Seeder
             VehicleMakeSeeder::class,
             VehicleModelSeeder::class,
             VehicleFuelSeeder::class,
-            VehicleTransmissionSeeder::class,
             VehicleFeatureSeeder::class,
             VehicleImageSeeder::class,
             VehicleRelationSeeder::class,

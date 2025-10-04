@@ -21,7 +21,6 @@ class VehicleRelationSeeder extends Seeder
         $features = VehicleFeature::pluck('id')->toArray();
         $makes = VehicleMake::pluck('id')->toArray();
         $models = VehicleModel::pluck('id')->toArray();
-        $transmissions = VehicleTransmission::pluck('id')->toArray();
 
         foreach ($vehicles as $vehicle) {
             VehicleRelation::updateOrCreate(
@@ -30,7 +29,6 @@ class VehicleRelationSeeder extends Seeder
                     'feature_id' => fake()->randomElement($features),
                     'make_id' => fake()->randomElement($makes),
                     'model_id' => fake()->randomElement($models),
-                    'transmission_id' => fake()->randomElement($transmissions),
                 ]
             );
         }
