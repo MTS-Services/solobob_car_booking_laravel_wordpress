@@ -37,6 +37,8 @@ class Admin extends Component
     public $email = '';
     public $password = '';
     public $password_confirmation = '';
+    public $number;
+    public $date_of_birth;
     public $status = User::STATUS_ACTIVE;
     public $avatar;
     public $existingAvatar = null;
@@ -56,11 +58,11 @@ class Admin extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 
-            'email', 
-            'password', 
-            'password_confirmation', 
-            'adminId', 
+            'name',
+            'email',
+            'password',
+            'password_confirmation',
+            'adminId',
             'editMode',
             'status',
             'avatar',
@@ -145,6 +147,11 @@ class Admin extends Component
             'password' => 'required|string|min:8|confirmed',
             'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
             'avatar' => 'nullable|image|max:2048',
+            'date_of_birth' => 'required|date|before : today ',
+            'number' => ['required', 'regex:/^(\+8801|01)[0-9]{9}$/'],
+
+            // 'date_of_birth'
+            // 'number'
         ]);
 
         $data = [
@@ -154,6 +161,11 @@ class Admin extends Component
             'is_admin' => User::ROLE_ADMIN,
             'status' => $this->status,
             'created_by' => user()->id,
+            'date_of_birth' => $this->date_of_birth,
+            'number' => $this->number,
+
+            // 'date_of_birth' => 
+            // 'number'
         ];
 
         // Handle avatar upload using service
@@ -185,7 +197,7 @@ class Admin extends Component
         ]);
 
         $admin = User::findOrFail($this->adminId);
-        
+
         $updateData = [
             'name' => $this->name,
             'email' => $this->email,

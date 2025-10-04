@@ -1,4 +1,4 @@
-<div>
+<div class="mx auto">
     {{-- Flash Messages --}}
     @if (session()->has('message'))
         <div class="mb-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-lg">
@@ -104,7 +104,9 @@
                                     @if ($admin->email_verified_at)
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2">
                                                 <polyline points="20 6 9 17 4 12"></polyline>
                                             </svg>
                                             Verified
@@ -112,10 +114,14 @@
                                     @else
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-amber-500/20 text-amber-400 border-amber-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
-                                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                                <line x1="12" y1="8" x2="12" y2="12">
+                                                </line>
+                                                <line x1="12" y1="16" x2="12.01" y2="16">
+                                                </line>
                                             </svg>
                                             Unverified
                                         </span>
@@ -290,14 +296,18 @@
                                 <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsAdmin->name }}</h4>
                                 <p class="text-zinc-400">{{ $detailsAdmin->email }}</p>
                                 @if ($detailsAdmin->email_verified_at)
-                                    <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <span
+                                        class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                         Email Verified
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400">
+                                    <span
+                                        class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400">
                                         Email Unverified
                                     </span>
                                 @endif
@@ -395,13 +405,13 @@
 
     {{-- Create/Edit Modal --}}
     @if ($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeModal">
+        <div class="fixed  inset-0 z-50 overflow-y-auto " wire:keydown.escape="closeModal ">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
                 <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity" wire:click="closeModal">
                 </div>
 
                 <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full border border-zinc-800">
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-3xl w-full border border-zinc-800 ">
                     <form wire:submit="save">
                         <div class="px-6 py-4 border-b border-zinc-800">
                             <h3 class="text-lg font-semibold text-zinc-100">
@@ -411,8 +421,12 @@
 
                         <div class="px-6 py-4 space-y-4">
                             {{-- Avatar Upload --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Profile Picture</label>
+
+
+                            <label class="block text-sm font-medium text-zinc-300 text-center mb-2">Profile
+                                Picture</label>
+                            <div class="flex items-center justify-center">
+
                                 <div class="flex items-center gap-4">
                                     <div class="flex-shrink-0">
                                         @if ($avatar)
@@ -475,8 +489,9 @@
                             </div>
 
                             {{-- Name --}}
+
                             <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
+                                <label class="block  text-sm font-medium text-zinc-300 mb-2">Name *</label>
                                 <input wire:model="name" type="text"
                                     class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
                                     placeholder="Enter admin name">
@@ -486,49 +501,93 @@
                             </div>
 
                             {{-- Email --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Email *</label>
-                                <input wire:model="email" type="email"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter email address">
-                                @error('email')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                            {{-- Status --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Status *</label>
-                                <select wire:model="status"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
-                                    @foreach ($statuses as $key => $label)
-                                        <option value="{{ $key }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                @error('status')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">Email *</label>
+                                    <input wire:model="email" type="email"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter email address">
+                                    @error('email')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+
+                                {{-- number --}}
+
+
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">Number</label>
+                                    <input wire:model="number" type="number"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter email address">
+                                    @error('email')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            {{-- date_of_birth --}}
+
+                            <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">Date of Birth</label>
+                                    <input wire:model="date_of_birth" type="date"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter email address">
+                                    @error('email')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+
+
+                                {{-- Status --}}
+
+
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300  mb-2">Status </label>
+                                    <select wire:model="status"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
+                                        @foreach ($statuses as $key => $label)
+                                            <option value="{{ $key }}">{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('status')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
 
                             {{-- Password --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">
-                                    Password {{ $editMode ? '(Leave blank to keep current)' : '*' }}
-                                </label>
-                                <input wire:model="password" type="password"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter password">
-                                @error('password')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
-                            </div>
 
-                            {{-- Confirm Password --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Confirm Password</label>
-                                <input wire:model="password_confirmation" type="password"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Confirm password">
+                            <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">
+                                        Password {{ $editMode ? '(Leave blank to keep current)' : '' }}
+                                    </label>
+                                    <input wire:model="password" type="password"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter password">
+                                    @error('password')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+
+
+                                {{-- Confirm Password --}}
+                                <div>
+                                    <label for="password_confirmation"
+                                        class="block text-sm font-medium text-zinc-300 mb-2">
+                                        Confirm Password
+                                    </label>
+
+                                    <input id="password_confirmation" wire:model="password_confirmation"
+                                        type="password"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder=" Confirm Password">
+                                </div>
                             </div>
                         </div>
 
