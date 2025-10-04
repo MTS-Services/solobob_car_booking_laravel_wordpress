@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('site_name')) {
     function site_name()
@@ -52,3 +53,10 @@ if (!function_exists('auth_storage_url')) {
         return $url ? $url : $image;
     }
 }
+if (! function_exists('user')) {
+    function user()
+    {
+        return Auth::user();
+    }
+}
+

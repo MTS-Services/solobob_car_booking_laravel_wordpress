@@ -12,8 +12,8 @@
              </div>
          </div>
      </div>
-   
+
      <div class="mt-4 glass-card rounded-2xl p-6">
-         @livewire('user-table')
+         @livewire('user-table', ['type' => 'user'])
      </div>
  </section>

@@ -15,6 +15,10 @@
 
 @import "flatpickr/dist/flatpickr.min.css";
 
+/* Swiper */
+@import 'swiper/css/bundle';
+
+
 /* @import "~tom-select/dist/scss/tom-select.bootstrap5"; */
 
 /* @custom-variant dark (&:where(.dark, .dark *)); */
@@ -245,3 +249,4 @@ textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
+

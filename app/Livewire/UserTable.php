@@ -43,7 +43,8 @@ final class UserTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return User::query();
+        return User::query()->where('is_admin', false);
+        
     }
 
     public function relationSearch(): array

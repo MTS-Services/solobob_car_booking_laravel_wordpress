@@ -13,6 +13,7 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
@@ -74,7 +75,50 @@
                 <livewire:partials.frontend.header />
                 <div class="flex flex-1">
                     <livewire:partials.frontend.sidebar />
-                    <main class="flex-grow p-6">
+
+
+
+                    <main class="flex-grow bg-white">
+                        @if (request()->routeIs('user.*'))
+                            <div class="container mx-auto px-1 xs:px-4 pt-8">
+                                <div class="grid grid-cols-2 gap-2 sm:flex sm:gap-4 mb-8">
+
+                                    <!-- My Bookings -->
+                                    <a href="{{ route('user.my-bookings') }}" wire:navigate
+                                        class="flex-1 flex items-center justify-center gap-2 lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
+                                         {{ $page_slug === 'user-my-bookings' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                        <flux:icon name="calendar" class="w-5 h-5" />
+                                        <span>My Bookings</span>
+                                    </a>
+
+                                    <!-- Payments -->
+                                    <a href="#payments" wire:navigate
+                                        class="flex-1 flex items-center justify-center gap-2 lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
+                                       {{ $page_slug === 'user-payments' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                        <flux:icon name="credit-card" class="w-5 h-5" />
+                                        <span>Payments</span>
+                                    </a>
+
+                                    <!-- Profile -->
+                                    <a href="{{ route('user.profile') }}" wire:navigate
+                                        class="flex-1 flex items-center justify-center gap-2 lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
+                                            {{ $page_slug === 'user-profile' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                        <flux:icon name="user" class="w-5 h-5" />
+                                        <span>Profile</span>
+                                    </a>
+
+                                    <!-- Security -->
+                                    <a href="{{ route('user.security') }}" wire:navigate
+                                        class="flex-1 flex items-center justify-center gap-2 lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
+                                      {{ $page_slug === 'user-security' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                        <flux:icon name="shield" class="w-5 h-5" />
+                                        <span>Security</span>
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+
+
                         {{ $slot }}
                     </main>
                 </div>
