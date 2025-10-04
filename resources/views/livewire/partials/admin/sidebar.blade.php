@@ -136,12 +136,12 @@
                         'icon' => 'cog-8-tooth',
                         'active' => 'settings-general',
                     ],
-                    [
-                        'name' => 'Appearance',
-                        'route' => '#',
-                        'icon' => 'palette',
-                        'active' => 'settings-appearance',
-                    ],
+                    // [
+                    //     'name' => 'Appearance',
+                    //     'route' => '#',
+                    //     'icon' => 'palette',
+                    //     'active' => 'settings-appearance',
+                    // ],
                     [
                         'name' => 'Security',
                         'route' => '#',
@@ -160,24 +160,24 @@
                         'icon' => 'credit-card',
                         'active' => 'settings-payments',
                     ],
-                    [
-                        'name' => 'Analytics',
-                        'route' => '#',
-                        'icon' => 'chart-bar',
-                        'active' => 'settings-analytics',
-                    ],
-                    [
-                        'name' => 'Support',
-                        'route' => '#',
-                        'icon' => 'headset',
-                        'active' => 'settings-support',
-                    ],
-                    [
-                        'name' => 'Notifications',
-                        'route' => '#',
-                        'icon' => 'bell',
-                        'active' => 'settings-notifications',
-                    ],
+                    // [
+                    //     'name' => 'Analytics',
+                    //     'route' => '#',
+                    //     'icon' => 'chart-bar',
+                    //     'active' => 'settings-analytics',
+                    // ],
+                    // [
+                    //     'name' => 'Support',
+                    //     'route' => '#',
+                    //     'icon' => 'headset',
+                    //     'active' => 'settings-support',
+                    // ],
+                    // [
+                    //     'name' => 'Notifications',
+                    //     'route' => '#',
+                    //     'icon' => 'bell',
+                    //     'active' => 'settings-notifications',
+                    // ],
                     [
                         'name' => 'Database',
                         'route' => '#',

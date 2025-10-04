@@ -73,9 +73,17 @@
                             <p class="text-sm text-text-primary font-medium">Alex Johnson</p>
                             <p class="text-xs text-text-secondary">@alexjohnson</p>
                         </div>
-
-                        {{-- <x-admin.profile-navlink route="#" name="{{ __('Profile') }}" />
-                        <x-admin.profile-navlink route="#" name="{{ __('Settings') }}" />
+                        <a href="#"
+                            class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-tl-xl rounded-tr-xl">
+                            {{ __('Profile') }}</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-bl-xl rounded-br-xl">
+                                {{ __('Sign Out') }}</button>
+                        </form>
+                        {{-- <x-admin.profile-navlink route="#" name="{{ __('Profile') }}" /> --}}
+                        {{-- <x-admin.profile-navlink route="#" name="{{ __('Settings') }}" />
                         <x-admin.profile-navlink route="{{ route('logout') }}" logout='true'
                             name="{{ __('Sign Out') }}" /> --}}
                         {{-- <a href="#"
