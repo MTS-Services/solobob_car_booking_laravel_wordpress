@@ -7,8 +7,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use function Pest\Laravel\put;
-
 return new class extends Migration
 {
     use AuditColumnsTrait, SoftDeletes;

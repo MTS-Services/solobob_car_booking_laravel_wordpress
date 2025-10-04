@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             VehicleRelationSeeder::class,
             VehicleLocationSeeder::class,
             VehicleAvailabilitySeeder::class,
+            VehicleSeeder::class,
         ]);
     }
 }
