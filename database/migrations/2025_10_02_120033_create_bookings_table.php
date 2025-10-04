@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-
+            
             // Relations
             $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('renter_id');

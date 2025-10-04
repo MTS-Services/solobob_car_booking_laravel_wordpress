@@ -18,8 +18,8 @@
      </div>
  </section> --}}
 
-
  <div>
+
      {{-- Flash Messages --}}
      @if (session()->has('message'))
          <div class="mb-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-lg">
@@ -37,11 +37,12 @@
          {{-- Header Section --}}
          <div class="glass-card rounded-2xl p-6 mb-6">
              <div class="flex items-center justify-between">
-                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
+                 <h2 class="text-xl font-bold text-accent">{{ __(' User List') }}</h2>
                  <div class="flex items-center gap-2">
-                     <x-button href="#" icon="trash-2" type='secondary' permission="admin-trash"
+                     <x-button href="#" icon="trash-2" type='secondary' permission="user-trash"
                          class="text-white">
                          {{ __('Trash') }}
+                          
                      </x-button>
                      <button wire:click="openCreateModal"
                          class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
@@ -105,25 +106,25 @@
                          </tr>
                      </thead>
                      <tbody class="divide-y divide-zinc-700/50">
-                         @forelse ($admins as $admin)
+                         @forelse ($users as $user)
                              <tr class="bg-zinc-50 transition-colors duration-150 ">
                                  <td class="px-6 py-4">
                                      <div class="flex items-center gap-3">
-                                         @if ($admin->avatar)
-                                             <img src="{{ Storage::url($admin->avatar) }}" alt="{{ $admin->name }}"
+                                         @if ($user->avatar)
+                                             <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}"
                                                  class="w-10 h-10 rounded-full object-cover border-2 border-zinc-300">
                                          @else
                                              <div
                                                  class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
-                                                 {{ $admin->initials() }}
+                                                 {{ $user->initials() }}
                                              </div>
                                          @endif
-                                         <span class="text-accent font-medium">{{ $admin->name }}</span>
+                                         <span class="text-accent font-medium">{{ $user->name }}</span>
                                      </div>
                                  </td>
-                                 <td class="px-6 py-4 text-accent">{{ $admin->email }}</td>
+                                 <td class="px-6 py-4 text-accent">{{ $user->email }}</td>
                                  <td class="px-6 py-4">
-                                     @if ($admin->email_verified_at)
+                                     @if ($user->email_verified_at)
                                          <span
                                              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
                                              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
@@ -160,22 +161,22 @@
                                                  'bg-red-500/20 text-red-400 border-red-500/30',
                                          ];
                                          $colorClass =
-                                             $statusColors[$admin->status] ??
+                                             $statusColors[$user->status] ??
                                              'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
                                      @endphp
                                      <span
                                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
-                                         {{ $admin->status_label }}
+                                         {{ $user->status_label }}
                                      </span>
                                  </td>
                                  <td class="px-6 py-4">
                                      <div class="flex flex-col">
-                                         <span class="text-accent text-sm">{{ $admin->created_at_formatted }}</span>
-                                         <span class="text-zinc-500 text-xs">{{ $admin->created_at_human }}</span>
+                                         <span class="text-accent text-sm">{{ $user->created_at_formatted }}</span>
+                                         <span class="text-zinc-500 text-xs">{{ $user->created_at_human }}</span>
                                      </div>
                                  </td>
                                  <td class="px-6 py-4 text-accent">
-                                     {{ $admin->createdBy?->name ?? 'System' }}
+                                     {{ $user->createdBy?->name ?? 'System' }}
                                  </td>
                                  <td class="px-6 py-4 ">
                                      <div class="flex items-center justify-end">
@@ -203,7 +204,7 @@
                                                  class="absolute right-0 mt-2 w-48 bg-zinc-100 border border-zinc-300 rounded-lg shadow-xl z-50"
                                                  style="display: none;">
                                                  <div class="py-1">
-                                                     <button wire:click="openDetailsModal({{ $admin->id }})"
+                                                     <button wire:click="openDetailsModal({{ $user->id }})"
                                                          @click="open = false"
                                                          class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm hover:bg-zinc-400 hover:text-white transition-colors">
                                                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -217,7 +218,7 @@
                                                          </svg>
                                                          Details
                                                      </button>
-                                                     <button wire:click="openEditModal({{ $admin->id }})"
+                                                     <button wire:click="openEditModal({{ $user->id }})"
                                                          @click="open = false"
                                                          class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-accent hover:bg-zinc-400 hover:text-white transition-colors">
                                                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -232,7 +233,7 @@
                                                          </svg>
                                                          Edit
                                                      </button>
-                                                     <button wire:click="openDeleteModal({{ $admin->id }})"
+                                                     <button wire:click="openDeleteModal({{ $user->id }})"
                                                          @click="open = false"
                                                          class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-zinc-400 hover:text-red-300 transition-colors">
                                                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -264,7 +265,7 @@
                                              <line x1="12" y1="16" x2="12.01" y2="16">
                                              </line>
                                          </svg>
-                                         <p class="text-zinc-500 text-lg">No admins found</p>
+                                         <p class="text-zinc-500 text-lg">No users found</p>
                                      </div>
                                  </td>
                              </tr>
@@ -274,16 +275,16 @@
              </div>
 
              {{-- Pagination --}}
-             @if ($admins->hasPages())
+             @if ($users->hasPages())
                  <div class="px-6 py-4 border-t border-zinc-700/50">
-                     {{ $admins->links() }}
+                     {{ $users->links() }}
                  </div>
              @endif
          </div>
      </section>
 
      {{-- Details Modal --}}
-     @if ($showDetailsModal && $detailsAdmin)
+     @if ($showDetailsModal && $detailsUser)
          <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDetailsModal">
              <div class="flex items-center justify-center min-h-screen px-4 py-6">
                  <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity"
@@ -292,7 +293,7 @@
                  <div
                      class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-2xl w-full border border-zinc-800">
                      <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
-                         <h3 class="text-lg font-semibold text-zinc-100">{{ __('Admin Details') }}</h3>
+                         <h3 class="text-lg font-semibold text-zinc-100">{{ __('User Details') }}</h3>
                          <button wire:click="closeDetailsModal"
                              class="text-zinc-400 hover:text-zinc-300 transition-colors">
                              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24"
@@ -305,20 +306,20 @@
 
                      <div class="px-6 py-6 space-y-6">
                          <div class="flex items-center gap-4">
-                             @if ($detailsAdmin->avatar)
-                                 <img src="{{ Storage::url($detailsAdmin->avatar) }}"
-                                     alt="{{ $detailsAdmin->name }}"
+                             @if ($detailsUser->avatar)
+                                 <img src="{{ Storage::url($detailsUser->avatar) }}"
+                                     alt="{{ $detailsUser->name }}"
                                      class="w-20 h-20 rounded-full object-cover border-4 border-zinc-700">
                              @else
                                  <div
                                      class="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-bold text-2xl">
-                                     {{ $detailsAdmin->initials() }}
+                                     {{ $detailsUser->initials() }}
                                  </div>
                              @endif
                              <div>
-                                 <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsAdmin->name }}</h4>
-                                 <p class="text-zinc-400">{{ $detailsAdmin->email }}</p>
-                                 @if ($detailsAdmin->email_verified_at)
+                                 <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsUser->name }}</h4>
+                                 <p class="text-zinc-400">{{ $detailsUser->email }}</p>
+                                 @if ($detailsUser->email_verified_at)
                                      <span
                                          class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
                                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
@@ -340,7 +341,7 @@
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                              <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                  <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                 <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
+                                 <p class="text-zinc-200 font-medium">#{{ $detailsUser->id }}</p>
                              </div>
 
                              <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
@@ -355,62 +356,62 @@
                                              'bg-red-500/20 text-red-400 border-red-500/30',
                                      ];
                                      $colorClass =
-                                         $statusColors[$detailsAdmin->status] ??
+                                         $statusColors[$detailsUser->status] ??
                                          'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
                                  @endphp
                                  <span
                                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
-                                     {{ $detailsAdmin->status_label }}
+                                     {{ $detailsUser->status_label }}
                                  </span>
                              </div>
 
                              <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                  <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
-                                 <p class="text-zinc-200 font-medium">{{ $detailsAdmin->created_at_formatted }}</p>
-                                 <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->created_at_human }}</p>
+                                 <p class="text-zinc-200 font-medium">{{ $detailsUser->created_at_formatted }}</p>
+                                 <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->created_at_human }}</p>
                              </div>
-
+                                    
                              <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                  <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created By</p>
                                  <p class="text-zinc-200 font-medium">
-                                     {{ $detailsAdmin->createdBy?->name ?? 'System' }}
+                                     {{ $detailsUser->createdBy?->name ?? 'System' }}
                                  </p>
-                                 @if ($detailsAdmin->createdBy)
-                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->createdBy->email }}</p>
+                                 @if ($detailsUser->createdBy)
+                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->createdBy->email }}</p>
                                  @endif
                              </div>
 
-                             @if ($detailsAdmin->updated_at && $detailsAdmin->updated_at != $detailsAdmin->created_at)
+                             @if ($detailsUser->updated_at && $detailsUser->updated_at != $detailsUser->created_at)
                                  <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                      <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated At</p>
-                                     <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updated_at_formatted }}
+                                     <p class="text-zinc-200 font-medium">{{ $detailsUser->updated_at_formatted }}
                                      </p>
-                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updated_at_human }}</p>
+                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->updated_at_human }}</p>
                                  </div>
 
-                                 @if ($detailsAdmin->updatedBy)
+                                 @if ($detailsUser->updatedBy)
                                      <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                          <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated By</p>
-                                         <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updatedBy->name }}</p>
-                                         <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updatedBy->email }}
+                                         <p class="text-zinc-200 font-medium">{{ $detailsUser->updatedBy->name }}</p>
+                                         <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->updatedBy->email }}
                                          </p>
                                      </div>
                                  @endif
                              @endif
 
-                             @if ($detailsAdmin->deleted_at)
+                             @if ($detailsUser->deleted_at)
                                  <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                      <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted At</p>
-                                     <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deleted_at_formatted }}
+                                     <p class="text-zinc-200 font-medium">{{ $detailsUser->deleted_at_formatted }}
                                      </p>
-                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deleted_at_human }}</p>
+                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->deleted_at_human }}</p>
                                  </div>
 
-                                 @if ($detailsAdmin->deletedBy)
+                                 @if ($detailsUser->deletedBy)
                                      <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                          <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted By</p>
-                                         <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deletedBy->name }}</p>
-                                         <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deletedBy->email }}
+                                         <p class="text-zinc-200 font-medium">{{ $detailsUser->deletedBy->name }}</p>
+                                         <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->deletedBy->email }}
                                          </p>
                                      </div>
                                  @endif
@@ -442,7 +443,7 @@
                      <form wire:submit="save">
                          <div class="px-6 py-4 border-b border-zinc-800">
                              <h3 class="text-lg font-semibold text-zinc-100">
-                                 {{ $editMode ? __('Edit Admin') : __('Create New Admin') }}
+                                 {{ $editMode ? __('Edit User') : __('Create New User') }}
                              </h3>
                          </div>
 
@@ -516,7 +517,7 @@
                                  <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
                                  <input wire:model="name" type="text"
                                      class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                     placeholder="Enter admin name">
+                                     placeholder="Enter user name">
                                  @error('name')
                                      <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                                  @enderror
@@ -599,7 +600,7 @@
                      </div>
 
                      <div class="px-6 py-4">
-                         <p class="text-zinc-300">Are you sure you want to delete this admin? This action will soft
+                         <p class="text-zinc-300">Are you sure you want to delete this user? This action will soft
                              delete the record.</p>
                      </div>
 

@@ -15,30 +15,43 @@ use Livewire\WithPagination;
     [
         'title' => 'User Management',
         'breadcrumb' => 'Users',
-        'page_slug' => 'admin-users',
+        'page_slug' => 'user-users',
     ]
 )]
 class User extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
+
 
     protected FileUploadService $fileUploadService;
 
     public $search = '';
+
     public $showModal = false;
+
     public $showDeleteModal = false;
+
     public $showDetailsModal = false;
-    public $detailsAdmin = null;
+
+    public $detailsUser = null;
+
     public $editMode = false;
 
     // Form fields
-    public $adminId;
+    public $userId;
+
     public $name = '';
+
     public $email = '';
+
     public $password = '';
+
     public $password_confirmation = '';
+
     public $status = ModelsUser::STATUS_ACTIVE;
+
     public $avatar;
+
     public $existingAvatar = null;
 
     protected $queryString = ['search'];
@@ -56,15 +69,15 @@ class User extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 
-            'email', 
-            'password', 
-            'password_confirmation', 
-            'adminId', 
+            'name',
+            'email',
+            'password',
+            'password_confirmation',
+            'userId',
             'editMode',
             'status',
             'avatar',
-            'existingAvatar'
+            'existingAvatar',
         ]);
         $this->status = ModelsUser::STATUS_ACTIVE;
         $this->resetValidation();
@@ -78,7 +91,7 @@ class User extends Component
 
     public function openDetailsModal($id)
     {
-        $this->detailsAdmin = ModelsUser::withTrashed()
+        $this->detailsUser = ModelsUser::withTrashed()
             ->with(['createdBy', 'updatedBy', 'deletedBy'])
             ->findOrFail($id);
         $this->showDetailsModal = true;
@@ -87,19 +100,19 @@ class User extends Component
     public function closeDetailsModal()
     {
         $this->showDetailsModal = false;
-        $this->detailsAdmin = null;
+        $this->detailsUser = null;
     }
 
     public function openEditModal($id)
     {
         $this->resetFields();
-        $admin = ModelsUser::findOrFail($id);
+        $user = ModelsUser::findOrFail($id);
 
-        $this->adminId = $admin->id;
-        $this->name = $admin->name;
-        $this->email = $admin->email;
-        $this->status = $admin->status ?? ModelsUser::STATUS_ACTIVE;
-        $this->existingAvatar = $admin->avatar;
+        $this->userId = $user->id;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->status = $user->status ?? ModelsUser::STATUS_ACTIVE;
+        $this->existingAvatar = $user->avatar;
         $this->editMode = true;
         $this->showModal = true;
     }
@@ -112,7 +125,7 @@ class User extends Component
 
     public function openDeleteModal($id)
     {
-        $this->adminId = $id;
+        $this->userId = $id;
         $this->showDeleteModal = true;
     }
 
@@ -125,25 +138,25 @@ class User extends Component
     public function closeDeleteModal()
     {
         $this->showDeleteModal = false;
-        $this->adminId = null;
+        $this->userId = null;
     }
 
     public function save()
     {
         if ($this->editMode) {
-            $this->updateAdmin();
+            $this->updateUser();
         } else {
-            $this->createAdmin();
+            $this->createUser();
         }
     }
 
-    protected function createAdmin()
+    protected function createUser()
     {
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'status' => 'required|in:' . ModelsUser::STATUS_ACTIVE . ',' . ModelsUser::STATUS_SUSPENDED . ',' . ModelsUser::STATUS_DELETED,
+            'status' => 'required|in:'.ModelsUser::STATUS_ACTIVE.','.ModelsUser::STATUS_SUSPENDED.','.ModelsUser::STATUS_DELETED,
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -151,7 +164,7 @@ class User extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'is_admin' => ModelsUser::ROLE_ADMIN,
+            'is_user' => ModelsUser::ROLE_USER,
             'status' => $this->status,
             'created_by' => user()->id,
         ];
@@ -170,22 +183,22 @@ class User extends Component
 
         ModelsUser::create($data);
 
-        session()->flash('message', 'Admin created successfully.');
+        session()->flash('message', 'User created successfully.');
         $this->closeModal();
     }
 
-    protected function updateAdmin()
+    protected function updateUser()
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->adminId,
+            'email' => 'required|email|unique:users,email,'.$this->userId,
             'password' => 'nullable|string|min:8|confirmed',
-            'status' => 'required|in:' . ModelsUser::STATUS_ACTIVE . ',' . ModelsUser::STATUS_SUSPENDED . ',' . ModelsUser::STATUS_DELETED,
+            'status' => 'required|in:'.ModelsUser::STATUS_ACTIVE.','.ModelsUser::STATUS_SUSPENDED.','.ModelsUser::STATUS_DELETED,
             'avatar' => 'nullable|image|max:2048',
         ]);
 
-        $admin = ModelsUser::findOrFail($this->adminId);
-        
+        $user = ModelsUser::findOrFail($this->userId);
+
         $updateData = [
             'name' => $this->name,
             'email' => $this->email,
@@ -202,51 +215,52 @@ class User extends Component
         if ($this->avatar) {
             $updateData['avatar'] = $this->fileUploadService->updateImage(
                 file: $this->avatar,
-                oldPath: $admin->avatar,
+                oldPath: $user->avatar,
                 directory: 'avatars',
                 width: 400,
                 height: 400,
                 disk: 'public',
                 maintainAspectRatio: true
             );
-        } elseif ($this->existingAvatar === null && $admin->avatar) {
+        } elseif ($this->existingAvatar === null && $user->avatar) {
             // If existing avatar was removed
-            $this->fileUploadService->delete($admin->avatar, 'public');
+            $this->fileUploadService->delete($user->avatar, 'public');
             $updateData['avatar'] = null;
         }
 
-        $admin->update($updateData);
+        $user->update($updateData);
 
-        session()->flash('message', 'Admin updated successfully.');
+        session()->flash('message', 'User updated successfully.');
         $this->closeModal();
     }
 
     public function delete()
     {
-        $admin = ModelsUser::findOrFail($this->adminId);
+        $user = ModelsUser::findOrFail($this->userId);
 
         // Prevent deleting yourself
-        if ($admin->id === user()->id) {
+        if ($user->id === user()->id) {
             session()->flash('error', 'You cannot delete your own account.');
             $this->closeDeleteModal();
+
             return;
         }
 
         // Update deleted_by before soft deleting
-        $admin->update(['deleted_by' => user()->id]);
-        $admin->delete();
+        $user->update(['deleted_by' => user()->id]);
+        $user->delete();
 
-        session()->flash('message', 'Admin deleted successfully.');
+        session()->flash('message', 'User deleted successfully.');
         $this->closeDeleteModal();
     }
 
     public function render()
     {
-        $admins = ModelsUser::admins()
+        $users = ModelsUser::Users()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('email', 'like', '%'.$this->search.'%');
                 });
             })
             ->with(['createdBy', 'updatedBy'])
@@ -254,7 +268,7 @@ class User extends Component
             ->paginate(10);
 
         return view('livewire.backend.admin.user-management.user', [
-            'admins' => $admins,
+            'users' => $users,
             'statuses' => ModelsUser::getStatus(),
         ]);
     }
