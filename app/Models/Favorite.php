@@ -4,15 +4,14 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 
-class Review extends BaseModel
+class Favorite extends BaseModel
 {
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
-    const STATUS_PENDING   = 0;
-    const STATUS_PUBLISHED = 1;
-    const STATUS_FLAGGED   = 2;
-    const STATUS_REMOVED   = 3;
+
+    // public const ACTIVE = 1;
+    // public const INACTIVE = 0;
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -20,13 +19,19 @@ class Review extends BaseModel
 
     protected $fillable = [
         'sort_order',
-        'booking_id',
         'user_id',
-        'rating',
-        'title',
-        'comment',
-        'review_status',
+        'vehicle_id',
     ];
+
+    protected $hidden = [];
+
+    /**
+     * Define the attribute casts for the model.
+     */
+    protected function casts(): array
+    {
+        return [];
+    }
 
     public function __construct(array $attributes = [])
     {
@@ -37,16 +42,16 @@ class Review extends BaseModel
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
-    // Relationships
-    public function booking()
-    {
-        return $this->belongsTo(Booking::class);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */

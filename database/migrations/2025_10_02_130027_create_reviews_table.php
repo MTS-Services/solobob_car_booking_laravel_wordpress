@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Traits\AuditColumnsTrait;
+use App\Models\Review;
 
 return new class extends Migration
 {
@@ -17,41 +18,35 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
 
-
+            // Relationships
             $table->unsignedBigInteger('booking_id')->unique();
-            $table->unsignedBigInteger('reviewer_id');
-            $table->unsignedBigInteger('reviewee_id');
-            $table->tinyInteger('review_type');
-            
-            $table->decimal('rating', 2, 1);
+            $table->unsignedBigInteger('user_id');
+
+            // Review fields
+            $table->decimal('rating', 2, 1)->check('rating >= 1.0 and rating <= 5.0');
             $table->string('title', 255)->nullable();
             $table->text('comment')->nullable();
-            
-            $table->integer('cleanliness_rating')->nullable();
-            $table->integer('communication_rating')->nullable();
-            $table->integer('vehicle_accuracy_rating')->nullable();
-            $table->integer('value_rating')->nullable();
-            
-            $table->text('response')->nullable();
-            $table->timestamp('response_date')->nullable();
-            
-            $table->boolean('is_featured')->default(false);
-            $table->tinyInteger('review_status')->default(0)->comment("'0 = pending', '1 = published', '2 = flagged', '3 = removed'");
-            
-            $table->foreign('reviewer_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('reviewee_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade')->onUpdate('cascade');
-            
+
+            // Review status
+            $table->tinyInteger('review_status')->default(Review::STATUS_PENDING);
+
+            // Common columns
             $table->timestamps();
             $table->softDeletes();
-            $this->addAdminAuditColumns($table);
 
-            $table->index('booking_id', 'idx_booking_id');
-            $table->index('reviewer_id', 'idx_reviewer_id');
-            $table->index('reviewee_id', 'idx_reviewee_id');
-            $table->index('review_type', 'idx_review_type');
-            $table->index('rating', 'idx_rating');
+            // Admin audit trail
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+
+            // Foreign keys
+            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

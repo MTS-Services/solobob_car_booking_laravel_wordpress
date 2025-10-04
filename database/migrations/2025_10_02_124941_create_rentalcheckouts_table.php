@@ -38,7 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('performed_by')->nullable();
 
             // Foreign Keys
-            $table->foreign('performed_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('performed_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
             $table->softDeletes();
