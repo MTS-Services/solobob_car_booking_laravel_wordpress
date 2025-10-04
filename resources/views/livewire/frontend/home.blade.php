@@ -345,7 +345,7 @@
     <!-- Start of Testimonials Section -->
     <!-- resources/views/your-view.blade.php -->
 
-    <section class="w-full relative bg-black bg-black/50 text-white py-20">
+    <section class="w-screen  relative bg-black/50 text-white py-20">
         <!-- Background image with dark overlay -->
         <div class="absolute inset-0 opacity-20 bg-cover bg-center"
             style="background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
@@ -379,8 +379,14 @@
                 </div>
 
                 <!-- Swiper Navigation & Pagination -->
-                <div class="swiper-button-prev hidden sm:block"></div>
-                <div class="swiper-button-next hidden sm:block"></div>
+                    <div
+                    class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                    <flux:icon name="arrow-right" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
+                </div>
+                <div
+                    class="swiper-button-prev !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                    <flux:icon name="arrow-left" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
+                </div>
                 <div class="swiper-pagination mt-10"></div>
             </div>
         </div>
