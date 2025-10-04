@@ -8,7 +8,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Services\FileUpload\FileUploadService;
 
 #[Layout(
     'app',
@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Storage;
 class Admin extends Component
 {
     use WithPagination, WithFileUploads;
+
+    protected FileUploadService $fileUploadService;
 
     public $search = '';
     public $showModal = false;
@@ -40,6 +42,11 @@ class Admin extends Component
     public $existingAvatar = null;
 
     protected $queryString = ['search'];
+
+    public function boot(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
 
     public function updatingSearch()
     {
@@ -123,71 +130,94 @@ class Admin extends Component
 
     public function save()
     {
-        $rules = [
+        if ($this->editMode) {
+            $this->updateAdmin();
+        } else {
+            $this->createAdmin();
+        }
+    }
+
+    protected function createAdmin()
+    {
+        $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email' . ($this->editMode ? ',' . $this->adminId : ''),
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
             'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
-            'avatar' => 'nullable|image|max:2048', // 2MB max
+            'avatar' => 'nullable|image|max:2048',
+        ]);
+
+        $data = [
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+            'is_admin' => User::ROLE_ADMIN,
+            'status' => $this->status,
+            'created_by' => user()->id,
         ];
 
-        if (!$this->editMode) {
-            $rules['password'] = 'required|string|min:8|confirmed';
-        } elseif ($this->password) {
-            $rules['password'] = 'nullable|string|min:8|confirmed';
+        // Handle avatar upload using service
+        if ($this->avatar) {
+            $data['avatar'] = $this->fileUploadService->uploadImage(
+                file: $this->avatar,
+                directory: 'avatars',
+                width: 400,
+                height: 400,
+                disk: 'public',
+                maintainAspectRatio: true
+            );
         }
 
-        $this->validate($rules);
+        User::create($data);
 
-        if ($this->editMode) {
-            $admin = User::findOrFail($this->adminId);
-            
-            $updateData = [
-                'name' => $this->name,
-                'email' => $this->email,
-                'status' => $this->status,
-                'updated_by' => user()->id,
-            ];
+        session()->flash('message', 'Admin created successfully.');
+        $this->closeModal();
+    }
 
-            if ($this->password) {
-                $updateData['password'] = Hash::make($this->password);
-            }
+    protected function updateAdmin()
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $this->adminId,
+            'password' => 'nullable|string|min:8|confirmed',
+            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
+            'avatar' => 'nullable|image|max:2048',
+        ]);
 
-            // Handle avatar upload
-            if ($this->avatar) {
-                // Delete old avatar if exists
-                if ($admin->avatar) {
-                    Storage::disk('public')->delete($admin->avatar);
-                }
-                $updateData['avatar'] = $this->avatar->store('avatars', 'public');
-            } elseif ($this->existingAvatar === null && $admin->avatar) {
-                // If existing avatar was removed
-                Storage::disk('public')->delete($admin->avatar);
-                $updateData['avatar'] = null;
-            }
+        $admin = User::findOrFail($this->adminId);
+        
+        $updateData = [
+            'name' => $this->name,
+            'email' => $this->email,
+            'status' => $this->status,
+            'updated_by' => user()->id,
+        ];
 
-            $admin->update($updateData);
-
-            session()->flash('message', 'Admin updated successfully.');
-        } else {
-            $data = [
-                'name' => $this->name,
-                'email' => $this->email,
-                'password' => Hash::make($this->password),
-                'is_admin' => User::ROLE_ADMIN,
-                'status' => $this->status,
-                'created_by' => user()->id,
-            ];
-
-            // Handle avatar upload for new admin
-            if ($this->avatar) {
-                $data['avatar'] = $this->avatar->store('avatars', 'public');
-            }
-
-            User::create($data);
-
-            session()->flash('message', 'Admin created successfully.');
+        // Update password if provided
+        if ($this->password) {
+            $updateData['password'] = Hash::make($this->password);
         }
 
+        // Handle avatar update using service
+        if ($this->avatar) {
+            $updateData['avatar'] = $this->fileUploadService->updateImage(
+                file: $this->avatar,
+                oldPath: $admin->avatar,
+                directory: 'avatars',
+                width: 400,
+                height: 400,
+                disk: 'public',
+                maintainAspectRatio: true
+            );
+        } elseif ($this->existingAvatar === null && $admin->avatar) {
+            // If existing avatar was removed
+            $this->fileUploadService->delete($admin->avatar, 'public');
+            $updateData['avatar'] = null;
+        }
+
+        $admin->update($updateData);
+
+        session()->flash('message', 'Admin updated successfully.');
         $this->closeModal();
     }
 
@@ -204,7 +234,7 @@ class Admin extends Component
 
         // Update deleted_by before soft deleting
         $admin->update(['deleted_by' => user()->id]);
-        $admin->delete(); // This will soft delete due to SoftDeletes trait
+        $admin->delete();
 
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();

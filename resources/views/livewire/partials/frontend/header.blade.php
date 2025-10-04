@@ -17,27 +17,27 @@
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         HOME
                     </a>
-                    <a href="{{ route('products') }}" wire:navigate
+                    {{-- <a href="{{ route('products') }}" wire:navigate
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         PRODUCT
-                    </a>
-                    <a href="/"
+                    </a> --}}
+                    {{-- <a href="/"
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         APPLICATION
-                    </a>
+                    </a> --}}
                     <a href="#"
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         CONTACT
                     </a>
-                    <a href="#"
+                    {{-- <a href="#"
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         SIGN AGREEMENT
-                    </a>
+                    </a> --}}
                 </nav>
 
                 <!-- Call-to-Action + Mobile Menu Button -->
                 <div class="flex items-center gap-4">
-                    <a href="{{ route('home') }}" wire:navigate
+                    <a href="{{ route('products') }}" wire:navigate
                         class="bg-zinc-500 hover:bg-zinc-600 duration-300 text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full font-medium">
                         EXPLORE OUR CAR
                     </a>

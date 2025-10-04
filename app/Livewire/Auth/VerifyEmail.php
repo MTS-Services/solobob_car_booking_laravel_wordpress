@@ -5,35 +5,36 @@ namespace App\Livewire\Auth;
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-// #[Layout('components.layouts.auth')]
 class VerifyEmail extends Component
 {
-    /**
-     * Send an email verification notification to the user.
-     */
+
     public function sendVerification(): void
     {
-        if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        $user = Auth::user();
 
+        if ($user->hasVerifiedEmail()) {
+            
+            $defaultRoute = $user->is_admin 
+                ? route('admin.dashboard', absolute: false) 
+                : route('user.my-bookings', absolute: false);
+
+            $this->redirectIntended(default: $defaultRoute, navigate: true);
             return;
         }
 
-        Auth::user()->sendEmailVerificationNotification();
-
+        // send email
+        $user->sendEmailVerificationNotification();
+        // flash message
         Session::flash('status', 'verification-link-sent');
+
     }
 
-    /**
-     * Log the current user out of the application.
-     */
     public function logout(Logout $logout): void
     {
         $logout();
-
         $this->redirect('/', navigate: true);
     }
 }

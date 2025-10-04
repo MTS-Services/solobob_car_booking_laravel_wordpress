@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder; // Import for Scopes
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail 
 {
     use HasFactory, Notifiable, SoftDeletes;
 
@@ -107,6 +108,11 @@ class User extends Authenticatable
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
+
+     public function addresses()
+    {
+        return $this->hasMany(Addresse::class, 'user_id', 'id');
+    }
 
     public function createdBy()
     {
