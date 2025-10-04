@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
@@ -32,9 +32,8 @@ return new class extends Migration
             $table->unsignedBigInteger('billing_address_id')->nullable();
             $table->foreign('billing_address_id')->references('id')->on('addresses')->onDelete('set null')->onUpdate('cascade');
 
-            $table->boolean('is_default')->default(false);
             $table->boolean('is_verified')->default(false);
-            $table->string('stripe_payment_method_id', 255)->nullable();
+            $table->string('transaction_id');
 
             $table->timestamps();
             $table->softDeletes();

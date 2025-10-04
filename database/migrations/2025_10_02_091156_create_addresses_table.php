@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Traits\AuditColumnsTrait;
+use App\Models\Addresse;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,10 +18,11 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('user_id');
             
             // Address info
-            $table->tinyInteger('address_type')->default(0)->comment('0 = Personal, 1 = Residential, 2 = Parking');
+            $table->tinyInteger('address_type')->default(Addresse::PERSONAL);
             $table->string('address', 255);
             $table->string('city', 100);
             $table->string('state')->nullable();

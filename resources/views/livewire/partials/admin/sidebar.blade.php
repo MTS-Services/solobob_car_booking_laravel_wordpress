@@ -82,6 +82,54 @@
                         'active' => 'admin-users-banned',
                     ],
                 ]" />
+                 <x-backend.navlink type="dropdown" icon="user-group" name="Product Management" :page_slug="$active"
+                :items="[
+                    [
+                        'name' => 'Product category',
+                        'route' => route('admin.pm.product-category'),
+                        'icon' => 'user',
+                        'active' => 'product-category',
+                    ],
+                    [
+                        'name' => 'Vehicle makes',
+                        'route' => route('admin.pm.vehicle-makes'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-make',
+                    ],
+                   [
+                        'name' => 'Vehicle Fuel',
+                        'route' => route('admin.pm.vehicle-fuel'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-fuel',
+                    ],
+                     [
+                        'name' => 'Vehicle Models',
+                        'route' => route('admin.pm.vehicle-model'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-model',
+                    ],
+                     [
+                        'name' => 'Vehicle Transmission',
+                        'route' => route('admin.pm.vehicle-transmission'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-transmission',
+                    ],
+                     [
+                        'name' => 'Vehicle ',
+                        'route' => route('admin.pm.vehicle-product'),
+                        'icon' => 'user-plus',
+                        'active' => 'vehicle-product',
+                    ],
+                ]" />
+            <x-backend.navlink type="single" icon="currency-dollar" name="Deposit Management" :route="route('admin.deposits')"
+                active="deposit-management" :page_slug="$active" />
+                {{-- order management --}}
+
+            <x-backend.navlink type="single" icon="shopping-cart" name="Order Management" :route="route('admin.orders')"
+                active="order-management" :page_slug="$active" />
+
+            <x-backend.navlink type="single" icon="currency-dollar" name="Payments" :route="route('admin.payments')"
+                active="payments" :page_slug="$active" />
 
             <div class="pt-4 pb-2">
                 <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase"
@@ -97,12 +145,12 @@
                         'icon' => 'cog-8-tooth',
                         'active' => 'settings-general',
                     ],
-                    [
-                        'name' => 'Appearance',
-                        'route' => '#',
-                        'icon' => 'palette',
-                        'active' => 'settings-appearance',
-                    ],
+                    // [
+                    //     'name' => 'Appearance',
+                    //     'route' => '#',
+                    //     'icon' => 'palette',
+                    //     'active' => 'settings-appearance',
+                    // ],
                     [
                         'name' => 'Security',
                         'route' => '#',
@@ -121,24 +169,24 @@
                         'icon' => 'credit-card',
                         'active' => 'settings-payments',
                     ],
-                    [
-                        'name' => 'Analytics',
-                        'route' => '#',
-                        'icon' => 'chart-bar',
-                        'active' => 'settings-analytics',
-                    ],
-                    [
-                        'name' => 'Support',
-                        'route' => '#',
-                        'icon' => 'headset',
-                        'active' => 'settings-support',
-                    ],
-                    [
-                        'name' => 'Notifications',
-                        'route' => '#',
-                        'icon' => 'bell',
-                        'active' => 'settings-notifications',
-                    ],
+                    // [
+                    //     'name' => 'Analytics',
+                    //     'route' => '#',
+                    //     'icon' => 'chart-bar',
+                    //     'active' => 'settings-analytics',
+                    // ],
+                    // [
+                    //     'name' => 'Support',
+                    //     'route' => '#',
+                    //     'icon' => 'headset',
+                    //     'active' => 'settings-support',
+                    // ],
+                    // [
+                    //     'name' => 'Notifications',
+                    //     'route' => '#',
+                    //     'icon' => 'bell',
+                    //     'active' => 'settings-notifications',
+                    // ],
                     [
                         'name' => 'Database',
                         'route' => '#',

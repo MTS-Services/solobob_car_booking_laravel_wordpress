@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Category extends BaseModel
 {
@@ -10,8 +11,7 @@ class Category extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_INACTIVE = 0;
+ 
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -34,16 +34,44 @@ class Category extends BaseModel
     }
 
     /* ================================================================
-     * *** RELATIONS ***
+     * *** Status ***
      ================================================================ */
 
     //
+    
+   public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
+
+    public static function getStatus(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',
+        ];
+    }
+    public function getStatusLabelAttribute(): string
+    {
+        return self::getStatus()[$this->status] ?? 'Unknown';
+    }
+    public function getIsCategoryLabelAttribute(): string
+    {
+        return $this->is_admin ? 'Administrator' : 'User';
+    }
+    public function getStatusColorAttribute(): string
+    {
+         return match ($this->status) {
+            self::STATUS_ACTIVE => 'success',
+            self::STATUS_INACTIVE => 'warning',
+            default => 'secondary',
+        };
+    }
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
 
     //
+    
 
     /* ================================================================
      * *** ACCESSORS ***

@@ -9,47 +9,24 @@ class Review extends BaseModel
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
-
-    /** ENUMs */
-    public const TYPE_RENTER_TO_OWNER  = 1;
-    public const TYPE_OWNER_TO_RENTER  = 2;
-    public const TYPE_VEHICLE_REVIEW   = 3;
-
-    public const STATUS_PENDING   = 0;
-    public const STATUS_PUBLISHED = 1;
-    public const STATUS_FLAGGED   = 2;
-    public const STATUS_REMOVED   = 3;
+    const STATUS_PENDING   = 0;
+    const STATUS_PUBLISHED = 1;
+    const STATUS_FLAGGED   = 2;
+    const STATUS_REMOVED   = 3;
 
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'booking_id',
-        'reviewer_id',
-        'reviewee_id',
-        'review_type',
+        'user_id',
         'rating',
         'title',
         'comment',
-        'cleanliness_rating',
-        'communication_rating',
-        'vehicle_accuracy_rating',
-        'value_rating',
-        'response',
-        'response_date',
-        'is_featured',
         'review_status',
-        'created_by',
-        'updated_by',
-        'deleted_by',
     ];
-
-    protected $casts = [
-        'rating' => 'decimal:1',
-        'response_date' => 'datetime',
-    ];
-
 
     public function __construct(array $attributes = [])
     {
@@ -60,21 +37,16 @@ class Review extends BaseModel
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
+    // Relationships
     public function booking()
     {
         return $this->belongsTo(Booking::class);
     }
 
-    public function reviewer()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'reviewer_id');
+        return $this->belongsTo(User::class);
     }
-
-    public function reviewee()
-    {
-        return $this->belongsTo(User::class, 'reviewee_id');
-    }
-
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */

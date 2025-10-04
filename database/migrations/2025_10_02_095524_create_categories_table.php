@@ -18,10 +18,13 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('sort_order')->default(0);
+            $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->string('name', 100)->unique();
             $table->string('slug', 100)->unique();
             $table->tinyInteger('status')->default(Category::STATUS_ACTIVE)->index();
+            
+            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
             $table->softDeletes();

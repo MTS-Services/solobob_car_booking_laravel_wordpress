@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('rentalcheckouts', function (Blueprint $table) {
             $table->id();
-
-            // Relation with booking (one-to-one)
+            $table->unsignedBigInteger('sort_order')->default(0);
+            
             $table->unsignedBigInteger('booking_id')->unique();
             $table->foreign('booking_id')
                 ->references('id')->on('bookings')
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('performed_by')->nullable();
 
             // Foreign Keys
-            $table->foreign('performed_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('performed_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
             $table->softDeletes();

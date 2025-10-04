@@ -17,13 +17,12 @@ return new class extends Migration
     {
         Schema::create('vehicle_relations', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('sort_order')->default(0);
             // Vehicle Relation Columns
             $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('feature_id');
             $table->unsignedBigInteger('make_id');
             $table->unsignedBigInteger('model_id');
-            $table->unsignedBigInteger('transmission_id');
 
             // Foreign Key Constraints
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
@@ -33,10 +32,6 @@ return new class extends Migration
             $table->foreign('make_id')->references('id')->on('vehicle_makes')->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('model_id')  ->references('id')->on('vehicle_models') ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->foreign('transmission_id')
-                ->references('id')->on('vehicle_transmissions')
-                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
             $table->softDeletes();
