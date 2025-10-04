@@ -18,25 +18,22 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
 
             // Relations
             $table->unsignedBigInteger('vehicle_id');
-            $table->unsignedBigInteger('renter_id');
-            $table->unsignedBigInteger('owner_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('pickup_location_id')->nullable();
-            $table->unsignedBigInteger('return_location_id')->nullable();
-            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->unsignedBigInteger('audit_by')->nullable();
 
-            // Booking core info
+            // Booking info
             $table->string('booking_reference', 50)->unique();
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->time('pickup_time')->nullable();
-            $table->time('return_time')->nullable();
-            $table->integer('total_days')->nullable();
+            $table->dateTime('pickup_date')->nullable();
+            $table->dateTime('return_date')->nullable();
+            $table->dateTime('booking_date')->nullable();
+            $table->string('return_location')->nullable();
 
             // Pricing
-            $table->decimal('daily_rate', 10, 2)->nullable();
             $table->decimal('subtotal', 10, 2)->nullable();
             $table->decimal('delivery_fee', 10, 2)->default(0);
             $table->decimal('service_fee', 10, 2)->nullable();
@@ -44,26 +41,32 @@ return new class extends Migration
             $table->decimal('security_deposit', 10, 2)->nullable();
             $table->decimal('total_amount', 10, 2)->nullable();
 
-            // Statuses
+            // Status
             $table->tinyInteger('booking_status')
                 ->default(Booking::BOOKING_STATUS_PENDING);
-            $table->tinyInteger('payment_status')
-                ->default(Booking::PAYMENT_STATUS_PENDING);
 
-            // Extra info
+            // Additional info
             $table->text('special_requests')->nullable();
-            $table->text('cancellation_reason')->nullable();
-            $table->timestamp('cancelled_at')->nullable();
-            $table->timestamp('confirmed_at')->nullable();
+            $table->text('reason')->nullable();
 
-            // Foreign Key Constraints
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('renter_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('pickup_location_id')->references('id')->on('vehicle_locations')->onDelete('set null')->onUpdate('cascade');
-            $table->foreign('return_location_id')->references('id')->on('vehicle_locations')->onDelete('set null')->onUpdate('cascade');
-            $table->foreign('cancelled_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            // Foreign key constraints
+            $table->foreign('vehicle_id')
+                ->references('id')->on('vehicles')
+                ->onDelete('cascade')->onUpdate('cascade');
 
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreign('pickup_location_id')
+                ->references('id')->on('vehicle_locations')
+                ->onDelete('set null')->onUpdate('cascade');
+
+            $table->foreign('audit_by')
+                ->references('id')->on('users')
+                ->onDelete('set null')->onUpdate('cascade');
+
+            // Common columns
             $table->timestamps();
             $table->softDeletes();
             $this->addAdminAuditColumns($table);

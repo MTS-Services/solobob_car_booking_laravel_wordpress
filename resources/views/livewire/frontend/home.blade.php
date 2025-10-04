@@ -123,6 +123,9 @@
     </section>
 
 
+    {{-- tab 1                              tab 2                               tab 3                               tab 4 --}}
+    {{-- <livewire:frontend.boooking />          Component 2                         component 3                         component 4 --}}
+
     <section class="py-12 px-4 md:px-8 lg:px-16">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">

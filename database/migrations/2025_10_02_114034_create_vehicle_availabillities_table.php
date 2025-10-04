@@ -16,11 +16,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_availabillities', function (Blueprint $table) {
+        Schema::create('vehicle_availabilities', function (Blueprint $table) {
             $table->id();
 
            $table->unsignedBigInteger('vehicle_id');
-           $table->date('unavailable_date')->now();
+           $table->date('unavailable_date');
            $table->tinyInteger('reason')->default(VehicleAvailabillity::REASON_BOOKED);
               $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
             

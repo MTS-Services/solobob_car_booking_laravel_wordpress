@@ -9,9 +9,9 @@ class Addresse extends BaseModel
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
-
-    // public const ACTIVE = 1;
-    // public const INACTIVE = 0;
+    public const PERSONAL    = 0;
+    public const RESIDENTIAL = 1;
+    public const PARKING     = 2;
 
 
     public const TYPES = [

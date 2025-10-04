@@ -18,6 +18,7 @@ return new class extends Migration
     {
         Schema::create('user_documents', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('user_id');
             
             $table->string('licence')->nullable();

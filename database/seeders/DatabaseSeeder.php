@@ -28,5 +28,18 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
         // User::factory(50)->create();
+
+        $this->call([
+            CategorySeeder::class,
+            VehicleMakeSeeder::class,
+            VehicleModelSeeder::class,
+            VehicleFuelSeeder::class,
+            VehicleTransmissionSeeder::class,
+            VehicleFeatureSeeder::class,
+            VehicleImageSeeder::class,
+            VehicleRelationSeeder::class,
+            VehicleLocationSeeder::class,
+            VehicleAvailabilitySeeder::class,
+        ]);
     }
 }
