@@ -10,6 +10,7 @@ use App\Livewire\Backend\Admin\ProductManagement\Vehicles;
 use App\Livewire\Backend\Admin\ProductManagement\VehicleTransmissions;
 use App\Livewire\Backend\Admin\DepositManagement\DepositComponent;
 use App\Livewire\Backend\Admin\OrderManagement\OrderComponent;
+use App\Livewire\Backend\Admin\PaymentComponent;
 use App\Livewire\Backend\Admin\UserManagement\User;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,8 @@ Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
       Route::get('/vehicleproduct', Vehicles::class)->name('vehicle-product');
     
   });
+  
+  Route::get('/payments', PaymentComponent::class)->name('payments');
 });
 
 
