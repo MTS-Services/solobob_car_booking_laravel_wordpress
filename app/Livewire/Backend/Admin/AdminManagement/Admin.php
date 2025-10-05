@@ -44,8 +44,14 @@ class Admin extends Component
     public $existingAvatar = null;
 
     // Trash modal properties
+
+
     public $showTrashModal = false;
+    
     public $showForceDeleteModal = false;
+
+
+
     public $forceDeleteId = null;
     public $trashSearch = '';
 
