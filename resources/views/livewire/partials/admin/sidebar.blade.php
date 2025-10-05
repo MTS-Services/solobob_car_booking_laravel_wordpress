@@ -118,7 +118,7 @@
                         'name' => 'Vehicle ',
                         'route' => route('admin.pm.vehicle-list'),
                         'icon' => 'user-plus',
-                        'active' => 'vehicle-product',
+                        'active' => 'vehicle-list',
                     ],
                 ]" />
             <x-backend.navlink type="single" icon="currency-dollar" name="Deposit Management" :route="route('admin.deposits')"
