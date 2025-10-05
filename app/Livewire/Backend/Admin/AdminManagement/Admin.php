@@ -346,17 +346,17 @@ class Admin extends Component
 
         $columns = [
             // ['key' => 'id', 'label' => 'ID', 'width' => '5%'],
-            [
-                'key' => 'avatar',
-                'label' => 'Avatar',
-                'width' => '8%',
-                'format' => function ($admin) {
-                    if ($admin->avatar) {
-                        return '<img src="' . Storage::url($admin->avatar) . '" class="w-10 h-10 rounded-full" alt="' . $admin->name . '">';
-                    }
-                    return '<div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">' . strtoupper(substr($admin->name, 0, 1)) . '</div>';
-                }
-            ],
+            // [
+            //     'key' => 'avatar',
+            //     'label' => 'Avatar',
+            //     'width' => '8%',
+            //     'format' => function ($admin) {
+            //         if ($admin->avatar) {
+            //             return '<img src="' . Storage::url($admin->avatar) . '" class="w-10 h-10 rounded-full" alt="' . $admin->name . '">';
+            //         }
+            //         return '<div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">' . strtoupper(substr($admin->name, 0, 1)) . '</div>';
+            //     }
+            // ],
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
             ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
             [
@@ -372,9 +372,18 @@ class Admin extends Component
                 'label' => 'Created',
                 'width' => '15%',
                 'format' => function ($admin) {
-                    return $admin->created_at->format('M d, Y');
+                    return $admin->created_at_formatted;
                 }
             ],
+
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($admin) {
+                    return $admin->createdBy?->name ?? 'System' ;
+                }
+            ]                   
         ];
 
         $actions = [
