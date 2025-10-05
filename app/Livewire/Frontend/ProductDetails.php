@@ -2,32 +2,36 @@
 
 namespace App\Livewire\Frontend;
 
+use App\Models\Vehicle;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 #[Layout(
     'app',
     [
-        'title' => 'Product-details',
-        'breadcrumb' => 'Product-details',
+        'title' => 'Product Details',
+        'breadcrumb' => 'Product Details',
         'page_slug' => 'product-details'
     ]
 )]
 class ProductDetails extends Component
 {
+    public $vehicle;
 
-    public $showModal = false;
-
-    public function openModal()
+    public function mount($slug)
     {
-        $this->showModal = true;
-        $this->dispatch('modal-opened');
+        // Fetch vehicle with relationships
+        $this->vehicle = Vehicle::where('slug', $slug)
+            ->with(['category', 'owner'])
+            ->where('status', Vehicle::STATUS_AVAILABLE)
+            ->firstOrFail();
     }
 
-    public function closeModal()
+    public function back()
     {
-        $this->showModal = false;
+        return redirect()->route('product');
     }
+
     public function render()
     {
         return view('livewire.frontend.product-details');
