@@ -23,7 +23,7 @@ class MyBookings extends Component
     public function render()
     {
 
-         $myBookings = Booking::query()
+         $myBookings = Booking::query()->self()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('booking_reference', 'like', '%' . $this->search . '%')
@@ -32,7 +32,7 @@ class MyBookings extends Component
             })
             ->with(['vehicle', 'user', 'pickupLocation', 'auditor'])
             ->latest()
-            ->paginate(10);
+            ->paginate(5);
 
          $columns = [
          

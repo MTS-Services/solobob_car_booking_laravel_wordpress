@@ -128,8 +128,44 @@ class Booking extends BaseModel
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
+    public function scopeSelf($query)
+    {
+        return $query->where('user_id', user()->id);
+    }
+    public function scopePending($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_PENDING);
+    }
 
-    //
+    public function scopeAccepted($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_ACCEPTED);
+    }
+
+    public function scopeDeposited($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_DEPOSITED);
+    }
+
+    public function scopeDelivered($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_DELIVERED);
+    }
+
+    public function scopeReturned($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_RETURNED);
+    }
+
+    public function scopeCancelled($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_CANCELLED);
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->where('booking_status', self::BOOKING_STATUS_REJECTED);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***

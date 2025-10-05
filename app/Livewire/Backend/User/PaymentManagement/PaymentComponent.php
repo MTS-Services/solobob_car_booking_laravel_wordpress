@@ -75,7 +75,7 @@ class PaymentComponent extends Component
     }
     public function render()
     {
-        $payments = Payment::query()
+        $payments = Payment::query()->self()
             ->with(['booking', 'user'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
