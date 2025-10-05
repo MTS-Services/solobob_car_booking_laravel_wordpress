@@ -173,7 +173,7 @@ class Vehiclefuels extends Component
     
     public function render()
     {
-         $vehiclefules = VehicleFuel::query()
+         $vehiclefule = VehicleFuel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -183,10 +183,41 @@ class Vehiclefuels extends Component
             ->with(['createdBy', 'updatedBy'])
             ->latest()
             ->paginate(10);
+
+             $columns = [
+
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+            ['key' => 'slug', 'label' => 'slug', 'width' => '25%'],
+
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehiclefule) {
+                    return $vehiclefule->created_at_formatted;
+                }
+            ],
+
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehiclefule) {
+                    return $vehiclefule->createdBy?->name ?? 'System';
+                }
+            ]
+        ];
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
+            ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
      
         return view('livewire.backend.admin.product-management.vehiclefuels',
             [
-                'vehiclefuels' => $vehiclefules,
+                'vehiclefuels' => $vehiclefule,
+                'columns' => $columns,
+                'actions' => $actions
                 
             ]);
     }
