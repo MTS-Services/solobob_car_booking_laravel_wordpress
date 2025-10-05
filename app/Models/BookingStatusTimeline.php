@@ -25,6 +25,7 @@ class BookingStatusTimeline extends BaseModel
         'sort_order',
         'booking_id',
         'booking_status',
+        
         'created_by',
         'updated_by',
         'deleted_by',

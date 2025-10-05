@@ -124,8 +124,8 @@ class Vehicle extends BaseModel
     {
         parent::__construct($attributes);
         $this->appends = array_merge(parent::getAppends(), [
-
-
+            'status_label',
+            'status_color',
         ]);
     }
 

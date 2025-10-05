@@ -18,9 +18,12 @@ class Favorite extends BaseModel
      ================================================================ */
 
     protected $fillable = [
-        'sort_order',
         'user_id',
         'vehicle_id',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];
@@ -56,7 +59,10 @@ class Favorite extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    public function scopeSelf($query)
+    {
+        return $query->where('user_id', user()->id);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***

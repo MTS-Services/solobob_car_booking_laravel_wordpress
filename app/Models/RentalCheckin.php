@@ -47,6 +47,32 @@ class RentalCheckin extends BaseModel
     }
 
     /* ================================================================
+     * *** ATTRIBUTES ***
+     ================================================================ */
+     public function getFuelLavelStartLabelAttribute()
+     {
+         return match ($this->fuel_level_start) {
+             self::FUEL_LEVEL_EMPTY => 'Empty',
+             self::FUEL_LEVEL_QUARTER => 'Quarter',
+             self::FUEL_LEVEL_HALF => 'Half',
+             self::FUEL_LEVEL_THREE_QUARTER => 'Three Quarter',
+             self::FUEL_LEVEL_FULL => 'Full',
+             default => 'Unknown',
+         };
+     }
+     public function getFuelLavelStartColorAttribute()
+     {
+         return match ($this->fuel_level_start) {
+             self::FUEL_LEVEL_EMPTY => 'danger',
+             self::FUEL_LEVEL_QUARTER => 'warning',
+             self::FUEL_LEVEL_HALF => 'warning',
+             self::FUEL_LEVEL_THREE_QUARTER => 'warning',
+             self::FUEL_LEVEL_FULL => 'success',
+             default => 'primary',
+         };
+     }
+
+    /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
 

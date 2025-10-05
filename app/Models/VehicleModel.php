@@ -35,9 +35,28 @@ class VehicleModel extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'status_label',
+            'status_color',
+        ]);
     }
 
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',            
+            default => 'Unknown',
+        };
+    }
+    public function getStatusColorAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE => 'success',
+            self::STATUS_INACTIVE => 'warning',            
+            default => 'secondary',
+        };
+    }
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
@@ -48,7 +67,15 @@ class VehicleModel extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', self::STATUS_INACTIVE);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***

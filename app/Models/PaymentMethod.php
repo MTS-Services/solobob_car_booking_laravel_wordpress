@@ -32,6 +32,10 @@ class PaymentMethod extends BaseModel
         'expiry_month',
         'expiry_year',
         'cardholder_name',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];
@@ -47,7 +51,32 @@ class PaymentMethod extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'method_type_label',
+            'method_type_color',
+        ]);
+    }
+
+    public function getMethodTypeLabelAttribute()
+    {
+        return match ($this->method_type) {
+            self::METHOD_TYPE_CREDIT_CARD => 'Credit Card',
+            self::METHOD_TYPE_DEBIT_CARD => 'Debit Card',
+            self::METHOD_TYPE_PAYPAL => 'PayPal',
+            self::METHOD_TYPE_BANK_ACCOUNT => 'Bank Account',
+            default => 'Unknown',
+        };
+    }
+
+    public function getMethodTypeColorAttribute()
+    {
+        return match ($this->method_type) {
+            self::METHOD_TYPE_CREDIT_CARD => 'badge-info',
+            self::METHOD_TYPE_DEBIT_CARD => 'badge-info',
+            self::METHOD_TYPE_PAYPAL => 'badge-info',
+            self::METHOD_TYPE_BANK_ACCOUNT => 'badge-info',
+            default => 'badge-info',
+        };
     }
 
     /* ================================================================
@@ -73,7 +102,10 @@ class PaymentMethod extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    public function scopeSelf($query)
+    {
+        return $query->where('user_id', user()->id);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***
