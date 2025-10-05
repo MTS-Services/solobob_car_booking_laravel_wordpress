@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder; // Import for Scopes
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable; // Import for Scopes
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * *** MODEL CONSTANTS ***
      ================================================================ */
     public const ROLE_ADMIN = true;
+
     public const ROLE_USER = false;
 
     /* ================================================================
@@ -75,7 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'deleted_at_formatted',
     ];
 
-
     /* ================================================================
      * *** STATUS ***
      ================================================================ */
@@ -91,20 +91,23 @@ class User extends Authenticatable implements MustVerifyEmail
             self::STATUS_INACTIVE => 'Inactive',
         ];
     }
+
     public function getStatusLabelAttribute(): string
     {
         return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
+
     public function getIsAdminLabelAttribute(): string
     {
         return $this->is_admin ? 'Administrator' : 'User';
     }
+
     public function getStatusColorAttribute(): string
     {
         return match ((int) $this->status) {
             self::STATUS_ACTIVE => 'badge-success',
             self::STATUS_SUSPENDED => 'badge-warning',
-            self::STATUS_INACTIVE => 'badge-danger',
+            self::STATUS_INACTIVE => 'badge-error',
             default => 'badge-secondary',
         };
     }
@@ -132,7 +135,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
     }
 
-
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
@@ -153,7 +155,6 @@ class User extends Authenticatable implements MustVerifyEmail
         $query->where('is_admin', self::ROLE_USER);
     }
 
-
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
@@ -161,25 +162,25 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Accessor for human-readable 'created_at' time (e.g., "3 days ago").
      */
-    public function getCreatedAtHumanAttribute(): string
+    public function getCreatedAtHumanAttribute(): ?string
     {
-        return $this->created_at->diffForHumans();
+        return $this->created_at ? $this->created_at->diffForHumans() : null;
     }
 
     /**
      * Accessor for human-readable 'updated_at' time.
      */
-    public function getUpdatedAtHumanAttribute(): string
+    public function getUpdatedAtHumanAttribute(): ?string
     {
-        return $this->updated_at->diffForHumans();
+        return $this->updated_at ? $this->updated_at->diffForHumans() : null;
     }
 
     /**
      * Accessor for human-readable 'deleted_at' time.
      */
-    public function getDeletedAtHumanAttribute(): string
+    public function getDeletedAtHumanAttribute(): ?string
     {
-        return $this->deleted_at->diffForHumans();
+        return $this->deleted_at ? $this->deleted_at->diffForHumans() : null;
     }
 
     /**
@@ -197,6 +198,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Carbon::parse($this->updated_at)->format('d M, Y h:i A');
     }
+
     /**
      * Accessor for formatted 'deleted_at' date.
      */
@@ -204,7 +206,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Carbon::parse($this->deleted_at)->format('d M, Y h:i A');
     }
-
 
     /* ================================================================
      * *** UTILITY METHODS ***
@@ -219,7 +220,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn($word) => Str::substr($word, 0, 1))
+            ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 
