@@ -1,4 +1,4 @@
-<div>
+<div class="mx-auto">
     {{-- Flash Messages --}}
     @if (session()->has('message'))
         <div class="mb-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-lg">
@@ -18,7 +18,8 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
                 <div class="flex items-center gap-2">
-                    <x-button href="#" icon="trash-2" type='secondary' permission="admin-trash" class="text-white">
+                    <x-button wire:click="openTrashModal" icon="trash-2" type='secondary'
+                        permission="product-category-trash" class="text-white">
                         {{ __('Trash') }}
                     </x-button>
                     <button wire:click="openCreateModal"
@@ -104,7 +105,9 @@
                                     @if ($admin->email_verified_at)
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2">
                                                 <polyline points="20 6 9 17 4 12"></polyline>
                                             </svg>
                                             Verified
@@ -112,31 +115,22 @@
                                     @else
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-amber-500/20 text-amber-400 border-amber-500/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2">
                                                 <circle cx="12" cy="12" r="10"></circle>
-                                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                                <line x1="12" y1="8" x2="12" y2="12">
+                                                </line>
+                                                <line x1="12" y1="16" x2="12.01" y2="16">
+                                                </line>
                                             </svg>
                                             Unverified
                                         </span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    @php
-                                        $statusColors = [
-                                            \App\Models\User::STATUS_ACTIVE =>
-                                                'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                            \App\Models\User::STATUS_SUSPENDED =>
-                                                'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            \App\Models\User::STATUS_DELETED =>
-                                                'bg-red-500/20 text-red-400 border-red-500/30',
-                                        ];
-                                        $colorClass =
-                                            $statusColors[$admin->status] ??
-                                            'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                    @endphp
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border badge badge-soft {{ $admin->status_color }}">
                                         {{ $admin->status_label }}
                                     </span>
                                 </td>
@@ -254,6 +248,213 @@
         </div>
     </section>
 
+    {{-- Trash Modal --}}
+    @if ($showTrashModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeTrashModal">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity"
+                    wire:click="closeTrashModal"></div>
+
+                <div
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-6xl w-full border border-zinc-800">
+                    <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Trash') }}</h3>
+                        <button wire:click="closeTrashModal" class="text-white hover:text-zinc-300 transition-colors">
+                            <flux:icon name="x-mark" class="w-6 h-6 stroke-white" />
+                        </button>
+                    </div>
+
+                    <div class="px-6 py-6">
+                        {{-- Trash Search --}}
+                        <div class="mb-4">
+                            <div class="relative">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input wire:model.live.debounce.300ms="trashSearch" type="text"
+                                    placeholder="Search in trash..."
+                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-8 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+                                @if ($trashSearch)
+                                    <button type="button" wire:click="$set('trashSearch', '')"
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18">
+                                            </line>
+                                            <line x1="6" y1="6" x2="18" y2="18">
+                                            </line>
+                                        </svg>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- Trash Table --}}
+                        <div class="overflow-x-auto rounded-lg border border-zinc-800">
+                            <table class="w-full">
+                                <thead class="bg-zinc-800/50 border-b border-zinc-700">
+                                    <tr>
+                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
+                                            Name</th>
+                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
+                                            Email</th>
+                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
+                                            Deleted At</th>
+                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
+                                            Deleted By</th>
+                                        <th class="px-6 text-zinc-300 py-3 text-right text-xs font-semibold uppercase">
+                                            Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-700/50">
+                                    @forelse ($trashedAdmins as $trashedAdmin)
+                                        <tr class="bg-zinc-800/30 hover:bg-zinc-800/50 transition-colors">
+                                            <td class="px-6 py-4">
+                                                <div class="flex items-center gap-3">
+                                                    @if ($trashedAdmin->avatar)
+                                                        <img src="{{ Storage::url($trashedAdmin->avatar) }}"
+                                                            alt="{{ $trashedAdmin->name }}"
+                                                            class="w-10 h-10 rounded-full object-cover border-2 border-zinc-700">
+                                                    @else
+                                                        <div
+                                                            class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
+                                                            {{ $trashedAdmin->initials() }}
+                                                        </div>
+                                                    @endif
+                                                    <span
+                                                        class="text-zinc-200 font-medium">{{ $trashedAdmin->name }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 text-zinc-300">{{ $trashedAdmin->email }}</td>
+                                            <td class="px-6 py-4">
+                                                <div class="flex flex-col">
+                                                    <span
+                                                        class="text-zinc-300 text-sm">{{ $trashedAdmin->deleted_at_formatted }}</span>
+                                                    <span
+                                                        class="text-zinc-500 text-xs">{{ $trashedAdmin->deleted_at_human }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 text-zinc-300">
+                                                {{ $trashedAdmin->deletedBy?->name ?? 'System' }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <div class="flex items-center justify-end gap-2">
+                                                    <button wire:click="restore({{ $trashedAdmin->id }})"
+                                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 rounded-lg transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <polyline points="23 4 23 10 17 10"></polyline>
+                                                            <polyline points="1 20 1 14 7 14"></polyline>
+                                                            <path
+                                                                d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                                                            </path>
+                                                        </svg>
+                                                        Restore
+                                                    </button>
+                                                    <button wire:click="openForceDeleteModal({{ $trashedAdmin->id }})"
+                                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path
+                                                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                            </path>
+                                                            <line x1="10" y1="11" x2="10"
+                                                                y2="17"></line>
+                                                            <line x1="14" y1="11" x2="14"
+                                                                y2="17"></line>
+                                                        </svg>
+                                                        Delete Forever
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-12 text-center">
+                                                <div class="flex flex-col items-center justify-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="w-12 h-12 text-zinc-600" viewBox="0 0 24 24"
+                                                        fill="none" stroke="currentColor" stroke-width="2">
+                                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                                        <path
+                                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="text-zinc-500 text-lg">Trash is empty</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- Trash Pagination --}}
+                        @if ($trashedAdmins->hasPages())
+                            <div class="mt-4">
+                                {{ $trashedAdmins->links() }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Force Delete Confirmation Modal --}}
+    @if ($showForceDeleteModal)
+        <div class="fixed inset-0 z-[60] overflow-y-auto" wire:keydown.escape="closeForceDeleteModal">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm transition-opacity"
+                    wire:click="closeForceDeleteModal"></div>
+
+                <div
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-md w-full border border-red-800">
+                    <div class="px-6 py-4 border-b border-red-800 bg-red-900/20">
+                        <h3 class="text-lg font-semibold text-red-400">{{ __('Permanent Delete Warning') }}</h3>
+                    </div>
+
+                    <div class="px-6 py-4">
+                        <div class="flex items-start gap-3 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                                </path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            <div>
+                                <p class="text-zinc-200 font-medium mb-2">This action cannot be undone!</p>
+                                <p class="text-zinc-400 text-sm">
+                                    Are you sure you want to permanently delete this admin? All data will be removed
+                                    from the database forever.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
+                        <button wire:click="closeForceDeleteModal"
+                            class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
+                            Cancel
+                        </button>
+                        <button wire:click="forceDelete"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors duration-200 font-semibold">
+                            Delete Permanently
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Details Modal --}}
     @if ($showDetailsModal && $detailsAdmin)
         <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDetailsModal">
@@ -290,14 +491,18 @@
                                 <h4 class="text-xl font-semibold text-zinc-100">{{ $detailsAdmin->name }}</h4>
                                 <p class="text-zinc-400">{{ $detailsAdmin->email }}</p>
                                 @if ($detailsAdmin->email_verified_at)
-                                    <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <span
+                                        class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                         Email Verified
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400">
+                                    <span
+                                        class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400">
                                         Email Unverified
                                     </span>
                                 @endif
@@ -318,7 +523,7 @@
                                             'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                         \App\Models\User::STATUS_SUSPENDED =>
                                             'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                        \App\Models\User::STATUS_DELETED =>
+                                        \App\Models\User::STATUS_INACTIVE =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
                                     ];
                                     $colorClass =
@@ -395,13 +600,13 @@
 
     {{-- Create/Edit Modal --}}
     @if ($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeModal">
+        <div class="fixed  inset-0 z-50 overflow-y-auto " wire:keydown.escape="closeModal ">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
                 <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity" wire:click="closeModal">
                 </div>
 
                 <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full border border-zinc-800">
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-3xl w-full border border-zinc-800 ">
                     <form wire:submit="save">
                         <div class="px-6 py-4 border-b border-zinc-800">
                             <h3 class="text-lg font-semibold text-zinc-100">
@@ -411,8 +616,9 @@
 
                         <div class="px-6 py-4 space-y-4">
                             {{-- Avatar Upload --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Profile Picture</label>
+                            <label class="block text-sm font-medium text-zinc-300 text-center mb-2">Profile
+                                Picture</label>
+                            <div class="flex items-center justify-center">
                                 <div class="flex items-center gap-4">
                                     <div class="flex-shrink-0">
                                         @if ($avatar)
@@ -476,7 +682,7 @@
 
                             {{-- Name --}}
                             <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
+                                <label class="block  text-sm font-medium text-zinc-300 mb-2">Name *</label>
                                 <input wire:model="name" type="text"
                                     class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
                                     placeholder="Enter admin name">
@@ -485,50 +691,79 @@
                                 @enderror
                             </div>
 
-                            {{-- Email --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Email *</label>
-                                <input wire:model="email" type="email"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter email address">
-                                @error('email')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
+                            {{-- Email & Number --}}
+                            <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">Email *</label>
+                                    <input wire:model="email" type="email"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter email address">
+                                    @error('email')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">Number</label>
+                                    <input wire:model="number" type="number"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter phone number">
+                                    @error('number')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
 
-                            {{-- Status --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Status *</label>
-                                <select wire:model="status"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
-                                    @foreach ($statuses as $key => $label)
-                                        <option value="{{ $key }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                @error('status')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
+                            {{-- Date of Birth & Status --}}
+                            <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">Date of Birth</label>
+                                    <input wire:model="date_of_birth" type="date"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
+                                    @error('date_of_birth')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300  mb-2">Status </label>
+                                    <select wire:model="status"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
+                                        @foreach ($statuses as $key => $label)
+                                            <option value="{{ $key }}"
+                                                {{ $key == $status ? 'selected' : '' }}>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('status')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
 
-                            {{-- Password --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">
-                                    Password {{ $editMode ? '(Leave blank to keep current)' : '*' }}
-                                </label>
-                                <input wire:model="password" type="password"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter password">
-                                @error('password')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            {{-- Password & Confirm Password --}}
+                            <div class=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-zinc-300 mb-2">
+                                        Password {{ $editMode ? '(Leave blank to keep current)' : '*' }}
+                                    </label>
+                                    <input wire:model="password" type="password"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Enter password">
+                                    @error('password')
+                                        <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                            {{-- Confirm Password --}}
-                            <div>
-                                <label class="block text-sm font-medium text-zinc-300 mb-2">Confirm Password</label>
-                                <input wire:model="password_confirmation" type="password"
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Confirm password">
+                                <div>
+                                    <label for="password_confirmation"
+                                        class="block text-sm font-medium text-zinc-300 mb-2">
+                                        Confirm Password
+                                    </label>
+                                    <input id="password_confirmation" wire:model="password_confirmation"
+                                        type="password"
+                                        class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                        placeholder="Confirm Password">
+                                </div>
                             </div>
                         </div>
 
