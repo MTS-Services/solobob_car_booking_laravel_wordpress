@@ -173,7 +173,7 @@ class Vehiclefuels extends Component
     
     public function render()
     {
-         $vehiclefule = VehicleFuel::query()
+         $vehiclefules = VehicleFuel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -186,7 +186,7 @@ class Vehiclefuels extends Component
      
         return view('livewire.backend.admin.product-management.vehiclefuels',
             [
-                'vehiclefuels' => $vehiclefule,
+                'vehiclefuels' => $vehiclefules,
                 
             ]);
     }

@@ -19,7 +19,7 @@ use Livewire\WithPagination;
 class ProductCategory extends Component
 {
 
-      use WithPagination;
+    use WithPagination;
 
     public $search = '';
     public $showModal = false;
@@ -33,8 +33,8 @@ class ProductCategory extends Component
     public $name = '';
     public $slug = '';
     public $status = Category::STATUS_ACTIVE;
- 
-  
+
+
 
 
 
@@ -46,10 +46,10 @@ class ProductCategory extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 
+            'name',
             'slug',
             'status',
-       
+
         ]);
         $this->status = Category::STATUS_ACTIVE;
         $this->resetValidation();
@@ -88,7 +88,7 @@ class ProductCategory extends Component
         $this->showModal = true;
     }
 
- 
+
 
     public function openDeleteModal($id)
     {
@@ -114,16 +114,16 @@ class ProductCategory extends Component
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:categories,slug,' . ($this->editMode ? $this->adminId : 'NULL') . ',id',
             'status' => 'required|in:' . Category::STATUS_ACTIVE . ',' . Category::STATUS_INACTIVE,
-           
+
         ];
 
-       
+
 
         $this->validate($rules);
 
         if ($this->editMode) {
             $category = Category::findOrFail($this->adminId);
-            
+
             $updateData = [
                 'name' => $this->name,
                 'slug' => $this->slug,
@@ -131,7 +131,7 @@ class ProductCategory extends Component
                 'updated_by' => user()->id,
             ];
 
-           
+
             $category->update($updateData);
 
             session()->flash('message', 'category updated successfully.');
@@ -144,7 +144,7 @@ class ProductCategory extends Component
             ];
 
             // Handle avatar upload for new admin
-           
+
 
             Category::create($data);
 
@@ -172,10 +172,10 @@ class ProductCategory extends Component
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();
     }
-    
+
     public function render()
     {
-         $productCategories = Category::query()
+        $productCategories = Category::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -185,11 +185,45 @@ class ProductCategory extends Component
             ->with(['createdBy', 'updatedBy'])
             ->latest()
             ->paginate(10);
-     
-        return view('livewire.backend.admin.product-management.product-category',
+        $columns = [
+
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+            ['key' => 'slug', 'label' => 'slug', 'width' => '25%'],
+
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($productCategorie) {
+                    return $productCategorie->created_at_formatted;
+                }
+            ],
+
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($productCategorie) {
+                    return $productCategorie->createdBy?->name ?? 'System';
+                }
+            ]
+        ];
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
+            ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
+
+
+
+        return view(
+            'livewire.backend.admin.product-management.product-category',
             [
                 'productCategories' => $productCategories,
                 'statuses' => Category::getStatus(),
-            ]);
+                'columns' => $columns,
+                'actions' => $actions,
+            ]
+        );
     }
 }

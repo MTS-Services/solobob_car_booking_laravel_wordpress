@@ -35,6 +35,10 @@
                 transform: translateY(-20px);
             }
         }
+
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
     @stack('styles')
 </head>

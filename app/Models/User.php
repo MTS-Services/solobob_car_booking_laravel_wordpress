@@ -107,7 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return match ((int) $this->status) {
             self::STATUS_ACTIVE => 'badge-success',
             self::STATUS_SUSPENDED => 'badge-warning',
-            self::STATUS_INACTIVE => 'badge-danger',
+            self::STATUS_INACTIVE => 'badge-error',
             default => 'badge-secondary',
         };
     }

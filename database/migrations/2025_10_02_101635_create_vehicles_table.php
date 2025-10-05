@@ -46,7 +46,7 @@ return new class extends Migration
             $table->tinyInteger('status')
                 ->default(Vehicle::STATUS_AVAILABLE);
 
-            $table->tinyInteger('transmission_type');
+            $table->tinyInteger('transmission_type')->default(Vehicle::TRANSMISSION_AUTOMATIC);
 
             $table->foreign('owner_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
