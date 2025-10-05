@@ -22,7 +22,6 @@ class User extends Component
 {
     use WithFileUploads, WithPagination;
 
-
     protected FileUploadService $fileUploadService;
 
     public $search = '';
