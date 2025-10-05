@@ -10,8 +10,8 @@ class VehicleModel extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
-    // public const ACTIVE = 1;
-    // public const INACTIVE = 0;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
     /* ================================================================
      * *** PROPERTIES ***

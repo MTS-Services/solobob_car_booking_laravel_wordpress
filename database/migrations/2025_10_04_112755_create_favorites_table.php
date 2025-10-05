@@ -15,11 +15,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_transmissions', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            
+            $table->unsignedBigInteger('sort_order')->default(0);
+
+            // Relationships
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('vehicle_id');
+
+            // Foreign keys
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
             $table->softDeletes();
             $this->addAdminAuditColumns($table);
@@ -31,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle_transmissions');
+        Schema::dropIfExists('favorites');
     }
 };

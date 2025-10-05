@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Traits\AuditColumnsTrait;
+use App\Models\VehicleModel;
 
 return new class extends Migration
 {
@@ -17,8 +18,9 @@ return new class extends Migration
     {
         Schema::create('vehicle_models', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->tinyInteger('status')->default(VehicleModel::STATUS_ACTIVE)->index();
             
             $table->timestamps();
             $table->softDeletes();

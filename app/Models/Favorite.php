@@ -4,73 +4,67 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 
-class VehicleAvailabillity extends BaseModel
+class Favorite extends BaseModel
 {
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
-    //  [note: "'booked', 'maintenance', 'owner_blocked'"]
-    public const REASON_BOOKED          = 1;
-    public const REASON_MAINTENANCE     = 2;
-    public const REASON_OWNER_BLOCKED   = 3;
+    // public const ACTIVE = 1;
+    // public const INACTIVE = 0;
 
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
+        'user_id',
         'vehicle_id',
-        'unavailable_date',
-        'reason',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-       
     ];
 
-    protected $hidden = [
-        
-    ];
+    protected $hidden = [];
 
     /**
      * Define the attribute casts for the model.
      */
     protected function casts(): array
     {
-        return [
-            
-        ];
+        return [];
     }
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            
-        ]);
+        $this->appends = array_merge(parent::getAppends(), []);
     }
 
-     /* ================================================================
+    /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    //
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
 
-     //
+    //
 
-      /* ================================================================
+    /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
 
-     //
+    //
 
-     /* ================================================================
+    /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
-
 }

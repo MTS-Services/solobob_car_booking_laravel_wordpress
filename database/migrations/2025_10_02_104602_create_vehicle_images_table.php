@@ -17,9 +17,9 @@ return new class extends Migration
     {
         Schema::create('vehicle_images', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('vehicle_id');
-            $table->string('image_url');
-            $table->integer('order_image')->default(0);
+            $table->string('image');
             $table->boolean('is_primary')->default(0);
 
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');

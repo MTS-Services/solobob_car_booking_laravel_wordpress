@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-
+            $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('owner_id');
             $table->unsignedBigInteger('category_id');
 
@@ -28,21 +28,15 @@ return new class extends Migration
             $table->integer('year')->nullable();
             $table->string('color', 50)->nullable();
             $table->string('license_plate', 50)->unique();
-            $table->string('vin', 17)->unique()->nullable();
             $table->integer('seating_capacity')->nullable();
             $table->integer('mileage')->nullable();
             $table->text('description')->nullable();
 
             // Pricing
-            $table->decimal('daily_rate', 10, 2)->nullable();
             $table->decimal('weekly_rate', 10, 2)->nullable();
             $table->decimal('monthly_rate', 10, 2)->nullable();
-            $table->decimal('security_deposit', 10, 2)->nullable();
-
-            // Rental constraints
-            $table->integer('minimum_rental_days')->default(1);
-            $table->integer('maximum_rental_days')->default(30);
-
+            $table->decimal('security_deposit_weekly', 10, 2)->nullable();
+            $table->decimal('security_deposit_monthly', 10, 2)->nullable();
             // Options
             $table->boolean('instant_booking')->default(false);
             $table->boolean('delivery_available')->default(false);
@@ -52,8 +46,7 @@ return new class extends Migration
             $table->tinyInteger('status')
                 ->default(Vehicle::STATUS_AVAILABLE);
 
-            $table->tinyInteger('approval_status')
-                ->default(Vehicle::APPROVAL_PENDING);
+            $table->tinyInteger('transmission_type');
 
             $table->foreign('owner_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
