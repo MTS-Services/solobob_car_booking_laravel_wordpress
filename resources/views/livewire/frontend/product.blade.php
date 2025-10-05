@@ -1,4 +1,4 @@
-<section>
+<section x-data="{ showModal: false, modalOpen: false }">
     {{-- inner banner --}}
     <div class="relative w-full h-[40vh] bg-cover bg-center bg-no-repeat overflow-hidden"
         style="background-image: url('{{ asset('assets/images/inner_banner_bg.png') }}');">
