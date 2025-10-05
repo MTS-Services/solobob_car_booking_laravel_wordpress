@@ -132,7 +132,38 @@
                                             <div class="py-1">
                                                 @foreach ($actions as $action)
                                                     @if (isset($action['href']) && $action['href'] != null && $action['href'] != '#')
-                                                        <a href="{{ $action['href'] }}" title="{{ $action['label'] }}"
+                                                        @php
+                                                            $param =
+                                                                (isset($action['param']) && $action['param']
+                                                                    ? $action['param']
+                                                                    : $action['key']) ?? '';
+                                                            $actionValue = data_get($item, $param);
+                                                            $actionParam = is_numeric($actionValue)
+                                                                ? $actionValue
+                                                                : "'{$actionValue}'";
+                                                            $href = empty($actionParam)
+                                                                ? $action['href']
+                                                                : "{$action['href']}/{$actionParam}";
+                                                        @endphp
+                                                        <a href="{{ $href }}" title="{{ $action['label'] }}"
+                                                            target="{{ $action['target'] ?? '_self' }}"
+                                                            class="block px-4 py-2 w-full text-sm text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                                            wire:navigate>
+                                                            {{ $action['label'] }}
+                                                        </a>
+                                                    @elseif (isset($action['route']) && $action['route'] != null && $action['route'] != '#')
+                                                        @php
+                                                            $param =
+                                                                (isset($action['param']) && $action['param']
+                                                                    ? $action['param']
+                                                                    : $action['key']) ?? '';
+                                                            $actionValue = data_get($item, $param);
+                                                            $actionParam = is_numeric($actionValue)
+                                                                ? $actionValue
+                                                                : "'{$actionValue}'";
+                                                        @endphp
+                                                        <a href="{{ route($action['route'], $actionParam) }}"
+                                                            title="{{ $action['label'] }}"
                                                             target="{{ $action['target'] ?? '_self' }}"
                                                             class="block px-4 py-2 w-full text-sm text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                                             wire:navigate>
@@ -140,7 +171,12 @@
                                                         </a>
                                                     @elseif(isset($action['method']) && $action['method'] != null)
                                                         @php
-                                                            $actionValue = data_get($item, $action['key'] ?? 'id');
+                                                            $actionValue = data_get(
+                                                                $item,
+                                                                (isset($action['param']) && $action['param']
+                                                                    ? $action['param']
+                                                                    : $action['key']) ?? 'id',
+                                                            );
                                                             $actionParam = is_numeric($actionValue)
                                                                 ? $actionValue
                                                                 : "'{$actionValue}'";
