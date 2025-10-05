@@ -1,8 +1,21 @@
 <section class="container mx-auto ">
-    <div class="text-center bg-gray-50 h-[50vh]">
+   
+
+  @if($myBookings)
+        <div>
+          
+            <x-backend.table :columns="$columns" :data="$myBookings" :actions="$actions" search-property="search"
+            per-page-property="perPage" empty-message="No admins found." />
 
 
+
+         
+   
+        </div>
+     @else
+      <div class="text-center bg-gray-50 h-[50vh]">
         <div class="flex justify-center mb-8 ">
+        
             <svg class="w-32 h-32 text-cyan-500" viewBox="0 0 200 120" fill="none" stroke="currentColor" stroke-width="3"
                 stroke-linecap="round" stroke-linejoin="round">
                 <!-- Car Body -->
@@ -34,7 +47,10 @@
         </div>
 
         <!-- Empty State Text -->
+       
         <h2 class="text-2xl font-semibold text-gray-800 mb-2">No Bookings Yet</h2>
         <p class="text-gray-500">Your booking history will appear here</p>
+       
     </div>
+    @endif
 </section>
