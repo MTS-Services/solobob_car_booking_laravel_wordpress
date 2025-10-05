@@ -29,7 +29,7 @@ class ProductDetails extends Component
 
     public function back()
     {
-        return redirect()->route('product');
+        return $this->redirect(route('products'), navigate: true);
     }
 
     public function render()

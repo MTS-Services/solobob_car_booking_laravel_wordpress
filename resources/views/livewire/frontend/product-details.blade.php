@@ -7,17 +7,21 @@
             }
         </style>
     @endpush
-    
+
     {{-- Header Section --}}
     <div class="container mx-auto bg-white flex justify-between items-center py-4 px-3 lg:px-4 xl:px-6 2xl:px-2">
         <div class="flex flex-col space-y-2">
-            <div class="flex items-center gap-2">
-                <flux:icon name="arrow-left" class="w-5 h-5 cursor-pointer" wire:click="back" />
-                <button wire:click="back">Back</button>
-            </div>
+            <button wire:click="back"
+                class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 
+            rounded-lg transition-all duration-200">
+                <flux:icon name="arrow-left" class="w-5 h-5" />
+                <span>Back</span>
+            </button>
+
             <h2 class="text-2xl font-normal text-gray-900">{{ $vehicle->year }} {{ $vehicle->title }}</h2>
             <div class="text-white text-base bg-accent w-fit px-3 rounded-md">
-                ${{ number_format($vehicle->weekly_rate, 2) }} <span class="text-xs sm:text-sm font-medium text-white">/Week</span>
+                ${{ number_format($vehicle->weekly_rate, 2) }} <span
+                    class="text-xs sm:text-sm font-medium text-white">/Week</span>
             </div>
         </div>
         <div class="font-bold cursor-pointer" onclick="copyCurrentUrl(this)">
@@ -29,40 +33,41 @@
         <div class="flex flex-col w-full xl:flex-row gap-6">
             {{-- Left Side - Image Slider --}}
             <div class="w-full xl:w-2/3 shadow-lg bg-white sm:px-2 pb-2 xss:pb-3 xs:pb-6 sm:pb-10">
-                <div class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px] lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
+                <div
+                    class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px] lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
                         @php
                             $imagePath = asset('assets/images/default-car.png');
-                            
+
                             if ($vehicle->avatar) {
                                 $cleanPath = str_replace('storage/', '', $vehicle->avatar);
                                 $cleanPath = ltrim($cleanPath, '/');
                                 $imagePath = asset('storage/' . $cleanPath);
                             }
                         @endphp
-                        
+
                         {{-- Main vehicle image --}}
                         <div class="swiper-slide">
-                            <img src="{{ $imagePath }}" 
-                                alt="{{ $vehicle->title }} image" 
+                            <img src="{{ $imagePath }}" alt="{{ $vehicle->title }} image"
                                 class="w-full h-full object-cover"
                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
                         </div>
-                        
+
                         {{-- Additional placeholder slides (you can add more images relation later) --}}
-                        @for($i = 0; $i < 4; $i++)
+                        @for ($i = 0; $i < 4; $i++)
                             <div class="swiper-slide">
-                                <img src="{{ $imagePath }}" 
-                                    alt="{{ $vehicle->title }} image {{ $i + 2 }}" 
+                                <img src="{{ $imagePath }}" alt="{{ $vehicle->title }} image {{ $i + 2 }}"
                                     class="w-full h-full object-cover"
                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
                             </div>
                         @endfor
                     </div>
-                    <div class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                    <div
+                        class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
                         <flux:icon name="arrow-right" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
                     </div>
-                    <div class="swiper-button-prev !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                    <div
+                        class="swiper-button-prev !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
                         <flux:icon name="arrow-left" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
                     </div>
                 </div>
@@ -88,7 +93,8 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <flux:icon name="cog" class="w-5 h-5 text-gray-600" />
-                            <span class="text-sm text-gray-700">{{ $vehicle->transmission_type == 0 ? 'Automatic' : 'Manual' }}</span>
+                            <span
+                                class="text-sm text-gray-700">{{ $vehicle->transmission_type == 0 ? 'Automatic' : 'Manual' }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <flux:icon name="calendar" class="w-5 h-5 text-gray-600" />
@@ -96,60 +102,64 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <flux:icon name="tag" class="w-5 h-5 text-gray-600" />
-                            <span class="text-sm text-gray-700">{{ $vehicle->category?->name ?? 'Uncategorized' }}</span>
+                            <span
+                                class="text-sm text-gray-700">{{ $vehicle->category?->name ?? 'Uncategorized' }}</span>
                         </div>
-                        @if($vehicle->color)
-                        <div class="flex items-center gap-2">
-                            <flux:icon name="swatch" class="w-5 h-5 text-gray-600" />
-                            <span class="text-sm text-gray-700">Color: {{ $vehicle->color }}</span>
-                        </div>
+                        @if ($vehicle->color)
+                            <div class="flex items-center gap-2">
+                                <flux:icon name="swatch" class="w-5 h-5 text-gray-600" />
+                                <span class="text-sm text-gray-700">Color: {{ $vehicle->color }}</span>
+                            </div>
                         @endif
-                        @if($vehicle->license_plate)
-                        <div class="flex items-center gap-2">
-                            <flux:icon name="identification" class="w-5 h-5 text-gray-600" />
-                            <span class="text-sm text-gray-700">Plate: {{ $vehicle->license_plate }}</span>
-                        </div>
+                        @if ($vehicle->license_plate)
+                            <div class="flex items-center gap-2">
+                                <flux:icon name="identification" class="w-5 h-5 text-gray-600" />
+                                <span class="text-sm text-gray-700">Plate: {{ $vehicle->license_plate }}</span>
+                            </div>
                         @endif
                     </div>
 
-                    @if($vehicle->description)
-                    <div class="space-y-1 xs:space-y-2">
-                        <h3 class="font-semibold text-gray-900 text-sm xs:text-base">Details:</h3>
-                        <div class="text-gray-700 relative group text-sm xs:text-base" x-data="{ expanded: false, showButton: false }"
-                            x-init="$nextTick(() => { showButton = $refs.text.scrollHeight > $refs.text.clientHeight; })">
-                            <div :class="expanded ? '' : 'line-clamp-3'" x-ref="text">
-                                <p>{{ $vehicle->description }}</p>
+                    @if ($vehicle->description)
+                        <div class="space-y-1 xs:space-y-2">
+                            <h3 class="font-semibold text-gray-900 text-sm xs:text-base">Details:</h3>
+                            <div class="text-gray-700 relative group text-sm xs:text-base" x-data="{ expanded: false, showButton: false }"
+                                x-init="$nextTick(() => { showButton = $refs.text.scrollHeight > $refs.text.clientHeight; })">
+                                <div :class="expanded ? '' : 'line-clamp-3'" x-ref="text">
+                                    <p>{{ $vehicle->description }}</p>
+                                </div>
+                                <template x-if="showButton">
+                                    <button @click="expanded = !expanded"
+                                        class="text-zinc-600 hover:text-zinc-700 font-medium mt-1 transition-opacity duration-300 text-sm xs:text-base">
+                                        <span class="text-zinc-500"
+                                            x-text="expanded ? 'Read Less' : 'Read More...'"></span>
+                                    </button>
+                                </template>
                             </div>
-                            <template x-if="showButton">
-                                <button @click="expanded = !expanded"
-                                    class="text-zinc-600 hover:text-zinc-700 font-medium mt-1 transition-opacity duration-300 text-sm xs:text-base">
-                                    <span class="text-zinc-500" x-text="expanded ? 'Read Less' : 'Read More...'"></span>
-                                </button>
-                            </template>
                         </div>
-                    </div>
                     @endif
 
                     {{-- Additional Features --}}
-                    @if($vehicle->instant_booking || $vehicle->delivery_available)
-                    <div class="flex gap-2 flex-wrap">
-                        @if($vehicle->instant_booking)
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <flux:icon name="bolt" class="w-3 h-3 mr-1" />
-                            Instant Booking
-                        </span>
-                        @endif
-                        @if($vehicle->delivery_available)
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            <flux:icon name="truck" class="w-3 h-3 mr-1" />
-                            Delivery Available
-                            @if($vehicle->delivery_fee)
-                                (${{ number_format($vehicle->delivery_fee, 2) }})
+                    {{-- @if ($vehicle->instant_booking || $vehicle->delivery_available)
+                        <div class="flex gap-2 flex-wrap">
+                            @if ($vehicle->instant_booking)
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <flux:icon name="bolt" class="w-3 h-3 mr-1" />
+                                    Instant Booking
+                                </span>
                             @endif
-                        </span>
-                        @endif
-                    </div>
-                    @endif
+                            @if ($vehicle->delivery_available)
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    <flux:icon name="truck" class="w-3 h-3 mr-1" />
+                                    Delivery Available
+                                    @if ($vehicle->delivery_fee)
+                                        (${{ number_format($vehicle->delivery_fee, 2) }})
+                                    @endif
+                                </span>
+                            @endif
+                        </div>
+                    @endif --}}
                 </div>
             </div>
 
@@ -172,16 +182,16 @@
                         </button>
 
                         {{-- Owner Info --}}
-                        @if($vehicle->owner)
-                        <div class="pt-3 xs:pt-4 border-t border-gray-200">
-                            <h3 class="font-semibold text-gray-900 mb-2 text-sm xs:text-base">Owner Information</h3>
-                            <div class="space-y-2">
-                                <p class="text-sm text-gray-700">{{ $vehicle->owner->name }}</p>
-                                @if($vehicle->owner->email)
-                                <p class="text-sm text-gray-600">{{ $vehicle->owner->email }}</p>
-                                @endif
+                        @if ($vehicle->owner)
+                            <div class="pt-3 xs:pt-4 border-t border-gray-200">
+                                <h3 class="font-semibold text-gray-900 mb-2 text-sm xs:text-base">Owner Information</h3>
+                                <div class="space-y-2">
+                                    <p class="text-sm text-gray-700">{{ $vehicle->owner->name }}</p>
+                                    @if ($vehicle->owner->email)
+                                        <p class="text-sm text-gray-600">{{ $vehicle->owner->email }}</p>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
                         @endif
 
                         <div class="pt-3 xs:pt-4 border-t border-gray-200">
@@ -233,8 +243,7 @@
                                 $imagePath = asset('storage/' . $cleanPath);
                             }
                         @endphp
-                        <img src="{{ $imagePath }}" 
-                            alt="{{ $vehicle->title }}"
+                        <img src="{{ $imagePath }}" alt="{{ $vehicle->title }}"
                             class="w-full h-64 md:h-80 object-cover rounded-lg"
                             onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
                     </div>
@@ -322,7 +331,7 @@
                             display: none;
                         }
                     </style>
-                    
+
                     {{-- Terms content here (keeping original terms) --}}
                     <div>
                         <h4 class="text-base font-semibold text-gray-900 mb-2">
@@ -361,7 +370,8 @@
                 navigator.clipboard.writeText(url).then(() => {
                     el.innerHTML = `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
                     setTimeout(() => {
-                        el.innerHTML = `<flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />`;
+                        el.innerHTML =
+                            `<flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />`;
                     }, 2000);
                 }).catch(err => {
                     console.error('Failed to copy: ', err);
