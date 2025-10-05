@@ -134,7 +134,7 @@
                                                     @if (isset($action['href']) && $action['href'] != null && $action['href'] != '#')
                                                         @php
                                                             $param =
-                                                                ($action['param']
+                                                                (isset($action['param']) && $action['param']
                                                                     ? $action['param']
                                                                     : $action['key']) ?? '';
                                                             $actionValue = data_get($item, $param);
@@ -154,7 +154,7 @@
                                                     @elseif (isset($action['route']) && $action['route'] != null && $action['route'] != '#')
                                                         @php
                                                             $param =
-                                                                ($action['param']
+                                                                (isset($action['param']) && $action['param']
                                                                     ? $action['param']
                                                                     : $action['key']) ?? '';
                                                             $actionValue = data_get($item, $param);
