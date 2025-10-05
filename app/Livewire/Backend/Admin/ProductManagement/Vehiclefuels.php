@@ -189,7 +189,7 @@ class Vehiclefuels extends Component
 
             [
                 'key' => 'created_at',
-                'label' => 'Created',
+                'label' => 'Created At',
                 'width' => '15%',
                 'format' => function ($vehiclefuel) {
                     return $vehiclefuel->created_at_formatted;
@@ -198,7 +198,7 @@ class Vehiclefuels extends Component
 
             [
                 'key' => 'created_by',
-                'label' => 'Created',
+                'label' => 'Created By',
                 'width' => '15%',
                 'format' => function ($vehiclefuel) {
                     return $vehiclefuel->createdBy?->name ?? 'System';

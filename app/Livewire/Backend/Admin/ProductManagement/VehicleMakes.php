@@ -187,7 +187,7 @@ class VehicleMakes extends Component
 
             [
                 'key' => 'created_at',
-                'label' => 'Created',
+                'label' => 'Created At',
                 'width' => '15%',
                 'format' => function ($vehicleMake) {
                     return $vehicleMake->created_at_formatted;
@@ -196,7 +196,7 @@ class VehicleMakes extends Component
 
             [
                 'key' => 'created_by',
-                'label' => 'Created',
+                'label' => 'Created By',
                 'width' => '15%',
                 'format' => function ($vehicleMake) {
                     return $vehicleMake->createdBy?->name ?? 'System';
