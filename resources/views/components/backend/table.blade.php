@@ -62,7 +62,7 @@
     <hr class="mb-4">
 
     {{-- DESKTOP TABLE (md and above) --}}
-    <div class="hidden md:block overflow-x-auto">
+    <div class="hidden md:block">
         <div class="min-w-full inline-block align-middle">
             {{-- Table Header --}}
             <div
