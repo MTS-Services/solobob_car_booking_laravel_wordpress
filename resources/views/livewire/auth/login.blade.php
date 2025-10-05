@@ -14,7 +14,7 @@
                     </h2>
                 </div>
             </div>
-
+            
             <!-- Right Side - Login Form -->
             <div class="w-full md:w-1/2 bg-white p-8 md:p-10">
                 <div class="max-w-md mx-auto">
@@ -34,7 +34,12 @@
                             <input wire:model="email" type="email" placeholder="enter your email" required autofocus
                                 autocomplete="email"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
+
+                            @error('email')
+                                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
+
 
                         <!-- Password Input -->
                         <div>
@@ -42,6 +47,10 @@
                             <input wire:model="password" type="password" placeholder="password" type="password" required
                                 autocomplete="current-password"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
+
+                            @error('email')
+                                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Remember Me & Forgot Password -->
