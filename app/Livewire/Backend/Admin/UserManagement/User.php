@@ -15,7 +15,7 @@ use Livewire\WithPagination;
     [
         'title' => 'User Management',
         'breadcrumb' => 'Users',
-        'page_slug' => 'user-users',
+        'page_slug' => 'users',
     ]
 )]
 class User extends Component
