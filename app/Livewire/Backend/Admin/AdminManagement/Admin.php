@@ -66,7 +66,10 @@ class Admin extends Component
             'editMode',
             'status',
             'avatar',
-            'existingAvatar'
+            'existingAvatar',
+            'date_of_birth',
+            'number',
+
         ]);
         $this->status = User::STATUS_ACTIVE;
         $this->resetValidation();
@@ -102,6 +105,8 @@ class Admin extends Component
         $this->email = $admin->email;
         $this->status = $admin->status ?? User::STATUS_ACTIVE;
         $this->existingAvatar = $admin->avatar;
+        $this->number = $admin->number;
+        $this->date_of_birth = $admin->date_of_birth;
         $this->editMode = true;
         $this->showModal = true;
     }
@@ -147,8 +152,8 @@ class Admin extends Component
             'password' => 'required|string|min:8|confirmed',
             'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
             'avatar' => 'nullable|image|max:2048',
-            'date_of_birth' => 'required|date|before : today ',
-            'number' => ['required', 'regex:/^(\+8801|01)[0-9]{9}$/'],
+            'date_of_birth' => 'nullable|date|before : today ',
+            'number' => 'nullable'
 
             // 'date_of_birth'
             // 'number'
@@ -194,6 +199,11 @@ class Admin extends Component
             'password' => 'nullable|string|min:8|confirmed',
             'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
             'avatar' => 'nullable|image|max:2048',
+            'date_of_birth' => 'nullable|date|before:today',
+            'number' => 'nullable',
+
+
+
         ]);
 
         $admin = User::findOrFail($this->adminId);
@@ -203,6 +213,9 @@ class Admin extends Component
             'email' => $this->email,
             'status' => $this->status,
             'updated_by' => user()->id,
+            'date_of_birth' => $this->date_of_birth,
+            'number' => $this->number,
+
         ];
 
         // Update password if provided

@@ -550,7 +550,8 @@
                                     <select wire:model="status"
                                         class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
                                         @foreach ($statuses as $key => $label)
-                                            <option value="{{ $key }}">{{ $label }}</option>
+                                            <option value="{{ $key }}"
+                                                {{ $key == $status ? 'selected' : '' }}>{{ $label }}</option>
                                         @endforeach
                                     </select>
                                     @error('status')
