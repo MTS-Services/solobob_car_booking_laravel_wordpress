@@ -192,7 +192,7 @@ class ProductCategory extends Component
 
             [
                 'key' => 'created_at',
-                'label' => 'Created',
+                'label' => 'Created At',
                 'width' => '15%',
                 'format' => function ($productCategorie) {
                     return $productCategorie->created_at_formatted;
@@ -201,7 +201,7 @@ class ProductCategory extends Component
 
             [
                 'key' => 'created_by',
-                'label' => 'Created',
+                'label' => 'Created By',
                 'width' => '15%',
                 'format' => function ($productCategorie) {
                     return $productCategorie->createdBy?->name ?? 'System';
