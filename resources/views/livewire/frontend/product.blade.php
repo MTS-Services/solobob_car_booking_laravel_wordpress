@@ -30,7 +30,7 @@
         <div class="grid grid-cols-1 xxs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
             <!-- Loop through the dynamic products data -->
-            @forelse ($this->products as $vehicle)
+            @forelse ($products as $vehicle)
                 <div
                     class="w-full bg-white rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition duration-300 ease-in-out group">
 
@@ -50,7 +50,7 @@
                             <!-- Dynamic Image Source -->
                             <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
                                 <img class="w-full h-full object-cover"
-                                    src="{{ $vehicle->primary_image ?? asset('assets/images/default-car.png') }}"
+                                    src="{{ $vehicle->avatar ? asset('storage/' . $vehicle->avatar) : asset('assets/images/default-car.png') }}"
                                     alt="{{ $vehicle->title }} Image">
                             </a>
                         </div>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="text-right text-gray-900 font-bold text-lg md:text-xl flex-shrink-0 ml-2">
                                     <!-- Dynamic Daily Rate -->
-                                    ${{ number_format($vehicle->daily_rate, 2) }} 
+                                    ${{ number_format($vehicle->weekly_rate, 2) }} 
                                     <span class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Day</span>
                                 </div>
                             </div>
@@ -137,10 +137,11 @@
         </div>
 
         <!-- Dynamic Pagination -->
+        @if($products->hasPages())
         <div class="flex justify-center items-center mt-8 mb-4 space-x-2">
             @php
-                $currentPage = $this->products->currentPage();
-                $totalPages = $this->products->lastPage();
+                $currentPage = $products->currentPage();
+                $totalPages = $products->lastPage();
 
                 // Calculate page range to display
                 $rangeWithDots = [];
@@ -210,6 +211,7 @@
                 </svg>
             </button>
         </div>
+        @endif
     </div>
 
 </section>

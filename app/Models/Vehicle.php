@@ -23,7 +23,7 @@ class Vehicle extends BaseModel
     // public const APPROVAL_REJECTED = 2;
 
     public const STATUS = [
-        self::STATUS_AVAILABLE => 'Available',
+        self::STATUS_AVAILABLE => 'Active',
         self::STATUS_RENTED => 'Rented',
         self::STATUS_MAINTENANCE => 'Under Maintenance',
         self::STATUS_INACTIVE => 'Inactive',
