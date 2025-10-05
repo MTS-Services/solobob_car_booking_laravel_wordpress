@@ -108,12 +108,12 @@
                         'icon' => 'user-plus',
                         'active' => 'vehicle-model',
                     ],
-                     [
-                        'name' => 'Vehicle Transmission',
-                        'route' => route('admin.pm.vehicle-transmission'),
-                        'icon' => 'user-plus',
-                        'active' => 'vehicle-transmission',
-                    ],
+                    //  [
+                    //     'name' => 'Vehicle Transmission',
+                    //     'route' => route('admin.pm.vehicle-transmission'),
+                    //     'icon' => 'user-plus',
+                    //     'active' => 'vehicle-transmission',
+                    // ],
                      [
                         'name' => 'Vehicle ',
                         'route' => route('admin.pm.vehicle-product'),
