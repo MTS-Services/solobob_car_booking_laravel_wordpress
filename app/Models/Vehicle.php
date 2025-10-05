@@ -39,6 +39,8 @@ class Vehicle extends BaseModel
         return [
             self::STATUS_AVAILABLE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
+            self::STATUS_RENTED => 'Rented',
+            self::STATUS_MAINTENANCE => 'Under Maintenance',
         ];
     }
     // public static function getApprovalStatus(): array
@@ -50,7 +52,7 @@ class Vehicle extends BaseModel
     // }
     public function getStatusLabelAttribute()
     {
-        return self::STATUS[$this->status] ?? 'Unknown';
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
 
     // public function getApprovalStatusLabelAttribute()
@@ -60,12 +62,12 @@ class Vehicle extends BaseModel
 
     public function getStatusColorAttribute()
     {
-        return match ($this->status) {
-            self::STATUS_AVAILABLE => 'success',
-            self::STATUS_RENTED => 'warning',
-            self::STATUS_MAINTENANCE => 'info',
-            self::STATUS_INACTIVE => 'danger',
-            default => 'secondary',
+        return match ((int) $this->status) {
+            self::STATUS_AVAILABLE => 'badge-success',
+            self::STATUS_RENTED => 'badge-warning',
+            self::STATUS_MAINTENANCE => 'badge-info',
+            self::STATUS_INACTIVE => 'badge-danger',
+            default => 'badge-secondary',
         };
     }
 
@@ -91,16 +93,12 @@ class Vehicle extends BaseModel
         'year',
         'color',
         'license_plate',
-        'vin',
         'seating_capacity',
         'mileage',
         'description',
         'daily_rate',
         'weekly_rate',
-        'monthly_rate',
-        'security_deposit',
-        'minimum_rental_days',
-        'maximum_rental_days',
+        'transmission_type',
         'instant_booking',
         'delivery_available',
         'delivery_fee',
@@ -115,7 +113,6 @@ class Vehicle extends BaseModel
         'daily_rate' => 'decimal:2',
         'weekly_rate' => 'decimal:2',
         'monthly_rate' => 'decimal:2',
-        'security_deposit' => 'decimal:2',
         'delivery_fee' => 'decimal:2',
         'instant_booking' => 'boolean',
         'delivery_available' => 'boolean',
@@ -126,7 +123,10 @@ class Vehicle extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+
+
+        ]);
     }
 
     /* ================================================================
