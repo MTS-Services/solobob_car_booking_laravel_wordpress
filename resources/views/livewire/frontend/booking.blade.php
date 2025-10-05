@@ -127,77 +127,77 @@
                         </div>
                     </div>
 
-                    
 
-<div x-data="{ contactModalOpen: false }">
-    <button @click="contactModalOpen = true"
-        class="w-full bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition mb-4">
-        Check Availability
-    </button>
-    
-    <div x-show="contactModalOpen" x-cloak
-        class="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 sm:p-6 z-50"
-        @click.self="contactModalOpen = false">
 
-        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full **mx-2**" @click.stop>
-            
-            <div class="p-4 border-b">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-semibold text-gray-800">2025 NISSAN SENTRA S</h2>
-                    <button @click="contactModalOpen = false"
-                        class="text-gray-500 hover:text-gray-700 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+                    <div x-data="{ contactModalOpen: false }">
+                        <button @click="contactModalOpen = true"
+                            class="w-full bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition mb-4">
+                            Check Availability
+                        </button>
 
-            <div class="p-4 space-y-4">
-                <div class="mb-4">
-                    <img src="{{ asset('assets/images/banner_car.png') }}"
-                        alt="2025 Nissan Sentra S"
-                        class="w-full h-auto object-cover rounded-lg shadow-md">
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" placeholder="Jhone Doe" value="Jhone Doe"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm">
-                    <input type="text" placeholder="017017017" value="017017017"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm">
-                </div>
-                
-                <input type="email" placeholder="Info@mail.com" value="Info@mail.com"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm">
-                
-                <textarea placeholder="Message *" rows="4"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm resize-none"></textarea>
-                
-                <div class="flex items-start space-x-3 pt-2">
-                    <input id="sms-alert" type="checkbox"
-                        class="mt-1 w-4 h-4 text-[#bb8106] bg-gray-100 border-gray-300 rounded focus:ring-[#bb8106]">
-                    <label for="sms-alert" class="text-xs text-gray-700">
-                        Yes, I'd like to receive SMS alerts from Fairpy rental for booking
-                        confirmations,
-                        payment updates, support messages, and important reminders.
-                        <span class="block text-gray-500 mt-0.5">
-                            Message and data rates may apply. Reply **STOP** to unsubscribe.
-                        </span>
-                    </label>
-                </div>
-            </div>
+                        <div x-show="contactModalOpen" x-cloak
+                            class="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 sm:p-6 z-50"
+                            @click.self="contactModalOpen = false">
 
-            <div class="p-4 border-t">
-                <button
-                    class="w-full bg-[#bb8106] text-white py-3 rounded-lg hover:bg-[#bb8106] transition font-medium">
-                    Get in touch
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+                            <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full **mx-2**" @click.stop>
+
+                                <div class="p-4 border-b">
+                                    <div class="flex justify-between items-center">
+                                        <h2 class="text-xl font-semibold text-gray-800">2025 NISSAN SENTRA S</h2>
+                                        <button @click="contactModalOpen = false"
+                                            class="text-gray-500 hover:text-gray-700 transition">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 space-y-4">
+                                    <div class="mb-4">
+                                        <img src="{{ asset('assets/images/banner_car.png') }}"
+                                            alt="2025 Nissan Sentra S"
+                                            class="w-full h-auto object-cover rounded-lg shadow-md">
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <input type="text" placeholder="Jhone Doe" value="Jhone Doe"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm">
+                                        <input type="text" placeholder="017017017" value="017017017"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm">
+                                    </div>
+
+                                    <input type="email" placeholder="Info@mail.com" value="Info@mail.com"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm">
+
+                                    <textarea placeholder="Message *" rows="4"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-[#bb8106] focus:border-[#bb8106] text-sm resize-none"></textarea>
+
+                                    <div class="flex items-start space-x-3 pt-2">
+                                        <input id="sms-alert" type="checkbox"
+                                            class="mt-1 w-4 h-4 text-[#bb8106] bg-gray-100 border-gray-300 rounded focus:ring-[#bb8106]">
+                                        <label for="sms-alert" class="text-xs text-gray-700">
+                                            Yes, I'd like to receive SMS alerts from Fairpy rental for booking
+                                            confirmations,
+                                            payment updates, support messages, and important reminders.
+                                            <span class="block text-gray-500 mt-0.5">
+                                                Message and data rates may apply. Reply **STOP** to unsubscribe.
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 border-t">
+                                    <button
+                                        class="w-full bg-[#bb8106] text-white py-3 rounded-lg hover:bg-[#bb8106] transition font-medium">
+                                        Get in touch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <p class="text-sm text-gray-600">
                         {{ $this->paymentDescription }}

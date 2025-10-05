@@ -39,7 +39,7 @@
              <div class="flex items-center justify-between">
                  <h2 class="text-xl font-bold text-accent">{{ __(' User List') }}</h2>
                  <div class="flex items-center gap-2">
-                     <x-button href="#" icon="trash-2" type='secondary' permission="user-trash" class="text-white">
+                     <x-button href="{{ route('admin.users.trash') }}" icon="trash-2" type='secondary' permission="user-trash" class="text-white">
                          {{ __('Trash') }}
 
                      </x-button>

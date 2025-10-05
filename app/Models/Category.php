@@ -11,7 +11,7 @@ class Category extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
- 
+
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -38,8 +38,8 @@ class Category extends BaseModel
      ================================================================ */
 
     //
-    
-   public const STATUS_ACTIVE = 1;
+
+    public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
 
 
@@ -52,15 +52,22 @@ class Category extends BaseModel
     }
     public function getStatusLabelAttribute(): string
     {
-        return self::getStatus()[$this->status] ?? 'Unknown';
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
+
+    // public function getStatusLabelAttribute(): string
+    // {
+    //     return self::getStatus()[$this->status] ?? 'Unknown';
+    // }
+
+
     public function getIsCategoryLabelAttribute(): string
     {
         return $this->is_admin ? 'Administrator' : 'User';
     }
     public function getStatusColorAttribute(): string
     {
-         return match ($this->status) {
+        return match ($this->status) {
             self::STATUS_ACTIVE => 'success',
             self::STATUS_INACTIVE => 'warning',
             default => 'secondary',
@@ -71,7 +78,7 @@ class Category extends BaseModel
      ================================================================ */
 
     //
-    
+
 
     /* ================================================================
      * *** ACCESSORS ***
