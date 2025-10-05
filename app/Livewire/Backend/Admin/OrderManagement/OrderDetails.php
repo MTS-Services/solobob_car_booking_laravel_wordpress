@@ -23,7 +23,7 @@ class OrderDetails extends Component
 
     public function mount($id){
 
-        $this->detailsOrder = Booking::withTrashed()->findOrFail(decrypt($id));
+        $this->detailsOrder = Booking::withTrashed()->findOrFail($id);
     }
     public function accpetOrder(){
        
