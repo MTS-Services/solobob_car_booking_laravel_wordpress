@@ -194,8 +194,8 @@ class ProductCategory extends Component
                 'key' => 'created_at',
                 'label' => 'Created',
                 'width' => '15%',
-                'format' => function ($admin) {
-                    return $admin->created_at_formatted;
+                'format' => function ($productCategorie) {
+                    return $productCategorie->created_at_formatted;
                 }
             ],
 
@@ -203,13 +203,13 @@ class ProductCategory extends Component
                 'key' => 'created_by',
                 'label' => 'Created',
                 'width' => '15%',
-                'format' => function ($admin) {
-                    return $admin->createdBy?->name ?? 'System';
+                'format' => function ($productCategorie) {
+                    return $productCategorie->createdBy?->name ?? 'System';
                 }
             ]
         ];
-         $actions = [
-            ['key' => 'id', 'label' => 'View', 'href' => route('admin.product-category.view')],
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
             ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
             ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
         ];

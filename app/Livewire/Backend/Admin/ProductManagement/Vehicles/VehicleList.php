@@ -61,9 +61,47 @@ class VehicleList extends Component
             ->with(['category', 'owner'])
             ->latest()
             ->paginate(10);
+              $columns = [
+          
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+            ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'width' => '10%',
+                'format' => function ($vehicle) {
+                    return '<span class="badge badge-soft ' . $vehicle->status_color . '">' . ucfirst($vehicle->status_label) . '</span>';
+                }
+            ],
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehicle) {
+                    return $vehicle->created_at_formatted;
+                }
+            ],
+
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehicle) {
+                    return $vehicle->createdBy?->name ?? 'System' ;
+                }
+            ]                   
+        ];
+
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'href' => route('admin.pm.vehicle-details')],
+            ['key' => 'id', 'label' => 'Edit', 'href' => route('admin.pm.vehicle-edit')],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
 
        return view('livewire.backend.admin.product-management.vehicles.vehicle-list', [
             'vehicles' => $vehicles,
+            'columns' => $columns,
+            'actions' => $actions
         ]);
     }
 }
