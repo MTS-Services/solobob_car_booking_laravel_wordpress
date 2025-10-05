@@ -463,7 +463,7 @@
                     wire:click="closeDetailsModal"></div>
 
                 <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-2xl w-full border border-zinc-800">
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-3xl w-full border border-zinc-800">
                     <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-zinc-100">{{ __('Admin Details') }}</h3>
                         <button wire:click="closeDetailsModal"
@@ -477,7 +477,7 @@
                     </div>
 
                     <div class="px-6 py-6 space-y-6">
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center  justify-center gap-4">
                             @if ($detailsAdmin->avatar)
                                 <img src="{{ Storage::url($detailsAdmin->avatar) }}" alt="{{ $detailsAdmin->name }}"
                                     class="w-20 h-20 rounded-full object-cover border-4 border-zinc-700">
@@ -510,28 +510,33 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
+                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Number</p>
+                                <span
+                                    class="text-zinc-200 font-medium">
+                                    {{ $detailsAdmin->number }}
+                                </span>
                             </div>
 
+                            {{-- date_of_birth --}}
+                                  <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Date of Birth</p>
+                              
+                                <span
+                                    class="text-zinc-200 font-medium">
+                                    {{ $detailsAdmin->date_of_birth }}
+                                </span>
+                            </div>
+                                </div>
+
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Status</p>
-                                @php
-                                    $statusColors = [
-                                        \App\Models\User::STATUS_ACTIVE =>
-                                            'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                        \App\Models\User::STATUS_SUSPENDED =>
-                                            'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                        \App\Models\User::STATUS_INACTIVE =>
-                                            'bg-red-500/20 text-red-400 border-red-500/30',
-                                    ];
-                                    $colorClass =
-                                        $statusColors[$detailsAdmin->status] ??
-                                        'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                @endphp
+                               
                                 <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border  badge badge-soft {{ $detailsAdmin->status_color }}">
                                     {{ $detailsAdmin->status_label }}
                                 </span>
                             </div>
@@ -541,6 +546,10 @@
                                 <p class="text-zinc-200 font-medium">{{ $detailsAdmin->created_at_formatted }}</p>
                                 <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->created_at_human }}</p>
                             </div>
+
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created By</p>
@@ -557,6 +566,9 @@
                                     <p class="text-zinc-200 font-medium">{{ $detailsAdmin->updated_at_formatted }}</p>
                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->updated_at_human }}</p>
                                 </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 @if ($detailsAdmin->updatedBy)
                                     <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
@@ -573,6 +585,7 @@
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted At</p>
                                     <p class="text-zinc-200 font-medium">{{ $detailsAdmin->deleted_at_formatted }}</p>
                                     <p class="text-xs text-zinc-400 mt-1">{{ $detailsAdmin->deleted_at_human }}</p>
+                                </div>
                                 </div>
 
                                 @if ($detailsAdmin->deletedBy)
