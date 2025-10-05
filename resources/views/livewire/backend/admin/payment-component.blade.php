@@ -77,60 +77,17 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-accent font-bold text-lg">${{ number_format($payment->amount, 2) }}</span>
+                                        class="text-accent font-bold text-lg">${{ $payment->amount_formatted }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $payment->payment_method == 1 ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' : 'bg-blue-500/20 text-blue-400 border-blue-500/30' }}">
-                                        {{ $payment->payment_method == 1 ? 'Stripe' : 'PayPal' }}
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium badge text-white {{ $payment->payment_method_color }}">
+                                        {{ $payment->payment_method_label }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    @php
-                                        $statusColors = [
-                                            0 => 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            1 => 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                            2 => 'bg-red-500/20 text-red-400 border-red-500/30',
-                                            3 => 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
-                                        ];
-                                        $colorClass =
-                                            $statusColors[$payment->status] ??
-                                            'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                    @endphp
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
-                                        @if ($payment->status == 0)
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
-                                                <circle cx="12" cy="12" r="10"></circle>
-                                                <line x1="12" y1="8" x2="12" y2="12">
-                                                </line>
-                                                <line x1="12" y1="16" x2="12.01" y2="16">
-                                                </line>
-                                            </svg>
-                                            Pending
-                                        @elseif($payment->status == 1)
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                            Completed
-                                        @elseif($payment->status == 2)
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2">
-                                                <line x1="18" y1="6" x2="6" y2="18">
-                                                </line>
-                                                <line x1="6" y1="6" x2="18" y2="18">
-                                                </line>
-                                            </svg>
-                                            Failed
-                                        @else
-                                            Refunded
-                                        @endif
-                                    </span>
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border badge {{ $payment->status_color}}">{{ $payment->status_label }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex flex-col">
