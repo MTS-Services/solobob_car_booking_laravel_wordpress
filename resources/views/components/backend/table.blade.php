@@ -173,7 +173,7 @@
                                                         @php
                                                             $actionValue = data_get(
                                                                 $item,
-                                                                ($action['param']
+                                                                (isset($action['param']) && $action['param']
                                                                     ? $action['param']
                                                                     : $action['key']) ?? 'id',
                                                             );
