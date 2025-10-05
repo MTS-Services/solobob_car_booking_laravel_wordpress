@@ -21,7 +21,18 @@ class PaymentMethod extends BaseModel
      * *** PROPERTIES ***
      ================================================================ */
 
-    protected $fillable = [];
+    protected $fillable = [
+        'payment_id',
+        'user_id',
+        'billing_address_id',
+        'method_type',
+        'provider',
+        'last_four',
+        'card_brand',
+        'expiry_month',
+        'expiry_year',
+        'cardholder_name',
+    ];
 
     protected $hidden = [];
 
@@ -51,6 +62,11 @@ class PaymentMethod extends BaseModel
     public function billingAddress()
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 
     /* ================================================================

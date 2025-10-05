@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends BaseModel
 {
@@ -141,11 +142,18 @@ class Payment extends BaseModel
     {
         return $this->belongsTo(User::class);
     }
-
+    public function paymentMethod() :HasMany
+    {
+        return $this->hasMany(PaymentMethod::class, 'payment_id', 'id');
+    }
 
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
+     public function scopeSelf()
+     {
+         return $this->where('user_id', user()->id);
+     }
     public function scopeDeposit($query)
     {
         return $query->where('type', self::TYPE_DEPOSIT);
