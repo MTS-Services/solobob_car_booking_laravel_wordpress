@@ -32,14 +32,6 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        // Generate 50 random users
-        for ($i = 1; $i <= 50; $i++) {
-            User::create([
-                'name' => "User {$i}",
-                'email' => "user{$i}@example.com",
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-            ]);
-        }
+        User::factory()->count(1000)->create();
     }
 }
