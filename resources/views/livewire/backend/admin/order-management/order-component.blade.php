@@ -62,14 +62,7 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-700/50">
                         @forelse ($orders as $order)
-                            {{-- @php 
-                                echo "<pre>";
-
-                                            print_r($order->timeline);
-
-                                echo "</pre>";
-
-                            @endphp --}}
+                           
                             <tr class="bg-zinc-50 transition-colors duration-150 ">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
@@ -116,22 +109,30 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
-                                        $statusColors = [
-                                            \App\Models\User::STATUS_ACTIVE =>
-                                                'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                            \App\Models\User::STATUS_SUSPENDED =>
-                                                'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            \App\Models\User::STATUS_INACTIVE =>
-                                                'bg-red-500/20 text-red-400 border-red-500/30',
-                                        ];
-                                        $colorClass =
-                                            $statusColors[$order->timeline->booking_status] ??
-                                            'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                    @endphp
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
-                                        {{ $order->timeline->booking_status }}
-                                    </span>
+                                    $statusColors = [
+                                        \App\Models\Booking::BOOKING_STATUS_PENDING =>
+                                            'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                                        \App\Models\Booking::BOOKING_STATUS_ACCEPTED =>
+                                            'bg-amber-500/20 text-amber-400 border-amber-500/30',
+                                        \App\Models\Booking::BOOKING_STATUS_DEPOSITED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_DELIVERED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_RETURNED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_CANCELLED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_REJECTED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                    ];
+                                    $colorClass =
+                                        $statusColors[$order->booking_status] ??
+                                        'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
+                                @endphp
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                    {{ $order->getStatusLabelAttribute() }}
+                                </span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex flex-col">
@@ -168,9 +169,7 @@
                                                 class="absolute right-0 mt-2 w-48 bg-zinc-100 border border-zinc-300 rounded-lg shadow-xl z-50"
                                                 style="display: none;">
                                                 <div class="py-1">
-                                                    <button wire:click="openDetailsModal({{ $order->id }})"
-                                                        @click="open = false"
-                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm hover:bg-zinc-400 hover:text-white transition-colors">
+                                                    <a href="{{route('admin.om.details', encrypt($order->id))}}" wire:navigate class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm hover:bg-zinc-400 hover:text-white transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                             stroke-width="2">
@@ -181,8 +180,8 @@
                                                                 y2="8"></line>
                                                         </svg>
                                                         Details
-                                                    </button>
-                                                    <button wire:click="openEditModal({{ $order->id }})"
+                                                    </a>
+                                                    {{-- <button wire:click="openEditModal({{ $order->id }})"
                                                         @click="open = false"
                                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-accent hover:bg-zinc-400 hover:text-white transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -209,7 +208,7 @@
                                                             </path>
                                                         </svg>
                                                         Delete
-                                                    </button>
+                                                    </button> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -247,7 +246,202 @@
         </div>
     </section>
 
-    {{-- <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeModal">
+  {{-- Details Modal --}}
+    @if ($showDetailsModal && $detailsOrder)
+        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDetailsModal">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                {{-- Backdrop --}}
+                <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity"
+                    wire:click="closeDetailsModal"></div>
+
+                {{-- Modal --}}
+                <div
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-2xl w-full border border-zinc-800">
+                    {{-- Header --}}
+                    <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Order Details') }}</h3>
+                        <button wire:click="closeDetailsModal"
+                            class="text-zinc-400 hover:text-zinc-300 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- Body --}}
+                    <div class="px-6 py-6 space-y-6">
+                        {{-- Profile Section --}}
+                        <div class="flex items-center gap-4">
+                            
+                            <div>
+                                <h4 class="text-xl font-semibold text-zinc-100">Reference</h4>
+                                <p class="text-zinc-400">{{ $detailsOrder->booking_reference }}</p>
+                            </div>
+                        </div>
+
+                        {{-- Information Grid --}}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Order By</p>
+                                <p class="text-zinc-200 font-medium">#{{ $detailsOrder->user->name }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Status</p>
+                                @php
+                                    $statusColors = [
+                                        \App\Models\Booking::BOOKING_STATUS_PENDING =>
+                                            'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                                        \App\Models\Booking::BOOKING_STATUS_ACCEPTED =>
+                                            'bg-amber-500/20 text-amber-400 border-amber-500/30',
+                                        \App\Models\Booking::BOOKING_STATUS_DEPOSITED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_DELIVERED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_RETURNED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_CANCELLED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                         \App\Models\Booking::BOOKING_STATUS_REJECTED =>
+                                            'bg-red-500/20 text-red-400 border-red-500/30',
+                                    ];
+                                    $colorClass =
+                                        $statusColors[$detailsOrder->booking_status] ??
+                                        'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
+                                @endphp
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                    {{ $detailsOrder->getStatusLabelAttribute() }}
+                                </span>
+                            </div>
+                            
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Email </p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->user->email }}</p>
+                            </div>
+                            
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Vehicle </p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->vehicle->title }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Booking Date </p>
+                                 <p class="text-zinc-200 font-medium">{{ $detailsOrder->created_at_formatted }}</p>
+                                <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->created_at_human }}</p>
+                            </div>
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Pickup Date </p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->humanReadableDateTime($detailsOrder->pickup_date) }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Return Date </p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->humanReadableDateTime($detailsOrder->return_date) }}</p>
+                            </div>
+
+                            
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Return Location</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->return_location }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Bills</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Sub Total :</span> {{ $detailsOrder->subtotal }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Delivery Fee :</span> {{ $detailsOrder->delivery_fee }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Service Fee :</span> {{ $detailsOrder->service_fee }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Tax :</span> {{ $detailsOrder->tax_amount }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Security Deposit :</span> {{ $detailsOrder->security_deposite }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Grand Total :</span> {{ $detailsOrder->total_amount }}</p>
+                            </div>
+
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Audited By</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->auditor->name }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Special Request</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->special_requests }}</p>
+                            </div>
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Reason</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->reason }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->created_at_formatted }}</p>
+                                <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->created_at_human }}</p>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created By</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->createdBy?->name ?? 'System' }}
+                                </p>
+                                @if ($detailsOrder->createdBy)
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->createdBy->email }}</p>
+                                @endif
+                            </div>
+
+                            @if ($detailsOrder->updated_at && $detailsOrder->updated_at != $detailsOrder->created_at)
+                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated At</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsOrder->updated_at_formatted }}</p>
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->updated_at_human }}</p>
+                                </div>
+
+                                @if ($detailsOrder->updatedBy)
+                                    <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                        <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Updated By</p>
+                                        <p class="text-zinc-200 font-medium">{{ $detailsOrder->updatedBy->name }}</p>
+                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->updatedBy->email }}
+                                        </p>
+                                    </div>
+                                @endif
+                            @endif
+
+                            @if ($detailsOrder->deleted_at)
+                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted At</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsOrder->deleted_at_formatted }}</p>
+                                    <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->deleted_at_human }}</p>
+                                </div>
+
+                                @if ($detailsOrder->deletedBy)
+                                    <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                        <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Deleted By</p>
+                                        <p class="text-zinc-200 font-medium">{{ $detailsOrder->deletedBy->name }}</p>
+                                        <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->deletedBy->email }}
+                                        </p>
+                                    </div>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Footer --}}
+                    <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
+                        <button wire:click="closeDetailsModal"
+                            class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+
+{{-- Edit & Update Modal --}}
+    @if($showDetailsModal && 1== 2)
+   <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeModal">
         <div class="flex items-center justify-center min-h-screen px-4 py-6">
             <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity" wire:click="closeModal">
             </div>
@@ -287,5 +481,6 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div> 
+    @endif 
 </div>

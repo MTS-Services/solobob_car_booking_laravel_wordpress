@@ -11,6 +11,7 @@ use App\Livewire\Backend\Admin\ProductManagement\Vehicles;
 use App\Livewire\Backend\Admin\ProductManagement\VehicleTransmissions;
 use App\Livewire\Backend\Admin\DepositManagement\DepositComponent;
 use App\Livewire\Backend\Admin\OrderManagement\OrderComponent;
+use App\Livewire\Backend\Admin\OrderManagement\OrderDetails;
 use App\Livewire\Backend\Admin\PaymentComponent;
 use App\Livewire\Backend\Admin\UserManagement\User;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,13 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/admins', Admin::class)->name('admins');
 
+    Route::group(['as' => 'om.', 'prefix' => 'order-management'], function () {
+        Route::get('/index', OrderComponent::class)->name('index');
+        Route::get('/details/{id}', OrderDetails::class)->name('details');
+    });
+
     Route::get('/deposit-management', DepositComponent::class)->name('deposits');
-    Route::get('/orders', OrderComponent::class)->name('orders');
+    
 });
 
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {

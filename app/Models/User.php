@@ -161,25 +161,19 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Accessor for human-readable 'created_at' time (e.g., "3 days ago").
      */
-    public function getCreatedAtHumanAttribute(): string
+        public function getCreatedAtHumanAttribute(): string
     {
-        return $this->created_at->diffForHumans();
+        return $this->created_at ? $this->created_at->diffForHumans() : 'Null';
     }
 
-    /**
-     * Accessor for human-readable 'updated_at' time.
-     */
     public function getUpdatedAtHumanAttribute(): string
     {
-        return $this->updated_at->diffForHumans();
+        return $this->updated_at ? $this->updated_at->diffForHumans() : 'Null';
     }
 
-    /**
-     * Accessor for human-readable 'deleted_at' time.
-     */
     public function getDeletedAtHumanAttribute(): string
     {
-        return $this->deleted_at->diffForHumans();
+        return $this->deleted_at ? $this->deleted_at->diffForHumans() : 'Null';
     }
 
     /**
