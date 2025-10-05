@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
 use App\Services\FileUpload\FileUploadService;
+use Illuminate\Support\Facades\Storage;
 
 #[Layout(
     'app',
@@ -25,6 +26,8 @@ class Admin extends Component
     protected FileUploadService $fileUploadService;
 
     public $search = '';
+    public $perPage = 10;
+
     public $showModal = false;
     public $showDeleteModal = false;
     public $showDetailsModal = false;
@@ -49,7 +52,11 @@ class Admin extends Component
     public $forceDeleteId = null;
     public $trashSearch = '';
 
-    protected $queryString = ['search'];
+    protected $queryString = [
+        'search' => ['except' => ''],
+    ];
+    // Customization for pagination theme
+    protected string $paginationTheme = 'tailwind';
 
     public function boot(FileUploadService $fileUploadService)
     {
@@ -57,6 +64,11 @@ class Admin extends Component
     }
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedPerPage()
     {
         $this->resetPage();
     }
@@ -323,12 +335,54 @@ class Admin extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('number', 'like', '%' . $this->search . '%')
+                        ->orWhere('date_of_birth', 'like', '%' . $this->search . '%');
                 });
             })
             ->with(['createdBy', 'updatedBy'])
-            ->latest()
-            ->paginate(10);
+            ->orderBy('name', 'asc')
+            ->paginate($this->perPage);
+
+        $columns = [
+            // ['key' => 'id', 'label' => 'ID', 'width' => '5%'],
+            [
+                'key' => 'avatar',
+                'label' => 'Avatar',
+                'width' => '8%',
+                'format' => function ($admin) {
+                    if ($admin->avatar) {
+                        return '<img src="' . Storage::url($admin->avatar) . '" class="w-10 h-10 rounded-full" alt="' . $admin->name . '">';
+                    }
+                    return '<div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">' . strtoupper(substr($admin->name, 0, 1)) . '</div>';
+                }
+            ],
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+            ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'width' => '10%',
+                'format' => function ($admin) {
+                    return '<span class="badge badge-soft ' . $admin->status_color . '">' . ucfirst($admin->status_label) . '</span>';
+                }
+            ],
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($admin) {
+                    return $admin->created_at->format('M d, Y');
+                }
+            ],
+        ];
+
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
+            ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
+
 
         // Trashed admins query - always return a paginator
         $trashedAdmins = User::onlyTrashed()
@@ -347,6 +401,8 @@ class Admin extends Component
             'admins' => $admins,
             'trashedAdmins' => $trashedAdmins,
             'statuses' => User::getStatus(),
+            'columns' => $columns,
+            'actions' => $actions,
         ]);
     }
 }
