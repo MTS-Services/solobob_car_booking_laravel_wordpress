@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use App\Models\Contacts;
+use App\Livewire\Forms\ContactForm;
 
 #[Layout(
     'app',
@@ -15,7 +17,8 @@ use Livewire\Component;
 )]
 class Home extends Component
 {
-    public $testimonials;
+     public $testimonials;
+
 
     public function mount()
     {
@@ -64,6 +67,24 @@ class Home extends Component
         Session::regenerateToken();
         return $this->redirectRoute('home', navigate: true);
     }
+
+    // Contact message
+
+   public ContactForm $form;
+
+    public function contactSubmit()
+    {
+        
+       
+        Contacts::create($this->form->all());
+
+        session()->flash('submit_message', 'Message has been sent successfully');
+        
+        $this->reset(['form.first_name','form.last_name','form.phone','form.email','form.message']);
+       
+    }
+
+    // End Contact
 
     public function render()
     {
