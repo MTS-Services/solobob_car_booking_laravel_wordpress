@@ -49,8 +49,7 @@
                         <div class="h-48">
                             <!-- Dynamic Image Source -->
                             <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
-                                <img class="w-full h-full object-cover"
-                                    src="{{ $vehicle->avatar ? asset('storage/' . $vehicle->avatar) : asset('assets/images/default-car.png') }}"
+                                <img class="w-full h-full object-cover" src="{{ storage_url($vehicle->avatar) }}"
                                     alt="{{ $vehicle->title }} Image">
                             </a>
                         </div>
@@ -237,17 +236,8 @@
 
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="w-full">
-                            @php
-                                $imagePath = asset('assets/images/default-car.png');
-                                if ($vehicle->avatar) {
-                                    $cleanPath = str_replace('storage/', '', $vehicle->avatar);
-                                    $cleanPath = ltrim($cleanPath, '/');
-                                    $imagePath = asset('storage/' . $cleanPath);
-                                }
-                            @endphp
-                            <img src="{{ $imagePath }}" alt="{{ $vehicle->title }}"
-                                class="w-full h-64 md:h-80 object-cover rounded-lg"
-                                onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
+                            <img src="{{ storage_url($vehicle->avatar) }}" alt="{{ $vehicle->title }}"
+                                class="w-full h-64 md:h-80 object-cover rounded-lg">
                         </div>
 
                         <div class="space-y-4">
