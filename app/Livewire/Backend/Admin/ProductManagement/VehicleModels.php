@@ -18,7 +18,7 @@ use Livewire\WithPagination;
 class VehicleModels extends Component
 {
 
-       use WithPagination;
+    use WithPagination;
 
     public $search = '';
     public $showModal = false;
@@ -32,8 +32,8 @@ class VehicleModels extends Component
     public $name = '';
     public $slug = '';
 
- 
-  
+
+
 
 
 
@@ -45,10 +45,10 @@ class VehicleModels extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 
-           
+            'name',
+
         ]);
-       
+
         $this->resetValidation();
     }
 
@@ -83,7 +83,7 @@ class VehicleModels extends Component
         $this->showModal = true;
     }
 
- 
+
 
     public function openDeleteModal($id)
     {
@@ -107,38 +107,38 @@ class VehicleModels extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-          
-           
+
+
         ];
 
-       
+
 
         $this->validate($rules);
 
         if ($this->editMode) {
             $vehicleModel = VehicleModel::findOrFail($this->adminId);
-            
+
             $updateData = [
                 'name' => $this->name,
-               
-              
+
+
                 'updated_by' => user()->id,
             ];
 
-           
+
             $vehicleModel->update($updateData);
 
             session()->flash('message', 'category updated successfully.');
         } else {
             $data = [
                 'name' => $this->name,
-              
-               
+
+
                 'created_by' => user()->id,
             ];
 
             // Handle avatar upload for new admin
-           
+
 
             VehicleModel::create($data);
 
@@ -166,10 +166,10 @@ class VehicleModels extends Component
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();
     }
-    
+
     public function render()
     {
-         $vehicleModel = VehicleModel::query()
+        $vehicleModel = VehicleModel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -179,12 +179,42 @@ class VehicleModels extends Component
             ->with(['createdBy', 'updatedBy'])
             ->latest()
             ->paginate(10);
-     
-        return view('livewire.backend.admin.product-management.vehicle-models',
+        $columns = [
+
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehicleModel) {
+                    return $vehicleModel->created_at_formatted;
+                }
+            ],
+
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehicleModel) {
+                    return $vehicleModel->createdBy?->name ?? 'System';
+                }
+            ]
+        ];
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
+            ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
+
+        return view(
+            'livewire.backend.admin.product-management.vehicle-models',
             [
                 'vehicleModels' => $vehicleModel,
-                
-            ]);
+                'columns' => $columns,
+                'actions' => $actions
+
+            ]
+        );
     }
-   
 }

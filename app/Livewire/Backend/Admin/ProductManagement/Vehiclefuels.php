@@ -173,7 +173,7 @@ class Vehiclefuels extends Component
     
     public function render()
     {
-         $vehiclefule = VehicleFuel::query()
+         $vehiclefuel = VehicleFuel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -193,8 +193,8 @@ class Vehiclefuels extends Component
                 'key' => 'created_at',
                 'label' => 'Created',
                 'width' => '15%',
-                'format' => function ($vehiclefule) {
-                    return $vehiclefule->created_at_formatted;
+                'format' => function ($vehiclefuel) {
+                    return $vehiclefuel->created_at_formatted;
                 }
             ],
 
@@ -202,8 +202,8 @@ class Vehiclefuels extends Component
                 'key' => 'created_by',
                 'label' => 'Created',
                 'width' => '15%',
-                'format' => function ($vehiclefule) {
-                    return $vehiclefule->createdBy?->name ?? 'System';
+                'format' => function ($vehiclefuel) {
+                    return $vehiclefuel->createdBy?->name ?? 'System';
                 }
             ]
         ];
@@ -215,7 +215,7 @@ class Vehiclefuels extends Component
      
         return view('livewire.backend.admin.product-management.vehiclefuels',
             [
-                'vehiclefuels' => $vehiclefule,
+                'vehiclefuels' => $vehiclefuel,
                 'columns' => $columns,
                 'actions' => $actions
                 

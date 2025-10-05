@@ -69,7 +69,7 @@
 
             {{-- Table Section --}}
 
-            <x-backend.table :columns="$columns" :data="$vehiclefules" :actions="$actions" search-property="search"
+            <x-backend.table :columns="$columns" :data="$vehicleMakes" :actions="$actions" search-property="search"
                 per-page-property="perPage" empty-message="No admins found." />
         </section>
 

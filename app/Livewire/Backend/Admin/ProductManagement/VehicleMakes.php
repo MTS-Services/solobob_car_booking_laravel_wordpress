@@ -20,7 +20,7 @@ class VehicleMakes extends Component
 {
 
 
-      use WithPagination;
+    use WithPagination;
 
     public $search = '';
     public $showModal = false;
@@ -34,8 +34,8 @@ class VehicleMakes extends Component
     public $name = '';
     public $slug = '';
 
- 
-  
+
+
 
 
 
@@ -47,12 +47,12 @@ class VehicleMakes extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 
+            'name',
             'slug',
-           
-       
+
+
         ]);
-       
+
         $this->resetValidation();
     }
 
@@ -87,7 +87,7 @@ class VehicleMakes extends Component
         $this->showModal = true;
     }
 
- 
+
 
     public function openDeleteModal($id)
     {
@@ -111,35 +111,35 @@ class VehicleMakes extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-                    
-           
+
+
         ];
 
-       
+
 
         $this->validate($rules);
 
         if ($this->editMode) {
             $vehicleMake = VehicleMake::findOrFail($this->adminId);
-            
+
             $updateData = [
                 'name' => $this->name,
                 'updated_by' => user()->id,
             ];
 
-           
+
             $vehicleMake->update($updateData);
 
             session()->flash('message', 'category updated successfully.');
         } else {
             $data = [
                 'name' => $this->name,
-               
+
                 'created_by' => user()->id,
             ];
 
             // Handle avatar upload for new admin
-           
+
 
             VehicleMake::create($data);
 
@@ -167,10 +167,10 @@ class VehicleMakes extends Component
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();
     }
-    
+
     public function render()
     {
-         $vehicleMake = VehicleMake::query()
+        $vehicleMake = VehicleMake::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -180,12 +180,43 @@ class VehicleMakes extends Component
             ->with(['createdBy', 'updatedBy'])
             ->latest()
             ->paginate(10);
-     
-        return view('livewire.backend.admin.product-management.vehicle-makes',
+
+        $columns = [
+
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehicleMake) {
+                    return $vehicleMake->created_at_formatted;
+                }
+            ],
+
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($vehicleMake) {
+                    return $vehicleMake->createdBy?->name ?? 'System';
+                }
+            ]
+        ];
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
+            ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
+
+        return view(
+            'livewire.backend.admin.product-management.vehicle-makes',
             [
                 'vehicleMakes' => $vehicleMake,
-                
-            ]);
-    }
+                'columns' => $columns,
+                'actions' => $actions
 
+            ]
+        );
+    }
 }
