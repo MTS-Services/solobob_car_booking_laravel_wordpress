@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends BaseModel
 {
@@ -52,7 +53,15 @@ class Payment extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'payment_method_label',
+            'payment_method_color',
+            'status_label',
+            'status_color',
+            'type_label',
+            'type_color',
+            'amount_formatted',
+        ]);
     }
 
     public function getPaymentMethodLabelAttribute(): string
@@ -61,6 +70,14 @@ class Payment extends BaseModel
             self::METHOD_STRIPE => 'Stripe',
             self::METHOD_PAYPAL => 'PayPal',
             default => 'Unknown',
+        };
+    }
+    public function getPaymentMethodColorAttribute(): string
+    {
+        return match ($this->payment_method) {
+            self::METHOD_STRIPE => 'badge-info',
+            self::METHOD_PAYPAL => 'badge-success',
+            default => 'badge-secondary',
         };
     }
 
@@ -75,6 +92,44 @@ class Payment extends BaseModel
         };
     }
 
+    public function getTypeLabelAttribute(): string
+    {
+        return match ($this->type) {
+            self::TYPE_DEPOSIT => 'Deposit',
+            self::TYPE_FINAL => 'Final',
+            self::TYPE_ADDITIONAL => 'Additional',
+            default => 'Unknown',
+        };
+    }
+
+    public function getTypeColorAttribute(): string
+    {
+        return match ($this->type) {
+            self::TYPE_DEPOSIT => 'badge-info',
+            self::TYPE_FINAL => 'badge-success',
+            self::TYPE_ADDITIONAL => 'badge-warning',
+            default => 'badge-secondary',
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING => 'badge-secondary',
+            self::STATUS_PAID => 'badge-success',
+            self::STATUS_REFUNDED => 'badge-info',
+            self::STATUS_FAILED => 'badge-warning',
+            default => 'badge-secondary',
+        };
+
+    }
+
+    public function getAmountFormattedAttribute(): string
+    {
+        return number_format($this->amount, 2);
+    }
+
+
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
@@ -87,12 +142,46 @@ class Payment extends BaseModel
     {
         return $this->belongsTo(User::class);
     }
+    public function paymentMethod() :HasMany
+    {
+        return $this->hasMany(PaymentMethod::class, 'payment_id', 'id');
+    }
 
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
+     public function scopeSelf()
+     {
+         return $this->where('user_id', user()->id);
+     }
+    public function scopeDeposit($query)
+    {
+        return $query->where('type', self::TYPE_DEPOSIT);
+    }
+    public function scopeFinal($query)
+    {
+        return $query->where('type', self::TYPE_FINAL);
+    }
+    public function scopeAdditional($query)
+    {
+        return $query->where('type', self::TYPE_ADDITIONAL);
+    }
 
-    //
+    public function scopePaid($query)
+    {
+        return $query->where('status', self::STATUS_PAID);
+    }
+    // please define all scopes
+    public function scopePending($query)
+    {
+        return $query->where('status', self::STATUS_PENDING);
+    }
+    public function scopeRefunded($query)
+    {
+        return $query->where('status', self::STATUS_REFUNDED);
+    }
+    
+
 
     /* ================================================================
      * *** ACCESSORS ***

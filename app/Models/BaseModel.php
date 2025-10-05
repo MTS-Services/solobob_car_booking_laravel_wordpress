@@ -50,17 +50,17 @@ class BaseModel extends Model
 
     public function getCreatedAtHumanAttribute(): string
     {
-        return $this->created_at->diffForHumans();
+        return $this->created_at ? $this->created_at->diffForHumans() : 'Null';
     }
 
     public function getUpdatedAtHumanAttribute(): string
     {
-        return $this->updated_at->diffForHumans();
+        return $this->updated_at ? $this->updated_at->diffForHumans() : 'Null';
     }
 
     public function getDeletedAtHumanAttribute(): string
     {
-        return $this->deleted_at->diffForHumans();
+        return $this->deleted_at ? $this->deleted_at->diffForHumans() : 'Null';
     }
 
     public function getCreatedAtFormattedAttribute(): string

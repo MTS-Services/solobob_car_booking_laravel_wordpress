@@ -107,7 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return match ((int) $this->status) {
             self::STATUS_ACTIVE => 'badge-success',
             self::STATUS_SUSPENDED => 'badge-warning',
-            self::STATUS_INACTIVE => 'badge-danger',
+            self::STATUS_INACTIVE => 'badge-error',
             default => 'badge-secondary',
         };
     }
@@ -162,25 +162,19 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Accessor for human-readable 'created_at' time (e.g., "3 days ago").
      */
-    public function getCreatedAtHumanAttribute(): ?string
+        public function getCreatedAtHumanAttribute(): string
     {
-        return $this->created_at ? $this->created_at->diffForHumans() : null;
+        return $this->created_at ? $this->created_at->diffForHumans() : 'Null';
     }
 
-    /**
-     * Accessor for human-readable 'updated_at' time.
-     */
-    public function getUpdatedAtHumanAttribute(): ?string
+    public function getUpdatedAtHumanAttribute(): string
     {
-        return $this->updated_at ? $this->updated_at->diffForHumans() : null;
+        return $this->updated_at ? $this->updated_at->diffForHumans() : 'Null';
     }
 
-    /**
-     * Accessor for human-readable 'deleted_at' time.
-     */
-    public function getDeletedAtHumanAttribute(): ?string
+    public function getDeletedAtHumanAttribute(): string
     {
-        return $this->deleted_at ? $this->deleted_at->diffForHumans() : null;
+        return $this->deleted_at ? $this->deleted_at->diffForHumans() : 'Null';
     }
 
     /**
