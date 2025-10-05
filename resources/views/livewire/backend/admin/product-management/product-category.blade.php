@@ -392,7 +392,7 @@
                                 <label class="block text-sm font-medium text-zinc-300 mb-2">Slug *</label>
                                 <input wire:model="slug" type="text"
                                     class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                    placeholder="Enter email address">
+                                    placeholder="Category slug">
                                 @error('slug')
                                     <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                                 @enderror

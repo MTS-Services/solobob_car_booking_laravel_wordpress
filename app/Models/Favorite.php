@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 
-class VehicleTransmission extends BaseModel
+class Favorite extends BaseModel
 {
     /* ================================================================
      * *** MODEL CONSTANTS ***
@@ -18,52 +18,53 @@ class VehicleTransmission extends BaseModel
      ================================================================ */
 
     protected $fillable = [
-       'name',
-       'slug',
+        'sort_order',
+        'user_id',
+        'vehicle_id',
     ];
 
-    protected $hidden = [
-        
-    ];
+    protected $hidden = [];
 
     /**
      * Define the attribute casts for the model.
      */
     protected function casts(): array
     {
-        return [
-            
-        ];
+        return [];
     }
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            
-        ]);
+        $this->appends = array_merge(parent::getAppends(), []);
     }
 
-     /* ================================================================
+    /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    //
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
 
-     //
+    //
 
-      /* ================================================================
+    /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
 
-     //
+    //
 
-     /* ================================================================
+    /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
-
 }

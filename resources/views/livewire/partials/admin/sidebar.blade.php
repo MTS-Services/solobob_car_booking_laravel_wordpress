@@ -64,23 +64,23 @@
             <x-backend.navlink type="dropdown" icon="user-group" name="User Management" :page_slug="$active"
                 :items="[
                     [
-                        'name' => 'All Users',
+                        'name' => 'Users',
                         'route' => route('admin.users'),
                         'icon' => 'user',
-                        'active' => 'admin-users',
+                        'active' => 'users',
                     ],
-                    [
-                        'name' => 'Pending Users',
-                        'route' => '#',
-                        'icon' => 'user-plus',
-                        'active' => 'admin-users-pending',
-                    ],
-                    [
-                        'name' => 'Banned Users',
-                        'route' => '#',
-                        'icon' => 'user-round-x',
-                        'active' => 'admin-users-banned',
-                    ],
+                    // [
+                    //     'name' => 'Pending Users',
+                    //     'route' => '#',
+                    //     'icon' => 'user-plus',
+                    //     'active' => 'admin-users-pending',
+                    // ],
+                    // [
+                    //     'name' => 'Banned Users',
+                    //     'route' => '#',
+                    //     'icon' => 'user-round-x',
+                    //     'active' => 'admin-users-banned',
+                    // ],
                 ]" />
                  <x-backend.navlink type="dropdown" icon="user-group" name="Product Management" :page_slug="$active"
                 :items="[
@@ -121,6 +121,15 @@
                         'active' => 'vehicle-product',
                     ],
                 ]" />
+            <x-backend.navlink type="single" icon="currency-dollar" name="Deposit Management" :route="route('admin.deposits')"
+                active="deposit-management" :page_slug="$active" />
+                {{-- order management --}}
+
+            <x-backend.navlink type="single" icon="shopping-cart" name="Order Management" :route="route('admin.orders')"
+                active="order-management" :page_slug="$active" />
+
+            <x-backend.navlink type="single" icon="currency-dollar" name="Payments" :route="route('admin.payments')"
+                active="payments" :page_slug="$active" />
 
             <div class="pt-4 pb-2">
                 <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase"

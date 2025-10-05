@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Frontend\Pages\Home;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -18,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 // });
 
-require __DIR__ . '/auth.php';
-require __DIR__ . '/user.php';
-require __DIR__ . '/admin.php';
-require __DIR__ . '/frontend.php';
+require __DIR__.'/auth.php';
+require __DIR__.'/user.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/frontend.php';

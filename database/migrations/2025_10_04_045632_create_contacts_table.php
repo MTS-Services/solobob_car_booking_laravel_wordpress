@@ -15,11 +15,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_transmissions', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('phone')->nullable();
+            $table->string('email');
+            $table->text('message');            
             $table->timestamps();
             $table->softDeletes();
             $this->addAdminAuditColumns($table);
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle_transmissions');
+        Schema::dropIfExists('contacts');
     }
 };

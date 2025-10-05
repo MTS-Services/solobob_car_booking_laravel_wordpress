@@ -1,7 +1,7 @@
-<div class="bg-white max-w[1950px] mx-auto oiverflow-hidden">
+<div class="bg-gray-100 max-w[1950px] mx-auto oiverflow-hidden">
     <section class="relative">
         <div class="container flex flex-col lg:flex-row min-h-screen">
-            <div class="w-full bg-gray-100 flex items-center justify-center px-4">
+            <div class="w-full bg-trasnparent flex items-center justify-center px-4">
                 <div class="max-w-xl w-full">
                     <h1 class="text-xl sm:text-5xl font-bold text-black mb-4 sm:mb-4 text-center lg:text-left">
                         FLEXIBLE CAR RENTALS<br>
@@ -26,89 +26,42 @@
                 </div>
             </div>
 
-            <div class="w-full bg-white flex items-start justify-center px-4 z-1">
-                <div class="w-full max-w-xl py-8">
+            <div class="w-full bg-transparent flex items-start justify-center px-4 z-1">
+                <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
-                    <form class="space-y-4">
+                    <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
+                        @if(session()->has('submit_message'))
+
+
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="text" placeholder="First Name"
-                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                            <input type="text" placeholder="Last Name"
-                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                           <p class="text-primary"> {{ session('submit_message') }} </p>
+                        </div>
+
+                        @endif 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <input type="text" placeholder="First Name"  wire:model="form.first_name"
+                                class="w-full px-3 py-2 border @if(!$errors->has("form.first_name")) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif rounded bg-white focus:outline-none focus:border-zinc-600">
+                            <input type="text" placeholder="Last Name" wire:model="form.last_name"
+                                class="w-full px-3 py-2 border @if(!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="email" placeholder="Email"
-                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                            <input type="tel" placeholder="Phone Number"
-                                class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                            <input type="email" placeholder="Email"  wire:model="form.email"
+                                class="w-full px-3 py-2 border  @if(!$errors->has("form.email")) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
+                            <input type="tel" placeholder="Phone Number"  wire:model="form.phone"
+                                class="w-full px-3 py-2 border @if(!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif  bg-white focus:outline-none focus:border-zinc-600">
                         </div>
 
-                        <textarea placeholder="Message" rows="4"
-                            class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600"></textarea>
+                        <textarea placeholder="Message" rows="4"  wire:model="form.message"
+                            class="w-full px-3 py-2 border bg-white @if(!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
                         <button type="submit"
                             class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
                             SUBMIT
                         </button>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-                            <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Full Name</label>
-                                <input type="text"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                            </div>
-                            <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Phone Number</label>
-                                <input type="tel"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Email Address</label>
-                                <input type="email"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                            </div>
-                            <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Driving License Number</label>
-                                <input type="text"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Upload Driver's
-                                    License</label>
-                                <input type="file"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300">
-                                <p class="text-xs text-zinc-500 mt-1">Maximum file size: 2 GB</p>
-                            </div>
-                            <div>
-                                <label class="block text-zinc-500 font-semibold mb-2">Upload Uber/Lyft Profile
-                                    Screenshot</label>
-                                <input type="file"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-yellow-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300">
-                                <p class="text-xs text-zinc-500 mt-1">Maximum file size: 2 GB</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start pt-2">
-                            <input type="checkbox" id="agreement" class="mt-1 mr-3 w-5 h-5">
-                            <label for="agreement" class="text-sm text-black">
-                                <span class="underline cursor-pointer">I have read and agree to the Rental
-                                    Agreement.</span>
-                            </label>
-                        </div>
-
-                        <div class="space-y-4">
-                            <button type="submit"
-                                class="w-1/2 bg-black text-white py-4 rounded-full font-semibold hover:bg-gray-900 transition">
-                                SUBMIT
-                            </button>
-                        </div>
+                     
                     </form>
 
                 </div>
@@ -122,6 +75,9 @@
         </div>
     </section>
 
+
+    {{-- tab 1                              tab 2                               tab 3                               tab 4 --}}
+    {{-- <livewire:frontend.boooking />          Component 2                         component 3                         component 4 --}}
 
     <section class="py-12 px-4 md:px-8 lg:px-16">
         <div class="max-w-7xl mx-auto">
@@ -345,7 +301,7 @@
     <!-- Start of Testimonials Section -->
     <!-- resources/views/your-view.blade.php -->
 
-    <section class="w-full relative bg-black bg-black/50 text-white py-20">
+    <section class="w-screen  relative bg-black/50 text-white py-20">
         <!-- Background image with dark overlay -->
         <div class="absolute inset-0 opacity-20 bg-cover bg-center"
             style="background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
@@ -379,8 +335,14 @@
                 </div>
 
                 <!-- Swiper Navigation & Pagination -->
-                <div class="swiper-button-prev hidden sm:block"></div>
-                <div class="swiper-button-next hidden sm:block"></div>
+                    <div
+                    class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                    <flux:icon name="arrow-right" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
+                </div>
+                <div
+                    class="swiper-button-prev !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
+                    <flux:icon name="arrow-left" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
+                </div>
                 <div class="swiper-pagination mt-10"></div>
             </div>
         </div>

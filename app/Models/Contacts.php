@@ -4,31 +4,24 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 
-class VehicleAvailabillity extends BaseModel
+class Contacts extends BaseModel
 {
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
-    //  [note: "'booked', 'maintenance', 'owner_blocked'"]
-    public const REASON_BOOKED          = 1;
-    public const REASON_MAINTENANCE     = 2;
-    public const REASON_OWNER_BLOCKED   = 3;
+    // public const ACTIVE = 1;
+    // public const INACTIVE = 0;
 
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
-    protected $fillable = [
-        'vehicle_id',
-        'unavailable_date',
-        'reason',
-        'created_by',
-        'updated_by',
-        'deleted_by',
+    // protected $fillable = [
        
-    ];
+    // ];
 
+    protected $guarded = [];
     protected $hidden = [
         
     ];

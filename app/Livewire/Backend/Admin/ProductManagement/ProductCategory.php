@@ -82,6 +82,7 @@ class ProductCategory extends Component
 
         $this->adminId = $admin->id;
         $this->name = $admin->name;
+        $this->slug = $admin->slug;
         $this->status = $admin->status ?? Category::STATUS_ACTIVE;
         $this->editMode = true;
         $this->showModal = true;
