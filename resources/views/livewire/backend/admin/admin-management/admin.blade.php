@@ -129,19 +129,6 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{-- @php
-                                        $statusColors = [
-                                            \App\Models\User::STATUS_ACTIVE =>
-                                                'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                            \App\Models\User::STATUS_SUSPENDED =>
-                                                'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            \App\Models\User::STATUS_INACTIVE =>
-                                                'bg-red-500/20 text-red-400 border-red-500/30',
-                                        ];
-                                        $colorClass =
-                                            $statusColors[$admin->status] ??
-                                            'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                    @endphp --}}
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border badge badge-soft {{ $admin->status_color }}">
                                         {{ $admin->status_label }}
