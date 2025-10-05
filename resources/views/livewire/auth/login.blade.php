@@ -14,7 +14,7 @@
                     </h2>
                 </div>
             </div>
-
+            
             <!-- Right Side - Login Form -->
             <div class="w-full md:w-1/2 bg-white p-8 md:p-10">
                 <div class="max-w-md mx-auto">
