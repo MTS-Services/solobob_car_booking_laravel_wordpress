@@ -58,9 +58,10 @@ if ($disabled) {
 
 @endphp
 
-@if ($route)
-    <a href="{{ $route }}" target="{{ $target }}" title="{{ $title }}" class="{{ $finalClasses }}"
-        {{ $disabled ? 'aria-disabled=true tabindex=-1' : '' }} {{ $attributes->except('class') }}>
+@if ($route || $href)
+    <a href="{{ $href ? $href : route($route) }}" wire:navigate target="{{ $target }}" title="{{ $title }}"
+        class="{{ $finalClasses }}" {{ $disabled ? 'aria-disabled=true tabindex=-1' : '' }}
+        {{ $attributes->except('class') }}>
         @if ($icon && $iconPosition === 'left')
             <flux:icon name="{{ $icon }}" class="w-4 h-4" />
         @endif

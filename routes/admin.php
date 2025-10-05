@@ -13,11 +13,13 @@ use App\Livewire\Backend\Admin\DepositManagement\DepositComponent;
 use App\Livewire\Backend\Admin\OrderManagement\OrderComponent;
 use App\Livewire\Backend\Admin\PaymentComponent;
 use App\Livewire\Backend\Admin\UserManagement\User;
+use App\Livewire\Backend\Admin\UserManagement\UserTrash;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/users', User::class)->name('users');
+    Route::get('/users/trash', UserTrash::class)->name('users.trash');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/admins', Admin::class)->name('admins');
 
