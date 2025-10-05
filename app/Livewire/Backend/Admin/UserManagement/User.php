@@ -156,7 +156,7 @@ class User extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'status' => 'required|in:'.ModelsUser::STATUS_ACTIVE.','.ModelsUser::STATUS_SUSPENDED.','.ModelsUser::STATUS_DELETED,
+            'status' => 'required|in:' . ModelsUser::STATUS_ACTIVE . ',' . ModelsUser::STATUS_SUSPENDED . ',' . ModelsUser::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -191,9 +191,9 @@ class User extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$this->userId,
+            'email' => 'required|email|unique:users,email,' . $this->userId,
             'password' => 'nullable|string|min:8|confirmed',
-            'status' => 'required|in:'.ModelsUser::STATUS_ACTIVE.','.ModelsUser::STATUS_SUSPENDED.','.ModelsUser::STATUS_DELETED,
+            'status' => 'required|in:' . ModelsUser::STATUS_ACTIVE . ',' . ModelsUser::STATUS_SUSPENDED . ',' . ModelsUser::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -232,8 +232,8 @@ class User extends Component
 
         session()->flash('message', 'User updated successfully.');
         $this->closeModal();
+        return $this->redirect(route('admin.admins'), navigate: true);
     }
-
     public function delete()
     {
         $user = ModelsUser::findOrFail($this->userId);
@@ -259,8 +259,8 @@ class User extends Component
         $users = ModelsUser::Users()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%'.$this->search.'%')
-                        ->orWhere('email', 'like', '%'.$this->search.'%');
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%');
                 });
             })
             ->with(['createdBy', 'updatedBy'])

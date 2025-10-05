@@ -39,10 +39,9 @@
              <div class="flex items-center justify-between">
                  <h2 class="text-xl font-bold text-accent">{{ __(' User List') }}</h2>
                  <div class="flex items-center gap-2">
-                     <x-button href="#" icon="trash-2" type='secondary' permission="user-trash"
-                         class="text-white">
+                     <x-button href="#" icon="trash-2" type='secondary' permission="user-trash" class="text-white">
                          {{ __('Trash') }}
-                          
+
                      </x-button>
                      <button wire:click="openCreateModal"
                          class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
@@ -157,7 +156,7 @@
                                                  'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                              \App\Models\User::STATUS_SUSPENDED =>
                                                  'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                             \App\Models\User::STATUS_DELETED =>
+                                             \App\Models\User::STATUS_INACTIVE =>
                                                  'bg-red-500/20 text-red-400 border-red-500/30',
                                          ];
                                          $colorClass =
@@ -307,8 +306,7 @@
                      <div class="px-6 py-6 space-y-6">
                          <div class="flex items-center gap-4">
                              @if ($detailsUser->avatar)
-                                 <img src="{{ Storage::url($detailsUser->avatar) }}"
-                                     alt="{{ $detailsUser->name }}"
+                                 <img src="{{ Storage::url($detailsUser->avatar) }}" alt="{{ $detailsUser->name }}"
                                      class="w-20 h-20 rounded-full object-cover border-4 border-zinc-700">
                              @else
                                  <div
@@ -352,7 +350,7 @@
                                              'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                          \App\Models\User::STATUS_SUSPENDED =>
                                              'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                         \App\Models\User::STATUS_DELETED =>
+                                         \App\Models\User::STATUS_INACTIVE =>
                                              'bg-red-500/20 text-red-400 border-red-500/30',
                                      ];
                                      $colorClass =
@@ -370,7 +368,7 @@
                                  <p class="text-zinc-200 font-medium">{{ $detailsUser->created_at_formatted }}</p>
                                  <p class="text-xs text-zinc-400 mt-1">{{ $detailsUser->created_at_human }}</p>
                              </div>
-                                    
+
                              <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                  <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created By</p>
                                  <p class="text-zinc-200 font-medium">

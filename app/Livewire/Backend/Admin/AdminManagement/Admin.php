@@ -42,7 +42,7 @@ class Admin extends Component
     public $status = User::STATUS_ACTIVE;
     public $avatar;
     public $existingAvatar = null;
-    
+
     // Trash modal properties
     public $showTrashModal = false;
     public $showForceDeleteModal = false;
@@ -182,17 +182,17 @@ class Admin extends Component
     {
         if ($this->forceDeleteId) {
             $admin = User::onlyTrashed()->findOrFail($this->forceDeleteId);
-            
+
             // Delete avatar if exists
             if ($admin->avatar) {
                 $this->fileUploadService->delete($admin->avatar, 'public');
             }
-            
+
             $admin->forceDelete();
-            
+
             session()->flash('message', 'Admin permanently deleted!');
         }
-        
+
         $this->closeForceDeleteModal();
     }
 
@@ -211,7 +211,7 @@ class Admin extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
+            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
             'date_of_birth' => 'nullable|date|before:today',
             'number' => 'nullable'
@@ -252,7 +252,7 @@ class Admin extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $this->adminId,
             'password' => 'nullable|string|min:8|confirmed',
-            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
+            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
             'date_of_birth' => 'nullable|date|before:today',
             'number' => 'nullable',

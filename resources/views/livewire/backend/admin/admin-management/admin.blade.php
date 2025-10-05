@@ -18,16 +18,10 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
                 <div class="flex items-center gap-2">
-                    <button wire:click="openTrashModal"
-                        class="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                            </path>
-                        </svg>
+                    <x-button wire:click="openTrashModal" icon="trash-2" type='secondary'
+                        permission="product-category-trash" class="text-white">
                         {{ __('Trash') }}
-                    </button>
+                    </x-button>
                     <button wire:click="openCreateModal"
                         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -135,21 +129,21 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    @php
+                                    {{-- @php
                                         $statusColors = [
                                             \App\Models\User::STATUS_ACTIVE =>
                                                 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                             \App\Models\User::STATUS_SUSPENDED =>
                                                 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            \App\Models\User::STATUS_DELETED =>
+                                            \App\Models\User::STATUS_INACTIVE =>
                                                 'bg-red-500/20 text-red-400 border-red-500/30',
                                         ];
                                         $colorClass =
                                             $statusColors[$admin->status] ??
                                             'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                    @endphp
+                                    @endphp --}}
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border badge badge-soft {{ $admin->status_color }}">
                                         {{ $admin->status_label }}
                                     </span>
                                 </td>
@@ -278,9 +272,8 @@
                     class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-6xl w-full border border-zinc-800">
                     <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-zinc-100">{{ __('Trash') }}</h3>
-                        <button wire:click="closeTrashModal"
-                            class="text-white hover:text-zinc-300 transition-colors">
-                          <flux:icon name="x-mark" class="w-6 h-6 stroke-white" />
+                        <button wire:click="closeTrashModal" class="text-white hover:text-zinc-300 transition-colors">
+                            <flux:icon name="x-mark" class="w-6 h-6 stroke-white" />
                         </button>
                     </div>
 
@@ -543,7 +536,7 @@
                                             'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                         \App\Models\User::STATUS_SUSPENDED =>
                                             'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                        \App\Models\User::STATUS_DELETED =>
+                                        \App\Models\User::STATUS_INACTIVE =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
                                     ];
                                     $colorClass =
