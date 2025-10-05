@@ -30,9 +30,9 @@
         <div class="grid grid-cols-1 xxs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
             <!-- Loop through the dynamic products data -->
-            @foreach ($this->products as $product)
+            @forelse ($this->products as $vehicle)
                 <div
-                    class="w-full bg-white rounded-xl shadow-2xl overflow-hidden   transform hover:scale-[1.02] transition duration-300 ease-in-out group">
+                    class="w-full bg-white rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition duration-300 ease-in-out group">
 
                     <div class="relative">
                         <div
@@ -41,24 +41,24 @@
                                 <flux:icon name="photo" class="w-4 h-4 text-white" />
                             </span>
                             <span class="text-gray-200 font-medium">
-                                {{ $product['id'] }}
+                                {{ $vehicle->id }}
                             </span>
                         </div>
 
 
                         <div class="h-58">
                             <!-- Dynamic Image Source -->
-                            <a href="{{ route('product-details') }}" wire:navigate>
+                            <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
                                 <img class="w-full h-full object-cover"
-                                    src="{{ asset('assets/images/' . $product['image_name']) }}"
-                                    alt="{{ $product['name'] }} Image">
+                                    src="{{ $vehicle->primary_image ?? asset('assets/images/default-car.png') }}"
+                                    alt="{{ $vehicle->title }} Image">
                             </a>
                         </div>
 
-                        <!-- Dynamic Tags -->
+                        <!-- Dynamic Category Tag -->
                         <span
                             class="absolute bottom-2 left-2 bg-accent text-white text-xs xxs:text-sm font-semibold px-3 py-1.5 rounded-md shadow-lg tracking-wider">
-                            {{ $product['tags'] }}
+                            {{ $vehicle->category?->name ?? 'Uncategorized' }}
                         </span>
 
                         <div class="absolute bottom-2 right-4 text-zinc-500 p-1">
@@ -70,75 +70,79 @@
                         <div class="p-2">
                             <div class="flex justify-between items-center mb-2">
                                 <div>
-                                    <!-- Dynamic Product Name -->
+                                    <!-- Dynamic Vehicle Title -->
                                     <p
                                         class="text-xs xs:text-sm md:text-base font-normal text-gray-700 uppercase leading-snug">
-                                        {{ $product['name'] }}
+                                        {{ $vehicle->title }}
                                     </p>
                                 </div>
                                 <div class="text-right text-gray-900 font-bold text-lg md:text-xl flex-shrink-0 ml-2">
-                                    <!-- Dynamic Price -->
-                                    ${{ $product['price_per_day'] }} <span
-                                        class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Day</span>
+                                    <!-- Dynamic Daily Rate -->
+                                    ${{ number_format($vehicle->daily_rate, 2) }} 
+                                    <span class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Day</span>
                                 </div>
                             </div>
 
-                            <!-- Dynamic Location -->
+                            <!-- Dynamic Owner Location -->
                             <div class="flex items-center text-xs sm:text-sm text-gray-500">
                                 <flux:icon name="map-pin" class="text-zinc-500 mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                <span>{{ $product['location'] }}</span>
+                                <span>{{ $vehicle->owner?->city ?? 'Location Not Set' }}</span>
                             </div>
                         </div>
 
                         <div class="border-t border-gray-200 my-2"></div>
 
-                        <div class="flex justify-between items-center text-gray-600 text-xs ">
-                            <!-- Dynamic Persons Capacity -->
+                        <div class="flex justify-between items-center text-gray-600 text-xs">
+                            <!-- Dynamic Seating Capacity -->
                             <div class="flex items-center">
                                 <flux:icon name="users" class="text-zinc-500 mr-1 w-4 h-4 sm:w-5 sm:h-5" />
-                                <span class="font-semibold text-gray-800">{{ $product['persons'] }}</span> Persons
+                                <span class="font-semibold text-gray-800">{{ $vehicle->seating_capacity }}</span> Persons
                             </div>
 
-                            <!-- Dynamic Features (Assuming the first feature in the array is the main one) -->
-                            @if (!empty($product['features']))
-                                <div class="flex items-center">
-                                    <flux:icon name="smartphone" class="w-4 h-4 sm:w-5 sm:h-5  text-zinc-500" />
-                                    {{ $product['features'][0] }}
-                                </div>
-                            @endif
+                            <!-- Dynamic Transmission Type -->
+                            <div class="flex items-center">
+                                <flux:icon name="cog" class="w-4 h-4 sm:w-5 sm:h-5 text-zinc-500 mr-1" />
+                                {{ $vehicle->transmission_type == 0 ? 'Auto' : 'Manual' }}
+                            </div>
 
-                            <!-- Dynamic Trips Count -->
+                            <!-- Dynamic Year -->
                             <div class="flex items-center">
                                 <flux:icon name="calendar" class="text-zinc-500 mr-1 w-4 h-4 sm:w-5 sm:h-5" />
-                                <span class="font-semibold text-gray-800">{{ $product['trips'] }}</span> Trips
+                                <span class="font-semibold text-gray-800">{{ $vehicle->year }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col md:flex-row gap-3 mt-4 sm:mt-6">
 
                             <button
-                                class="flex-1 flex items-center justify-center bg-accent text-white py-2! px-2! text-sm rounded-lg font-semibold shadow-md hover:bg-accent/90 transition duration-150 transform hover:scale-[1.01]">
+                                wire:click="$dispatch('open-booking-modal', { vehicleId: {{ $vehicle->id }} })"
+                                class="flex-1 flex items-center justify-center bg-accent text-white py-2 px-2 text-sm rounded-lg font-semibold shadow-md hover:bg-accent/90 transition duration-150 transform hover:scale-[1.01]">
                                 <flux:icon.book-open class="w-5 h-5 mr-2" />
                                 Book
                             </button>
 
-                            <button
-                                class="flex-1 bg-gray-800 text-white py-2! px-2! text-sm rounded-lg font-semibold shadow-md hover:bg-gray-700 transition duration-150 transform hover:scale-[1.01]">
+                            <a href="#" wire:navigate
+                                class="flex-1 flex items-center justify-center bg-gray-800 text-white py-2 px-2 text-sm rounded-lg font-semibold shadow-md hover:bg-gray-700 transition duration-150 transform hover:scale-[1.01]">
                                 Get In touch
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="col-span-full text-center py-12">
+                    <flux:icon name="inbox" class="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                    <p class="text-gray-500 text-lg">No vehicles available at the moment.</p>
+                </div>
+            @endforelse
         </div>
 
         <!-- Dynamic Pagination -->
         <div class="flex justify-center items-center mt-8 mb-4 space-x-2">
             @php
-                $currentPage = $this->getPage();
-                $totalPages = $this->totalPages;
+                $currentPage = $this->products->currentPage();
+                $totalPages = $this->products->lastPage();
 
-                // Calculate page range to display - matching second image pattern
+                // Calculate page range to display
                 $rangeWithDots = [];
 
                 if ($totalPages <= 5) {
@@ -147,7 +151,6 @@
                         $rangeWithDots[] = $i;
                     }
                 } else {
-                    // Pattern: < 1 ... 3 4 5 ... 7 || >
                     // Always show first page
                     $rangeWithDots[] = 1;
 
