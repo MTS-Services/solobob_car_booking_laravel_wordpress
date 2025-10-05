@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/users', User::class)->name('users');
-    Route::get('/user/trash', UserTrash::class)->name('user.trash');
+    Route::get('/users/trash', UserTrash::class)->name('users.trash');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/admins', Admin::class)->name('admins');
 
