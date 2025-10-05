@@ -2,6 +2,7 @@
 
 use App\Livewire\Backend\Admin\AdminManagement\Admin;
 use App\Livewire\Backend\Admin\Dashboard;
+use App\Livewire\Backend\Admin\Profile;
 use App\Livewire\Backend\Admin\ProductManagement\ProductCategory;
 use App\Livewire\Backend\Admin\ProductManagement\Vehiclefuels;
 use App\Livewire\Backend\Admin\ProductManagement\VehicleMakes;
@@ -19,6 +20,7 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/users', User::class)->name('users');
     Route::get('/user/trash', UserTrash::class)->name('user.trash');
+    Route::get('/profile', Profile::class)->name('profile');
     Route::get('/admins', Admin::class)->name('admins');
 
     Route::get('/deposit-management', DepositComponent::class)->name('deposits');

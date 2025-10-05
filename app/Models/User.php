@@ -64,6 +64,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * The accessors to append to the model's array form.
      */
     public $appends = [
+        'status_label',
+        'status_color',
+
         'created_at_human',
         'updated_at_human',
         'deleted_at_human',
@@ -77,23 +80,21 @@ class User extends Authenticatable implements MustVerifyEmail
      * *** STATUS ***
      ================================================================ */
     public const STATUS_ACTIVE = 1;
-
-    public const STATUS_SUSPENDED = 0;
-
-    public const STATUS_DELETED = -1;
+    public const STATUS_SUSPENDED = 2;
+    public const STATUS_INACTIVE = 3;
 
     public static function getStatus(): array
     {
         return [
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_SUSPENDED => 'Suspended',
-            self::STATUS_DELETED => 'Deactivated',
+            self::STATUS_INACTIVE => 'Inactive',
         ];
     }
 
     public function getStatusLabelAttribute(): string
     {
-        return self::getStatus()[$this->status] ?? 'Unknown';
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
 
     public function getIsAdminLabelAttribute(): string
@@ -103,11 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_SUSPENDED => 'warning',
-            self::STATUS_DELETED => 'danger',
-            default => 'secondary',
+        return match ((int) $this->status) {
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_SUSPENDED => 'badge-warning',
+            self::STATUS_INACTIVE => 'badge-danger',
+            default => 'badge-secondary',
         };
     }
     /* ================================================================

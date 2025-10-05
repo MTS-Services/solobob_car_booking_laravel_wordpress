@@ -37,9 +37,17 @@ class Admin extends Component
     public $email = '';
     public $password = '';
     public $password_confirmation = '';
+    public $number;
+    public $date_of_birth;
     public $status = User::STATUS_ACTIVE;
     public $avatar;
     public $existingAvatar = null;
+
+    // Trash modal properties
+    public $showTrashModal = false;
+    public $showForceDeleteModal = false;
+    public $forceDeleteId = null;
+    public $trashSearch = '';
 
     protected $queryString = ['search'];
 
@@ -53,18 +61,25 @@ class Admin extends Component
         $this->resetPage();
     }
 
+    public function updatingTrashSearch()
+    {
+        $this->resetPage('trashedPage');
+    }
+
     public function resetFields()
     {
         $this->reset([
-            'name', 
-            'email', 
-            'password', 
-            'password_confirmation', 
-            'adminId', 
+            'name',
+            'email',
+            'password',
+            'password_confirmation',
+            'adminId',
             'editMode',
             'status',
             'avatar',
-            'existingAvatar'
+            'existingAvatar',
+            'date_of_birth',
+            'number',
         ]);
         $this->status = User::STATUS_ACTIVE;
         $this->resetValidation();
@@ -100,6 +115,8 @@ class Admin extends Component
         $this->email = $admin->email;
         $this->status = $admin->status ?? User::STATUS_ACTIVE;
         $this->existingAvatar = $admin->avatar;
+        $this->number = $admin->number;
+        $this->date_of_birth = $admin->date_of_birth;
         $this->editMode = true;
         $this->showModal = true;
     }
@@ -128,6 +145,57 @@ class Admin extends Component
         $this->adminId = null;
     }
 
+    // Trash Modal Methods
+    public function openTrashModal()
+    {
+        $this->showTrashModal = true;
+        $this->resetPage('trashedPage');
+    }
+
+    public function closeTrashModal()
+    {
+        $this->showTrashModal = false;
+        $this->trashSearch = '';
+    }
+
+    public function openForceDeleteModal($id)
+    {
+        $this->forceDeleteId = $id;
+        $this->showForceDeleteModal = true;
+    }
+
+    public function closeForceDeleteModal()
+    {
+        $this->forceDeleteId = null;
+        $this->showForceDeleteModal = false;
+    }
+
+    public function restore($id)
+    {
+        $admin = User::onlyTrashed()->findOrFail($id);
+        $admin->restore();
+
+        session()->flash('message', 'Admin restored successfully!');
+    }
+
+    public function forceDelete()
+    {
+        if ($this->forceDeleteId) {
+            $admin = User::onlyTrashed()->findOrFail($this->forceDeleteId);
+
+            // Delete avatar if exists
+            if ($admin->avatar) {
+                $this->fileUploadService->delete($admin->avatar, 'public');
+            }
+
+            $admin->forceDelete();
+
+            session()->flash('message', 'Admin permanently deleted!');
+        }
+
+        $this->closeForceDeleteModal();
+    }
+
     public function save()
     {
         if ($this->editMode) {
@@ -143,8 +211,10 @@ class Admin extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
+            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
+            'date_of_birth' => 'nullable|date|before:today',
+            'number' => 'nullable'
         ]);
 
         $data = [
@@ -154,6 +224,8 @@ class Admin extends Component
             'is_admin' => User::ROLE_ADMIN,
             'status' => $this->status,
             'created_by' => user()->id,
+            'date_of_birth' => $this->date_of_birth,
+            'number' => $this->number,
         ];
 
         // Handle avatar upload using service
@@ -180,17 +252,21 @@ class Admin extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $this->adminId,
             'password' => 'nullable|string|min:8|confirmed',
-            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_DELETED,
+            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
+            'date_of_birth' => 'nullable|date|before:today',
+            'number' => 'nullable',
         ]);
 
         $admin = User::findOrFail($this->adminId);
-        
+
         $updateData = [
             'name' => $this->name,
             'email' => $this->email,
             'status' => $this->status,
             'updated_by' => user()->id,
+            'date_of_birth' => $this->date_of_birth,
+            'number' => $this->number,
         ];
 
         // Update password if provided
@@ -242,6 +318,7 @@ class Admin extends Component
 
     public function render()
     {
+        // Main admins query
         $admins = User::admins()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
@@ -253,8 +330,22 @@ class Admin extends Component
             ->latest()
             ->paginate(10);
 
+        // Trashed admins query - always return a paginator
+        $trashedAdmins = User::onlyTrashed()
+            ->where('is_admin', true)
+            ->when($this->trashSearch, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('name', 'like', '%' . $this->trashSearch . '%')
+                        ->orWhere('email', 'like', '%' . $this->trashSearch . '%');
+                });
+            })
+            ->with(['deletedBy', 'createdBy'])
+            ->latest('deleted_at')
+            ->paginate(10, ['*'], 'trashedPage');
+
         return view('livewire.backend.admin.admin-management.admin', [
             'admins' => $admins,
+            'trashedAdmins' => $trashedAdmins,
             'statuses' => User::getStatus(),
         ]);
     }

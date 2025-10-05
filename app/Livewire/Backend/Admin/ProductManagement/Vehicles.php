@@ -55,7 +55,7 @@ class Vehicles extends Component
     public $delivery_fee = '';
     public $adminId;
     public $status = Vehicle::STATUS_AVAILABLE;
-    public $approval_status = Vehicle::APPROVAL_PENDING;
+    // public $approval_status = Vehicle::APPROVAL_PENDING;
     public $avatar;
     public $existingAvatar = null;
 
@@ -102,7 +102,7 @@ class Vehicles extends Component
             'existingAvatar'
         ]);
         $this->status = Vehicle::STATUS_AVAILABLE;
-        $this->approval_status = Vehicle::APPROVAL_PENDING;
+        // $this->approval_status = Vehicle::APPROVAL_PENDING;
         $this->instant_booking = false;
         $this->delivery_available = false;
         $this->resetValidation();
@@ -155,7 +155,7 @@ class Vehicles extends Component
         $this->delivery_available = $vehicle->delivery_available;
         $this->delivery_fee = $vehicle->delivery_fee;
         $this->status = $vehicle->status ?? Vehicle::STATUS_AVAILABLE;
-        $this->approval_status = $vehicle->approval_status ?? Vehicle::APPROVAL_PENDING;
+        // $this->approval_status = $vehicle->approval_status ?? Vehicle::APPROVAL_PENDING;
         $this->existingAvatar = $vehicle->avatar;
         $this->editMode = true;
         $this->showModal = true;
@@ -218,7 +218,7 @@ class Vehicles extends Component
             'delivery_available' => 'nullable|boolean',
             'delivery_fee' => 'nullable|numeric|min:0',
             'status' => 'required|in:' . implode(',', [Vehicle::STATUS_AVAILABLE, Vehicle::STATUS_RENTED, Vehicle::STATUS_MAINTENANCE, Vehicle::STATUS_INACTIVE]),
-            'approval_status' => 'required|in:' . implode(',', [Vehicle::APPROVAL_PENDING, Vehicle::APPROVAL_APPROVED, Vehicle::APPROVAL_REJECTED]),
+            // 'approval_status' => 'required|in:' . implode(',', [Vehicle::APPROVAL_PENDING, Vehicle::APPROVAL_APPROVED, Vehicle::APPROVAL_REJECTED]),
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -290,7 +290,7 @@ class Vehicles extends Component
             'delivery_available' => 'nullable|boolean',
             'delivery_fee' => 'nullable|numeric|min:0',
             'status' => 'required|in:' . implode(',', [Vehicle::STATUS_AVAILABLE, Vehicle::STATUS_RENTED, Vehicle::STATUS_MAINTENANCE, Vehicle::STATUS_INACTIVE]),
-            'approval_status' => 'required|in:' . implode(',', [Vehicle::APPROVAL_PENDING, Vehicle::APPROVAL_APPROVED, Vehicle::APPROVAL_REJECTED]),
+            // 'approval_status' => 'required|in:' . implode(',', [Vehicle::APPROVAL_PENDING, Vehicle::APPROVAL_APPROVED, Vehicle::APPROVAL_REJECTED]),
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -376,7 +376,7 @@ class Vehicles extends Component
             'categories' => Category::where('status', Category::STATUS_ACTIVE)->pluck('name', 'id'),
             'owners' => User::pluck('name', 'id'),
             'statuses' => Vehicle::STATUS,
-            'approvalStatuses' => Vehicle::APPROVAL_STATUS,
+            // 'approvalStatuses' => Vehicle::APPROVAL_STATUS,
         ]);
     }
 }

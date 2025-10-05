@@ -39,8 +39,7 @@
              <div class="flex items-center justify-between">
                  <h2 class="text-xl font-bold text-accent">{{ __(' User List') }}</h2>
                  <div class="flex items-center gap-2">
-                     <x-button href="{{ route('admin.user.trash') }}" icon="trash-2" type='secondary'
-                         permission="user-trash" class="text-white">
+                     <x-button href="#" icon="trash-2" type='secondary' permission="user-trash" class="text-white">
                          {{ __('Trash') }}
 
                      </x-button>
@@ -157,7 +156,7 @@
                                                  'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                              \App\Models\User::STATUS_SUSPENDED =>
                                                  'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                             \App\Models\User::STATUS_DELETED =>
+                                             \App\Models\User::STATUS_INACTIVE =>
                                                  'bg-red-500/20 text-red-400 border-red-500/30',
                                          ];
                                          $colorClass =
@@ -351,7 +350,7 @@
                                              'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                          \App\Models\User::STATUS_SUSPENDED =>
                                              'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                         \App\Models\User::STATUS_DELETED =>
+                                         \App\Models\User::STATUS_INACTIVE =>
                                              'bg-red-500/20 text-red-400 border-red-500/30',
                                      ];
                                      $colorClass =

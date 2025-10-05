@@ -74,13 +74,14 @@
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         @if ($order->user->avatar)
-                                            <img src="{{ Storage::url($order->user->avatar) }}" alt="{{ $order->user->name }}"
+                                            <img src="{{ Storage::url($order->user->avatar) }}"
+                                                alt="{{ $order->user->name }}"
                                                 class="w-10 h-10 rounded-full object-cover border-2 border-zinc-300">
                                         @else
                                             <div
                                                 class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
                                                 {{ $order->initials() }}
-                                               
+
                                             </div>
                                         @endif
                                         <span class="text-accent font-medium">{{ $order->user->name }}
@@ -120,7 +121,7 @@
                                                 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                             \App\Models\User::STATUS_SUSPENDED =>
                                                 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            \App\Models\User::STATUS_DELETED =>
+                                            \App\Models\User::STATUS_INACTIVE =>
                                                 'bg-red-500/20 text-red-400 border-red-500/30',
                                         ];
                                         $colorClass =
