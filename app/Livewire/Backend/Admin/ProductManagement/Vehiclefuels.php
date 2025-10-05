@@ -115,7 +115,6 @@ class Vehiclefuels extends Component
            
         ];
 
-       
 
         $this->validate($rules);
 
@@ -187,7 +186,6 @@ class Vehiclefuels extends Component
              $columns = [
 
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
-            ['key' => 'slug', 'label' => 'slug', 'width' => '25%'],
 
             [
                 'key' => 'created_at',
