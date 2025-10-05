@@ -116,7 +116,7 @@
                     // ],
                      [
                         'name' => 'Vehicle ',
-                        'route' => route('admin.pm.vehicle-product'),
+                        'route' => route('admin.pm.vehicle-list'),
                         'icon' => 'user-plus',
                         'active' => 'vehicle-product',
                     ],
