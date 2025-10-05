@@ -5,7 +5,7 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('User Trash ') }}</h2>
                 <div class="flex items-center gap-2">
-                    <x-button href="{{ route('admin.users') }}" icon="trash-2" type='secondary' permission="user-trash"
+                    <x-button href="{{ route('admin.users') }}" icon="user" type='secondary' permission="user-trash"
                         class="text-white">
                         {{ __('Users') }}
                     </x-button>
@@ -160,36 +160,21 @@
                                                 class="absolute right-0 mt-2 w-48 bg-zinc-100 border border-zinc-300 rounded-lg shadow-xl z-50"
                                                 style="display: none;">
                                                 <div class="py-1">
-                                                    <button wire:click="openDetailsModal({{ $user->id }})"
-                                                        @click="open = false"
-                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-accent text-sm hover:bg-zinc-400 hover:text-white transition-colors">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2">
-                                                            <circle cx="12" cy="12" r="10"></circle>
-                                                            <line x1="12" y1="16" x2="12"
-                                                                y2="12"></line>
-                                                            <line x1="12" y1="8" x2="12.01"
-                                                                y2="8"></line>
-                                                        </svg>
-                                                        Details
-                                                    </button>
-                                                    <button wire:click="openEditModal({{ $user->id }})"
+
+                                                    <button wire:click="restore({{ $user->id }})"
                                                         @click="open = false"
                                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-accent hover:bg-zinc-400 hover:text-white transition-colors">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2">
+                                                        <?xml version="1.0"?><svg class="w-4 h-4"
+                                                            viewBox="0 0 48 48" width="48"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M0 0h48v48h-48z" fill="none" />
                                                             <path
-                                                                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
-                                                            </path>
-                                                            <path
-                                                                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">
-                                                            </path>
+                                                                d="M25.99 6c-9.95 0-17.99 8.06-17.99 18h-6l7.79 7.79.14.29 8.07-8.08h-6c0-7.73 6.27-14 14-14s14 6.27 14 14-6.27 14-14 14c-3.87 0-7.36-1.58-9.89-4.11l-2.83 2.83c3.25 3.26 7.74 5.28 12.71 5.28 9.95 0 18.01-8.06 18.01-18s-8.06-18-18.01-18zm-1.99 10v10l8.56 5.08 1.44-2.43-7-4.15v-8.5h-3z" />
                                                         </svg>
-                                                        Edit
+                                                        Restore
                                                     </button>
-                                                    <button wire:click="openDeleteModal({{ $user->id }})"
+
+                                                    {{-- <button wire:click="permanentDelete({{ $user->id }})"
                                                         @click="open = false"
                                                         class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-zinc-400 hover:text-red-300 transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -200,8 +185,22 @@
                                                                 d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
                                                             </path>
                                                         </svg>
-                                                        Delete
+                                                        Permanent Delete
+                                                    </button> --}}
+                                                    <button wire:click.prevent="openDeleteModal({{ $user->id }})"
+                                                        @click="open = false"
+                                                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-zinc-400 hover:text-red-300 transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path
+                                                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                            </path>
+                                                        </svg>
+                                                        Permanent Delete
                                                     </button>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -239,4 +238,36 @@
 
         </div>
     </section>
+    {{-- Delete Confirmation Modal --}}
+    @if ($showDeleteModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDeleteModal">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity"
+                    wire:click="closeDeleteModal"></div>
+
+                <div
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-md w-full border border-zinc-800">
+                    <div class="px-6 py-4 border-b border-zinc-800">
+                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Confirm Delete') }}</h3>
+                    </div>
+
+                    <div class="px-6 py-4">
+                        <p class="text-zinc-300">Are you sure you want to delete this user? This action will soft
+                            delete the record.</p>
+                    </div>
+
+                    <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
+                        <button wire:click="closeDeleteModal"
+                            class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
+                            Cancel
+                        </button>
+                        <button wire:click="permanentDelete"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors duration-200">
+                            Permanent Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

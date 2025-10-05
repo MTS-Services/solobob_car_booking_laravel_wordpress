@@ -4,8 +4,8 @@ namespace App\Livewire\Backend\Admin\UserManagement;
 
 use App\Models\User as ModelsUser;
 use Livewire\Attributes\Layout;
-use Livewire\WithPagination;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Layout(
     'app',
@@ -25,9 +25,45 @@ class UserTrash extends Component
 
     public $users = [];
 
+    public $showDeleteModal = false;
+    public $userId = null;
+
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function openDeleteModal($id)
+    {
+        $this->userId = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function closeDeleteModal()
+    {
+        $this->showDeleteModal = false;
+        $this->userId = null;
+    }
+
+    public function permanentDelete()
+    {
+        try {
+            ModelsUser::withTrashed()->findOrFail($this->userId)->forceDelete();
+            session()->flash('message', 'User permanently deleted successfully.');
+            $this->closeDeleteModal();
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    public function restore($id)
+    {
+        try {
+            ModelsUser::withTrashed()->findOrFail($id)->restore();
+            session()->flash('message', 'User restored successfully.');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
     }
 
     public function render()
