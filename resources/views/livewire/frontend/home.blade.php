@@ -31,37 +31,33 @@
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
                     <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
-                        @if(session()->has('submit_message'))
-
-
-
+                        @if (session()->has('submit_message'))
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <p class="text-primary"> {{ session('submit_message') }} </p>
+                            </div>
+                        @endif
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           <p class="text-primary"> {{ session('submit_message') }} </p>
-                        </div>
-
-                        @endif 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="text" placeholder="First Name"  wire:model="form.first_name"
-                                class="w-full px-3 py-2 border @if(!$errors->has("form.first_name")) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif rounded bg-white focus:outline-none focus:border-zinc-600">
+                            <input type="text" placeholder="First Name" wire:model="form.first_name"
+                                class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
                             <input type="text" placeholder="Last Name" wire:model="form.last_name"
-                                class="w-full px-3 py-2 border @if(!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="email" placeholder="Email"  wire:model="form.email"
-                                class="w-full px-3 py-2 border  @if(!$errors->has("form.email")) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
-                            <input type="tel" placeholder="Phone Number"  wire:model="form.phone"
-                                class="w-full px-3 py-2 border @if(!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif  bg-white focus:outline-none focus:border-zinc-600">
+                            <input type="email" placeholder="Email" wire:model="form.email"
+                                class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
+                            <input type="tel" placeholder="Phone Number" wire:model="form.phone"
+                                class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
                         </div>
 
-                        <textarea placeholder="Message" rows="4"  wire:model="form.message"
-                            class="w-full px-3 py-2 border bg-white @if(!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500  @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
+                        <textarea placeholder="Message" rows="4" wire:model="form.message"
+                            class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
                         <button type="submit"
                             class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
                             SUBMIT
                         </button>
 
-                     
+
                     </form>
 
                 </div>
@@ -335,7 +331,7 @@
                 </div>
 
                 <!-- Swiper Navigation & Pagination -->
-                    <div
+                <div
                     class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
                     <flux:icon name="arrow-right" class="w-5! !h-5 xs:w-6! xs:!h-6 text-gray-800" />
                 </div>
