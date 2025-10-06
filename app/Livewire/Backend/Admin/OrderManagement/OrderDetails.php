@@ -41,7 +41,7 @@ class OrderDetails extends Component
         }
         session()->flash('message', 'Operation successfully completed');
        
-        $this->mount(encrypt($this->detailsOrder->id));
+        $this->mount($this->detailsOrder->id);
 
     }
 
