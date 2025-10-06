@@ -101,7 +101,7 @@ class OrderComponent extends Component
         ];
 
         $actions = [
-            ['key' => 'id', 'label' => 'View', 'href' => 'details'],
+            ['key' => 'id', 'label' => 'View', 'route' => 'admin.om.details'],
         ];
 
 
