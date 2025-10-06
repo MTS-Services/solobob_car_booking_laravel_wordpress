@@ -1,11 +1,11 @@
 <div class="bg-gray-100 w-screen lg:w-full mx-auto oiverflow-hidden">
     <section class="relative ">
-        <div class="container flex flex-col lg:flex-row min-h-screen">
-            <div class="w-full bg-trasnparent flex items-center justify-center px-4">
-                <div class="w-full">
+        <div class="container flex flex-col lg:flex-row min-h-screen justify-center lg:justify-between gap-2">
+            <div class="w-full bg-trasnparent flex items-center justify-center">
+                <div class="w-full mx-5 lg:mx-0">
                     <h1 class="text-xl sm:text-5xl font-bold text-black mb-4 sm:mb-4 text-center lg:text-left">
                         FLEXIBLE CAR RENTALS<br>
-                        FOR GIG WORKERS &<br>
+                        FOR GIG WORKERS &<br class="hidden lg:block">
                         <span class="text-zinc-500">LOCAL BUSINESSES</span>
                     </h1>
                     <p class="text-sm sm:text-lg text-gray-700 mb-6 sm:mb-8 text-center lg:text-left">
@@ -14,10 +14,7 @@
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <button
-                            class="bg-zinc-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-zinc-600 transition w-full sm:w-auto">
-                            APPLY NOW
-                        </button>
+                       
                         <button
                             class="bg-white text-black px-8 py-3 rounded-full font-semibold border border-zinc-500 hover:bg-gray-50 transition w-full sm:w-auto">
                             SEE PRICING & AVAILABILITY
@@ -26,34 +23,58 @@
                 </div>
             </div>
 
-            <div class="w-full bg-transparent flex items-start justify-center px-4 z-1">
+            <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
                 <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
-                    <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
+                 <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
                         @if (session()->has('submit_message'))
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <p class="text-primary"> {{ session('submit_message') }} </p>
                             </div>
                         @endif
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="text" placeholder="First Name" wire:model="form.first_name"
+                           <div>
+                             <input type="text" placeholder="First Name" wire:model="form.first_name"
                                 class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
-                            <input type="text" placeholder="Last Name" wire:model="form.last_name"
+                              @if ($errors->has('form.first_name'))
+                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.first_name') }}</small>
+                                @endif
+                           </div>
+                                <div>
+                                    <input type="text" placeholder="Last Name" wire:model="form.last_name"
                                 class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                        </div>
+                                @if ($errors->has('form.last_name'))
+                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.last_name') }}</small>
+                                @endif
+                                </div>
+                            </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="email" placeholder="Email" wire:model="form.email"
+                            <div>
+                                <input type="email" placeholder="Email" wire:model="form.email"
                                 class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
-                            <input type="tel" placeholder="Phone Number" wire:model="form.phone"
+                                 @if ($errors->has('form.email'))
+                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.last_name') }}</small>
+                                @endif
+                            </div>
+                            <div>
+                                 <input type="tel" placeholder="Phone Number" wire:model="form.phone"
                                 class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
+                                @if ($errors->has('form.phone'))
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.phone') }}</small>
+                                    @endif
+                            </div>
                         </div>
 
-                        <textarea placeholder="Message" rows="4" wire:model="form.message"
+                       <div>
+                         <textarea placeholder="Message" rows="4" wire:model="form.message"
                             class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
-
-                        <button type="submit"
+                                @if ($errors->has('form.message'))
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.message') }}</small>
+                                    @endif
+                       </div>
+                            <button type="submit"
                             class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
                             SUBMIT
                         </button>
@@ -75,7 +96,7 @@
     {{-- <livewire:frontend.boooking />          Component 2                         component 3                         component 4 --}}
 
     <section class="py-12 px-4 md:px-8 lg:px-16">
-        <div class="w-full mx-auto">
+        <div class="container mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-bold text-black mb-4">WHO WE SERVE</h2>
                 <p class="text-gray-600 text-base md:text-lg max-w-3xl mx-auto">
@@ -86,7 +107,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
                             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
@@ -95,14 +116,11 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold text-black mb-4">Gig Drivers</h3>
-                        <button
-                            class="bg-zinc-500 hover:bg-yellow-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors">
-                            GET IN TOUCH
-                        </button>
+                       
                     </div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
                             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
@@ -111,14 +129,11 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold text-black mb-4">Local Businesses</h3>
-                        <button
-                            class="bg-zinc-500 hover:bg-yellow-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors">
-                            GET IN TOUCH
-                        </button>
+                    
                     </div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
                             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
@@ -127,10 +142,7 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold text-black mb-4">Short-Term Personal Use</h3>
-                        <button
-                            class="bg-zinc-500 hover:bg-zinc-600 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors">
-                            GET IN TOUCH
-                        </button>
+                     
                     </div>
                 </div>
             </div>
@@ -138,7 +150,7 @@
     </section>
 
     <section class="bg-black text-white py-16 px-4 md:py-24">
-        <div class="w-full mx-auto">
+        <div class="container mx-auto">
             <!-- Header -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-12">
                 <div>
@@ -160,7 +172,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Step 1 -->
                 <div
-                    class="bg-gradient-to-b from-gray-500 to-gray-500 rounded-2xl p-8 border-b-4 border-yellow-600 flex flex-col items-center text-center min-h-[200px] justify-center">
+                    class="bg-gradient-to-b from-gray-500 to-gray-500 rounded-2xl p-8 border-b-4 border-yellow-600 flex flex-col items-center text-center min-h-[200px] justify-center mx-10 lg:mx-0">
                     <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-6">
                         <span class="text-2xl font-bold text-gray-800">1</span>
                     </div>
@@ -171,7 +183,7 @@
 
                 <!-- Step 2 -->
                 <div
-                    class="bg-gradient-to-b from-gray-500 to-gray-500 rounded-2xl p-8 border-b-4 border-yellow-600 flex flex-col items-center text-center min-h-[200px] justify-center">
+                    class="bg-gradient-to-b from-gray-500 to-gray-500 rounded-2xl p-8 border-b-4 border-yellow-600 flex flex-col items-center text-center min-h-[200px] justify-center mx-10 lg:mx-0">
                     <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-6">
                         <span class="text-2xl font-bold text-gray-800">2</span>
                     </div>
@@ -182,7 +194,7 @@
 
                 <!-- Step 3 -->
                 <div
-                    class="bg-gradient-to-b from-gray-500 to-gray-500 rounded-2xl p-8 border-b-4 border-yellow-600 flex flex-col items-center text-center min-h-[200px] justify-center md:col-span-2 lg:col-span-1">
+                    class="bg-gradient-to-b from-gray-500 to-gray-500 rounded-2xl p-8 border-b-4 border-yellow-600 flex flex-col items-center text-center min-h-[200px] justify-center md:col-span-2 lg:col-span-1 mx-10 lg:mx-0">
                     <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-6">
                         <span class="text-2xl font-bold text-gray-800">3</span>
                     </div>

@@ -25,7 +25,7 @@
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         APPLICATION
                     </a> --}}
-                    <a href="#"
+                    <a href="{{ route('contact') }}" wire:navigate
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         CONTACT
                     </a>

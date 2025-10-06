@@ -33,27 +33,13 @@
             <div>
                 <h3 class="text-lg font-bold mb-4 text-white">QUICK LINKS</h3>
                 <ul class="space-y-2 text-gray-400">
+                   
                     <li>
-                        <a href="/apply" class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
-                            <span class="mr-1 ">
-                                <flux:icon name="chevrons-right" class="w-4 stroke-zinc-500" />
-                            </span> Apply
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/contact"
+                        <a href="{{ route('contact') }}" wire:navigate
                             class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
                             <span class="mr-1 text-zinc-800">
                                 <flux:icon name="chevrons-right" class="w-4 stroke-zinc-500" />
                             </span> Contact
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/sign-agreement"
-                            class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
-                            <span class="mr-1 text-zinc-500">
-                                <flux:icon name="chevrons-right" class="w-4 stroke-zinc-500" />
-                            </span> Sign Agreement
                         </a>
                     </li>
                 </ul>
