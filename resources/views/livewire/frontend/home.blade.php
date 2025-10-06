@@ -1,8 +1,8 @@
-<div class="bg-gray-100 max-w[1950px] mx-auto oiverflow-hidden">
-    <section class="relative">
+<div class="bg-gray-100 w-screen lg:w-full mx-auto oiverflow-hidden">
+    <section class="relative ">
         <div class="container flex flex-col lg:flex-row min-h-screen">
             <div class="w-full bg-trasnparent flex items-center justify-center px-4">
-                <div class="max-w-xl w-full">
+                <div class="w-full">
                     <h1 class="text-xl sm:text-5xl font-bold text-black mb-4 sm:mb-4 text-center lg:text-left">
                         FLEXIBLE CAR RENTALS<br>
                         FOR GIG WORKERS &<br>
@@ -52,14 +52,13 @@
 
                         <textarea placeholder="Message" rows="4" wire:model="form.message"
                             class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
+
                         <button type="submit"
                             class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
                             SUBMIT
                         </button>
 
-
                     </form>
-
                 </div>
             </div>
 
@@ -76,7 +75,7 @@
     {{-- <livewire:frontend.boooking />          Component 2                         component 3                         component 4 --}}
 
     <section class="py-12 px-4 md:px-8 lg:px-16">
-        <div class="max-w-7xl mx-auto">
+        <div class="w-full mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-bold text-black mb-4">WHO WE SERVE</h2>
                 <p class="text-gray-600 text-base md:text-lg max-w-3xl mx-auto">
@@ -139,7 +138,7 @@
     </section>
 
     <section class="bg-black text-white py-16 px-4 md:py-24">
-        <div class="max-w-7xl mx-auto">
+        <div class="w-full mx-auto">
             <!-- Header -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-12">
                 <div>
@@ -297,7 +296,7 @@
     <!-- Start of Testimonials Section -->
     <!-- resources/views/your-view.blade.php -->
 
-    <section class="w-screen  relative bg-black/50 text-white py-20">
+    <section class="w-full  relative bg-black/50 text-white py-20">
         <!-- Background image with dark overlay -->
         <div class="absolute inset-0 opacity-20 bg-cover bg-center"
             style="background-image: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">

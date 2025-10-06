@@ -26,12 +26,9 @@
             <div class="flex items-center gap-3">
                 <!-- Search -->
                 {{-- <x-admin.search-form placeholder="Search here..." /> --}}
-            <flux:input 
-                    type="search" 
-                    placeholder="Search here..."
+                <flux:input type="search" placeholder="Search here..."
                     class="w-32 sm:w-48 lg:w-64 !px-3 !py-2 !rounded-xl !bg-bg-black/10 dark:!bg-bg-white/10 !border-0 focus:!ring-2 focus:!ring-white/20 focus:!outline-none !shadow-none transition-all duration-200"
-                    icon="magnifying-glass" 
-                />
+                    icon="magnifying-glass" />
 
 
 
@@ -74,6 +71,8 @@
                         <a href="#"
                             class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-tl-xl rounded-tr-xl">
                             {{ __('Profile') }}</a>
+                        <a href="#"
+                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"
@@ -84,14 +83,14 @@
                         {{-- <x-admin.profile-navlink route="#" name="{{ __('Settings') }}" />
                         <x-admin.profile-navlink route="{{ route('logout') }}" logout='true'
                             name="{{ __('Sign Out') }}" /> --}}
-                        <a href="{{route('admin.profile')}}"
-                         class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Profile</a>
-                     <a href="#"
-                         class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a>
-                     <div class="border-t border-white/10 my-2"></div>
-                     <a href="#"
-                         class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Sign
-                         out</a> 
+                        {{-- <a href="{{ route('admin.profile') }}"
+                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Profile</a>
+                        <a href="#"
+                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a>
+                        <div class="border-t border-white/10 my-2"></div>
+                        <a href="#"
+                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Sign
+                            out</a> --}}
                     </div>
                 </div>
             </div>

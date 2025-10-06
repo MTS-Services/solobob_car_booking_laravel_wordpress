@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="p-4">
-                        <div class="p-2">
+                        <div class="grow">
                             <div class="flex justify-between items-center mb-2">
                                 <div>
                                     <!-- Dynamic Vehicle Title -->

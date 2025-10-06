@@ -35,21 +35,23 @@
                 <ul class="space-y-2 text-gray-400">
                     <li>
                         <a href="/apply" class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
-                            <span class="mr-2 ">
+                            <span class="mr-1 ">
                                 <flux:icon name="chevrons-right" class="w-4 stroke-zinc-500" />
                             </span> Apply
                         </a>
                     </li>
                     <li>
-                        <a href="/contact" class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
-                            <span class="mr-2 text-zinc-800">
+                        <a href="/contact"
+                            class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
+                            <span class="mr-1 text-zinc-800">
                                 <flux:icon name="chevrons-right" class="w-4 stroke-zinc-500" />
                             </span> Contact
                         </a>
                     </li>
                     <li>
-                        <a href="/sign-agreement" class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
-                            <span class="mr-2 text-zinc-500">
+                        <a href="/sign-agreement"
+                            class="hover:text-zinc-500 transition-colors flex items-center text-gray-400">
+                            <span class="mr-1 text-zinc-500">
                                 <flux:icon name="chevrons-right" class="w-4 stroke-zinc-500" />
                             </span> Sign Agreement
                         </a>
@@ -62,17 +64,17 @@
                 <h3 class="text-lg font-bold mb-4 text-white">CONTACT INFO</h3>
                 <ul class="space-y-3 text-gray-400">
                     <li class="flex items-center text-gray-400">
-                        <span class="mr-2 text-zinc-500">
+                        <span class="mr-1 text-zinc-500">
                             <flux:icon name="phone" class="w-4 stroke-zinc-500" />
                         </span> 0123456789
                     </li>
                     <li class="flex items-center text-gray-400">
-                        <span class="mr-2 text-zinc-500">
+                        <span class="mr-1 text-zinc-500">
                             <flux:icon name="mail" class="w-4 stroke-zinc-500" />
                         </span> moneylord513@gmail.com
                     </li>
                     <li class="flex items-center text-gray-400">
-                        <span class="mr-2 text-zinc-500">
+                        <span class="mr-1 text-zinc-500">
                             <flux:icon name="map-pin" class="w-4 stroke-zinc-500" />
                         </span> Grand Prairie, TX
                     </li>
@@ -83,7 +85,7 @@
             <div>
                 <h3 class="text-lg font-bold mb-4 text-white">WORKING HOURS</h3>
                 <p class="text-gray-400 flex items-center">
-                    <span class="mr-2 text-zinc-500">
+                    <span class="mr-1 text-zinc-500">
                         <flux:icon name="clock-3" class="w-4 stroke-zinc-500" />
                     </span> Monday - Friday
                 </p>
