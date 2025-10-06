@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Backend\User\Deposit;
+use App\Livewire\Backend\User\DepositDetail;
 use App\Livewire\Backend\User\MyBookings;
 use App\Livewire\Backend\User\MyBookingsDetails;
 use App\Livewire\Backend\User\PaymentManagement\PaymentComponent;
@@ -13,10 +15,16 @@ Route::middleware(['auth', 'verified'])->name('user.')->prefix('user')->group(fu
    
 
     Route::get('/security', Security::class)->name('security');
+
     Route::group([], function(){
          Route::get('/my-bookings', MyBookings::class)->name('my-bookings');
          Route::get('/booking-details/{id}', MyBookingsDetails::class)->name('booking-details');
     });
+    Route::group([], function(){
+         Route::get('/deposits', Deposit::class)->name('deposit');
+        Route::get('/deposit-details/{id}', DepositDetail::class)->name('deposit.detail');
+    });
+
     Route::group([ 'prefix' => 'payment'], function () {
         Route::get('/list', PaymentComponent::class)->name('payments');
         Route::get('/details/{id}', PaymentDetailsComponent::class)->name('payment-details');

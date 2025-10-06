@@ -102,6 +102,13 @@
                                         <flux:icon name="credit-card" class="w-5 h-5" />
                                         <span>Payments</span>
                                     </a>
+                                    <!-- User Deposits -->
+                                    <a href="{{ route('user.deposit') }}" wire:navigate
+                                        class="flex-1 flex items-center justify-center gap-2 lg:text-xl xs:text-base text-sm py-3 px-3 xs:px-6 rounded-lg font-medium transition-colors duration-200 hover:opacity-90 
+                                       {{ $page_slug === 'livewire.backend.user.deposit' ? 'bg-zinc-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                                        <flux:icon name="credit-card" class="w-5 h-5" />
+                                        <span>Deposit</span>
+                                    </a>
 
                                     <!-- Profile -->
                                     <a href="{{ route('user.profile') }}" wire:navigate
