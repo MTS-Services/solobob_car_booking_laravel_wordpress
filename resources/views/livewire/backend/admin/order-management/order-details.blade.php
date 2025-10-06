@@ -206,8 +206,8 @@
                         @if(! $detailsOrder->booking_status)
                         <div class="button_wrapper">
                             <div class="flex gap-1 justify-end">
-                                <a href="#" class="flex items-center justify-center btn btn-primary " wire:click="accpetOrder()">Accept</a>
-                                <a href="#" class="flex items-center justify-center btn btn-warning" wire:click="openRejectModal()">Reject</a>
+                                <a href="#" class="flex items-center justify-center btn btn-primary " wire:click.prevent="accpetOrder()">Accept</a>
+                                <a href="#" class="flex items-center justify-center btn btn-warning" wire:click.prevent="openRejectModal()">Reject</a>
                             </div>
                         </div>
                         @endif

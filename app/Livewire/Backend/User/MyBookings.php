@@ -23,7 +23,8 @@ class MyBookings extends Component
     public function render()
     {
 
-         $myBookings = Booking::query()->self()
+         $myBookings = Booking::query()
+            ->self()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('booking_reference', 'like', '%' . $this->search . '%')
@@ -47,42 +48,28 @@ class MyBookings extends Component
                    return Carbon::parse($myBookings->booking_date)->format('d M, Y h:i A');
                 }
             ],
-             ['key' => 'booking_date', 'label' => 'Booking Date', 'width' => '20%',
-                'format'    => function($myBookings){
-                    
-                   return Carbon::parse($myBookings->booking_date)->format('d M, Y h:i A');
-                }
-            ],
+             
              ['key' => 'pickup_date', 'label' => 'Pickup Date', 'width' => '20%',
                 'format'    => function($myBookings){
                     
                    return Carbon::parse($myBookings->pickup_date)->format('d M, Y h:i A');
                 }
             ],
-             ['key' => 'special_requests', 'label' => 'Notes', 'width' => '20%',
-                
-            ],
+            
            
 
             [
                 'key' => 'vehicle_id',
-                'label' => 'Vehicle Models',
+                'label' => 'Vehicle',
                 'width' => '15%',
                 'format' => function ($myBookings) {
                     return $myBookings->vehicle?->title ?? 'Unknow' ;
                 }
             ]   , 
-             [
-                'key' => 'created_at',
-                'label' => 'Created',
-                'width' => '15%',
-                'format' => function ($myBookings) {
-                    return $myBookings->created_at_formatted;
-                }
-            ],               
+                          
         ];
          $actions = [
-            ['key' => 'id', 'label' => 'View', 'href' => 'details'],
+            ['key' => 'id', 'label' => 'View', 'route' => 'user.booking-details'],
         ];
         return view('livewire.backend.user.my-bookings',compact(
             'myBookings',

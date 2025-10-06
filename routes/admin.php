@@ -18,6 +18,7 @@ use App\Livewire\Backend\Admin\ProductManagement\VehicleTransmissions;
 
 // Other Management Components
 use App\Livewire\Backend\Admin\DepositManagement\DepositComponent;
+use App\Livewire\Backend\Admin\DepositManagement\DepositDetail;
 use App\Livewire\Backend\Admin\OrderManagement\OrderComponent;
 use App\Livewire\Backend\Admin\OrderManagement\OrderDetails;
 use App\Livewire\Backend\Admin\PaymentManagement\PaymentComponent;
@@ -42,9 +43,15 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
         Route::get('/details/{id}', OrderDetails::class)->name('details');
     });
 
-    Route::get('/deposit-management', DepositComponent::class)->name('deposits');
-    
-    Route::get('/deposits', DepositComponent::class)->name('deposits');
+
+    Route::group([], function(){
+         Route::get('/deposit-management', DepositComponent::class)->name('deposits');
+          Route::get('/deposits', DepositComponent::class)->name('deposits');
+          route::get('/deposit/details/{id}', DepositDetail::class)->name('deposit.detail');
+    });
+
+
+   
     Route::get('/orders', OrderComponent::class)->name('orders');
     Route::get('/payments', PaymentComponent::class)->name('payments');
 
