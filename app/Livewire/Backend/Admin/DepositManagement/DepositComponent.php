@@ -33,7 +33,7 @@ class DepositComponent extends Component
              ['key' => 'type', 'label' => 'Payment Type', 'width' => '20%', 'format' => function($deposits){
                 return $deposits->getTypeLabelAttribute();
              }],
-             ['key' => 'status', 'label' => 'Payment Type', 'width' => '20%', 'format' => function($deposits){
+             ['key' => 'status', 'label' => 'Payment Status', 'width' => '20%', 'format' => function($deposits){
                 return $deposits->getStatusLabelAttribute();
              }],
              ['key' => 'amount', 'label' => 'Amount', 'width' => '20%', 'format' => function($deposits){

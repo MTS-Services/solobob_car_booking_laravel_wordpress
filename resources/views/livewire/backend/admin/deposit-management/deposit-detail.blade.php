@@ -2,7 +2,7 @@
     <section>
 
         <div class="flex items-center justify-between glass-card rounded-2xl p-6 mb-6">
-            <h2 class="text-xl font-bold text-text-primary">{{ __('Order Details') }}</h2>
+            <h2 class="text-xl font-bold text-text-primary">{{ __('Deposit Details') }}</h2>
            
         </div>
        
@@ -12,7 +12,7 @@
 
   {{-- Details Modal --}}
 
-        <div class="block inset-0 z-50 overflow-y-auto"">
+        <div class="block inset-0 z-50 overflow-y-auto">
             <div class="block items-center justify-center min-h-screen py-6">
 
 
@@ -39,7 +39,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             <div class="bg-white rounded-lg p-4 border border-zinc-700" >
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Booking</p>
-                                <p class="text-zinc-500 font-medium">#{{ $depositDetail->booking_id }}</p>
+                                <p class="text-zinc-500 font-regular underline text-xs"><a href="{{ route('admin.om.details', $depositDetail->booking_id) }}" wire:navigate>Booking Details</a></p>
                             </div>
 
                             <div class="bg-white rounded-lg p-4 border border-zinc-700">
@@ -48,6 +48,31 @@
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $depositDetail->getStatusColorAttribute() }}">
                                     {{ $depositDetail->getStatusLabelAttribute() }}
+                                </span>
+                            </div>
+                              <div class="bg-white rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Payment Type</p>
+                               
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $depositDetail->getTypeColorAttribute() }}">
+                                    {{ $depositDetail->getTypeLabelAttribute() }}
+                                </span>
+                            </div>
+
+                              <div class="bg-white rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Payment Method</p>
+                               
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $depositDetail->getTypeColorAttribute() }}">
+                                    {{ $depositDetail->getPaymentMethodLabelAttribute() }}
+                                </span>
+
+                            </div>  <div class="bg-white rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Amount</p>
+                               
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
+                                    ${{ $depositDetail->amount }}
                                 </span>
                             </div>
                             
