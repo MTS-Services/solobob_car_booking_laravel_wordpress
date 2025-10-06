@@ -24,7 +24,7 @@ class Product extends Component
     public function render()
     {
         $products = Vehicle::query()
-            ->with(['category', 'owner'])
+            ->with(['category', 'owner', 'images'])
             ->where('status', Vehicle::STATUS_AVAILABLE)
             ->latest()
             ->paginate($this->perPage);

@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Frontend;
 
+use App\Livewire\Forms\ContactForm;
+use App\Models\Contacts;
 use App\Models\Vehicle;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -22,7 +24,7 @@ class ProductDetails extends Component
     {
         // Fetch vehicle with relationships
         $this->vehicle = Vehicle::where('slug', $slug)
-            ->with(['category', 'owner'])
+            ->with(['category', 'owner', 'images'])
             ->where('status', Vehicle::STATUS_AVAILABLE)
             ->firstOrFail();
     }
@@ -30,6 +32,22 @@ class ProductDetails extends Component
     public function back()
     {
         return $this->redirect(route('products'), navigate: true);
+    }
+
+    // Contact message
+
+    public ContactForm $form;
+
+    public function contactSubmit()
+    {
+
+        $this->validate();
+
+        Contacts::create($this->form->all());
+
+        session()->flash('submit_message', 'Message has been sent successfully');
+
+        $this->reset(['form.first_name', 'form.last_name', 'form.phone', 'form.email', 'form.message']);
     }
 
     public function render()

@@ -45,12 +45,16 @@
                             </span>
                         </div>
 
-
                         <div class="h-48">
                             <!-- Dynamic Image Source -->
                             <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
-                                <img class="w-full h-full object-cover" src="{{ storage_url($vehicle->avatar) }}"
-                                    alt="{{ $vehicle->title }} Image">
+                                @if (isset($vehicle?->images) && $vehicle?->images?->count() > 0)
+                                    <img class="w-full h-full object-cover"
+                                        src="{{ storage_url($vehicle?->images?->first()?->image) }}"
+                                        alt="{{ $vehicle->title }} Image">
+                                @else
+                                    <img src="{{ asset('assets/images/default/no_img.jpg') }}" alt="{{ $vehicle->title }} Image">
+                                @endif
                             </a>
                         </div>
 

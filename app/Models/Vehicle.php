@@ -140,6 +140,11 @@ class Vehicle extends BaseModel
         return $this->belongsTo(User::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(VehicleImage::class, 'vehicle_id', 'id');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
