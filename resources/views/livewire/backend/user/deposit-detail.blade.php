@@ -26,7 +26,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             <div class="bg-white rounded-lg p-4 border border-zinc-700" >
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Booking</p>
-                                {{ $depositDetail->booking_id}}
+                              
                                 <p class="text-zinc-500 font-regular underline text-xs"><a href="{{ route('user.booking-details', $depositDetail->booking_id) }}" wire:navigate>Booking Details</a></p>
                             </div>
 

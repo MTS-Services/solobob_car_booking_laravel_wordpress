@@ -20,10 +20,10 @@ class DepositDetail extends Component
 
 
     public function mount($id){
-
-        $this->depositDetail = Payment::findOrFail($id)
+        $this->depositDetail = Payment::where('id', $id)
                             ->with(['booking','user','paymentMethod'])
                             ->first();
+          
 
     }
     public function render()
