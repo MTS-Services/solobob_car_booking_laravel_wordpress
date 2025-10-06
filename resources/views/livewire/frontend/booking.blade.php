@@ -211,7 +211,7 @@
                         <h2 class="text-xl font-semibold mb-6">Trip Date & Time</h2>
 
                         <div class="mb-6">
-                            <label class="block text-sm font-medium mb-2">Start Date</label>
+                            <label class="block text-sm font-medium mb-2">Pickup Time</label>
                             <input type="date" value="10/02/2025"
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4">
 
@@ -225,7 +225,7 @@
                         </div>
 
                         <div class="mb-6">
-                            <label class="block text-sm font-medium mb-2">Return Date</label>
+                            <label class="block text-sm font-medium mb-2">Return Date </label>
                             <input type="date" value="11/01/2025"
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4">
 

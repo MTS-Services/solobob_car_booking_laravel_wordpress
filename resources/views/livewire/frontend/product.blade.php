@@ -3,7 +3,7 @@
     <div class="relative w-full h-[40vh] bg-cover bg-center bg-no-repeat overflow-hidden"
         style="background-image: url('{{ asset('assets/images/inner_banner_bg.png') }}');">
         {{-- Main Content Container --}}
-        <div class="relative z-50 container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex items-center justify-between h-full">
 
                 {{-- Left Side - "Cars List" Text --}}
