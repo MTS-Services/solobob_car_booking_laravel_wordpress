@@ -44,8 +44,29 @@ class VehicleFeature extends BaseModel
     {
         parent::__construct($attributes);
         $this->appends = array_merge(parent::getAppends(), [
-            
+            'feture_category_label',
+            'feture_category_color',
         ]);
+    }
+    public function getFetureCategoryLabelAttribute()
+    {
+        return match ($this->feature_category) {
+            self::FEATURE_CATEGORY_SAFETY => 'Safety',
+            self::FEATURE_CATEGORY_COMFORT => 'Comfort',
+            self::FEATURE_CATEGORY_ENTERTAINMENT => 'Entertainment',
+            self::FEATURE_CATEGORY_OTHER => 'Other',
+            default => 'Unknown',
+        };
+    }
+    public function getFetureCategoryColorAttribute()
+    {
+        return match ($this->feature_category) {
+            self::FEATURE_CATEGORY_SAFETY => 'danger',
+            self::FEATURE_CATEGORY_COMFORT => 'success',
+            self::FEATURE_CATEGORY_ENTERTAINMENT => 'warning',
+            self::FEATURE_CATEGORY_OTHER => 'secondary',
+            default => 'secondary',
+        };
     }
 
      /* ================================================================
@@ -57,8 +78,6 @@ class VehicleFeature extends BaseModel
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
-
-     //
 
       /* ================================================================
      * *** ACCESSORS ***

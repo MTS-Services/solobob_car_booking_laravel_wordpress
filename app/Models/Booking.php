@@ -10,10 +10,6 @@ class Booking extends BaseModel
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
-    public const PAYMENT_STATUS_PENDING   = 0;
-    public const PAYMENT_STATUS_PAID      = 1;
-    public const PAYMENT_STATUS_REFUNDED  = 2;
-    public const PAYMENT_STATUS_FAILED    = 3;
 
     public const BOOKING_STATUS_PENDING    = 0;
     public const BOOKING_STATUS_ACCEPTED   = 1;
@@ -46,6 +42,10 @@ class Booking extends BaseModel
         'special_requests',
         'reason',
         'audit_by',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $casts = [
@@ -64,7 +64,37 @@ class Booking extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'booking_status_label',
+            'booking_status_color',
+
+        ]);
+    }
+    public function getBookingStatusLabelAttribute()
+    {
+        return match ($this->attributes['booking_status']) {
+            self::BOOKING_STATUS_PENDING => 'Pending',
+            self::BOOKING_STATUS_ACCEPTED => 'Accepted',
+            self::BOOKING_STATUS_DEPOSITED => 'Deposited',
+            self::BOOKING_STATUS_DELIVERED => 'Delivered',
+            self::BOOKING_STATUS_RETURNED => 'Returned',
+            self::BOOKING_STATUS_CANCELLED => 'Cancelled',
+            self::BOOKING_STATUS_REJECTED => 'Rejected',
+            default => 'Unknown',
+        };
+    }
+    public function getBookingStatusColorAttribute()
+    {
+        return match ($this->attributes['booking_status']) {
+            self::BOOKING_STATUS_PENDING => 'badge-secondary',
+            self::BOOKING_STATUS_ACCEPTED => 'badge-info',
+            self::BOOKING_STATUS_DEPOSITED => 'badge-info',
+            self::BOOKING_STATUS_DELIVERED => 'badge-success',
+            self::BOOKING_STATUS_RETURNED => 'badge-success',
+            self::BOOKING_STATUS_CANCELLED => 'badge-danger',
+            self::BOOKING_STATUS_REJECTED => 'badge-danger',
+            default => 'badge-secondary',
+        };
     }
 
     /* ================================================================

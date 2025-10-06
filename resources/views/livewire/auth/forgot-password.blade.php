@@ -1,5 +1,6 @@
-<div class="flex items-center justify-center min-h-screen p-4 sm:p-0">
-     <div class="bg-black max-w-7xl mx-auto rounded-lg overflow-hidden shadow-2xl border-4 ">
+<section class="py-20">
+    <div class="flex items-center justify-center p-4 sm:p-0">
+    <div class="bg-black max-w-7xl mx-auto rounded-lg overflow-hidden shadow-2xl border-4 ">
         <div class="flex flex-col md:flex-row">
             <!-- Left Side - Car Image -->
             <div class="w-full md:w-1/2 relative h-64 md:h-auto">
@@ -13,50 +14,35 @@
                     </h2>
                 </div>
             </div>
-                 
+
             <!-- Right Side - Login Form -->
             <div class="w-full md:w-1/2 bg-white p-8 md:p-10">
                 <div class="max-w-md mx-auto">
                     <h1 class="text-3xl md:text-2xl font-semibold mb-2">YOUR GATEWAY TO</h1>
                     <h2 class="text-3xl md:text-2xl font-semibold mb-2">UNFORGETTABLE JOURNEYS</h2>
                     <h3 class="text-xl md:text-2xl font-semibold mb-6 text-[#B79347]">Login to Your Account</h3>
-                    
-                    <p class="text-gray-600 text-sm mb-8">
+
+                    <p class="text-gray-600 text-sm mb-4">
                         From the buzz of iconic cities to the tranquility of hidden gems, we bring the world to your
                         fingertips. Start exploring today
                     </p>
+                    <x-auth-session-status class="text-center mb-4" :status="session('status')" />
 
-                    <form method="POST" wire:submit="login" class="flex flex-col gap-6" class="space-y-4">
+                    <form method="POST" wire:submit="sendPasswordResetLink" class="flex flex-col gap-6"
+                        class="space-y-4">
                         <!-- Email Input -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                            <input wire:model="email" type="email" placeholder="enter your email"  required  autofocus  autocomplete="email"
+                            <input wire:model="email" type="email" placeholder="enter your email" required autofocus
+                                autocomplete="email"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
                         </div>
-                            
-                        {{-- <!-- Password Input -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                            <input  wire:model="password" type="password" placeholder="password"  type="password"  required autocomplete="current-password"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
-                        </div>
-
-                        <!-- Remember Me & Forgot Password -->
-                        <div class="flex items-center justify-between text-sm">
-                            <label class="flex items-center">
-                                <input type="checkbox"
-                                    class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black">
-                                <span class="ml-2 text-gray-600">Keep me logged in</span>
-                            </label>
-                            <a href="{{ route('password.request') }}" class="text-black font-medium hover:underline">Forgot your password?</a>
-                        </div> --}}
 
                         <!-- Sign In Button -->
                         <button type="submit"
                             class="w-full bg-[#B79347] text-white py-3 rounded-md font-semibold hover:bg-gray-800 transition duration-200">
                             Email password reset link
                         </button>
-                         <div class="relative my-6">
+                        <div class="relative my-6">
                             <div class="absolute inset-0 flex items-center">
                                 <div class="w-full border-t border-gray-300"></div>
                             </div>
@@ -66,7 +52,8 @@
                         </div>
                         <!-- Sign Up Link -->
                         <p class="text-center text-sm text-gray-600">
-                            Or, return to ? <a href="{{ route('register') }}" class="text-black font-medium hover:underline">
+                            Or, return to ? <a href="{{ route('register') }}"
+                                class="text-black font-medium hover:underline">
                                 Log in</a>
                         </p>
                         <!-- Divider -->
@@ -75,7 +62,7 @@
             </div>
         </div>
     </div>
-{{-- 
+    {{-- 
     <div class="flex items-center justify-center min-h-screen p-4 sm:p-0">
     <div class="bg-white dark:bg-zinc-800 shadow-xl rounded-xl p-6 sm:p-8 w-full max-w-sm">
         <div class="flex flex-col gap-6">
@@ -103,5 +90,4 @@
         </div>
     </div> --}}
 </div>
-    
-</div>
+</section>

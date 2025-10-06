@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Category extends BaseModel
 {
@@ -18,9 +17,16 @@ class Category extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',  
+        'parent_id',
         'name',
         'slug',
         'status',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+
     ];
 
     protected $casts = [

@@ -22,11 +22,12 @@
                     <h2 class="text-3xl md:text-2xl font-semibold mb-2">UNFORGETTABLE JOURNEYS</h2>
                     <h3 class="text-xl md:text-2xl font-semibold mb-6 text-[#B79347]">Reset password</h3>
 
-                    <p class="text-gray-600 text-sm mb-8">
+                    <p class="text-gray-600 text-sm mb-4">
                         Please enter your new password below
                     </p>
+                    <x-auth-session-status class="text-center mb-4" :status="session('status')" />
 
-                    <form method="POST" wire:submit="login" class="flex flex-col gap-6" class="space-y-4">
+                    <form method="POST" wire:submit="resetPassword" class="flex flex-col gap-6" class="space-y-4">
                         <!-- Email Input -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
@@ -42,10 +43,13 @@
                                 autocomplete="current-password"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
                         </div>
+                        @error('password')
+                            <p class="text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                         <!-- Password Input -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Confirm password</label>
-                            <input wire:model="password" type="password" placeholder="Confirm password" type="password"
+                            <input wire:model="password_confirmation" type="password" placeholder="Confirm password" type="password"
                                 required autocomplete="current-password"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent">
                         </div>

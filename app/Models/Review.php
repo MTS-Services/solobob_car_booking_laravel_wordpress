@@ -31,7 +31,34 @@ class Review extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'review_status_label',
+            'review_status_color',
+        ]);
+    }
+
+    /* ================================================================
+     * *** ATTRIBUTES ***
+     ================================================================ */
+    public function getReviewStatusLabelAttribute()
+    {
+        return match ($this->review_status) {
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PUBLISHED => 'Published',
+            self::STATUS_FLAGGED => 'Flagged',
+            self::STATUS_REMOVED => 'Removed',
+            default => 'Unknown',
+        };
+    }
+    public function getReviewStatusColorAttribute()
+    {
+        return match ($this->review_status) {
+            self::STATUS_PENDING => 'warning',
+            self::STATUS_PUBLISHED => 'success',
+            self::STATUS_FLAGGED => 'danger',
+            self::STATUS_REMOVED => 'danger',
+            default => 'warning',
+        };
     }
 
     /* ================================================================
@@ -50,8 +77,26 @@ class Review extends BaseModel
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
-
-    //
+    public function scopeSelf($query)
+    {
+        return $query->where('user_id', user()->id);
+    }
+    public function scopePending($query)
+    {
+        return $query->where('review_status', self::STATUS_PENDING);
+    }
+    public function scopeFlagged($query)
+    {
+        return $query->where('review_status', self::STATUS_FLAGGED);
+    }
+     public function scopePublished($query)
+    {
+        return $query->where('review_status', self::STATUS_PUBLISHED);
+    }
+    public function scopeRemoved($query)
+    {
+        return $query->where('review_status', self::STATUS_REMOVED);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***

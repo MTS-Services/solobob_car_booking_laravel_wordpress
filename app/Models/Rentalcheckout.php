@@ -65,7 +65,10 @@ class Rentalcheckout extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    public function scopeSelf($query)
+    {
+        return $query->where('created_by', user()->id);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***

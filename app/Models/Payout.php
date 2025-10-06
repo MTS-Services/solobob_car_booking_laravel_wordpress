@@ -36,6 +36,7 @@ class Payout extends BaseModel
         'payout_details',
         'scheduled_date',
         'completed_at',
+
         'created_by',
         'updated_by',
         'deleted_by',
@@ -50,9 +51,37 @@ class Payout extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'payout_status_label',
+            'payout_status_color',
+            'payout_method_label',
+            'payout_method_color',
+
+        ]);
     }
 
+    /* ================================================================
+     * *** ATTRIBUTES ***
+     ================================================================ */
+    public function getPayoutStatusLabelAttribute()
+    {
+        return match ($this->payout_status) {
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PROCESSING => 'Processing',
+            self::STATUS_COMPLETED => 'Completed',
+            self::STATUS_FAILED => 'Failed',
+            default => 'Unknown',
+        };
+    }
+    public function getPayoutMethodColorAttribute()
+    {
+        return match ($this->payout_method) {
+            self::METHOD_BANK_TRANSFER => 'badge-info',
+            self::METHOD_PAYPAL => 'badge-info',
+            self::METHOD_STRIPE => 'badge-info',
+            default => 'badge-info',
+        };
+    }
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
@@ -71,7 +100,35 @@ class Payout extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    public function scopeSelf($query)
+    {
+        return $query->where('owner_id', user()->id);
+    }
+    public function scopePending($query)
+    {
+        return $query->where('payout_status', self::STATUS_PENDING);
+    }
+    public function scopeCompleted($query)
+    {
+        return $query->where('payout_status', self::STATUS_COMPLETED);
+    }
+    public function scopeFailed($query)
+    {
+        return $query->where('payout_status', self::STATUS_FAILED);
+    }
+
+    public function scopdeBankTransfer($query)
+    {
+        return $query->where('payout_method',self::METHOD_BANK_TRANSFER);
+    }
+    public function scopePaypal($query)
+    {
+        return $query->where('payout_method',self::METHOD_PAYPAL);
+    }
+    public function scopeStripe($query)
+    {
+        return $query->where('payout_method',self::METHOD_STRIPE);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***
