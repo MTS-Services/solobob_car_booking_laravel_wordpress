@@ -1,5 +1,5 @@
 <div>
-    <section>
+    <section>         
         <div class="flex items-center justify-between glass-card rounded-2xl p-6 mb-6">
             <h2 class="text-xl font-bold text-text-primary">{{ __('Payment List') }}</h2>
         </div>
@@ -25,7 +25,7 @@
                         </svg>
                     </button>
                 @endif
-            </div>
+            </div>      
         </div>
 
         {{-- Table Section --}}
