@@ -3,7 +3,7 @@
     <div class="relative w-full h-[40vh] bg-cover bg-center bg-no-repeat overflow-hidden"
         style="background-image: url('{{ asset('assets/images/inner_banner_bg.png') }}');">
         {{-- Main Content Container --}}
-        <div class="relative z-50 container mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full">
             <div class="flex items-center justify-between h-full">
 
                 {{-- Left Side - "Cars List" Text --}}
@@ -45,12 +45,16 @@
                             </span>
                         </div>
 
-
                         <div class="h-48">
                             <!-- Dynamic Image Source -->
                             <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
-                                <img class="w-full h-full object-cover" src="{{ storage_url($vehicle->avatar) }}"
-                                    alt="{{ $vehicle->title }} Image">
+                                @if (isset($vehicle?->images) && $vehicle?->images?->count() > 0)
+                                    <img class="w-full h-full object-cover"
+                                        src="{{ storage_url($vehicle?->images?->first()?->image) }}"
+                                        alt="{{ $vehicle->title }} Image">
+                                @else
+                                    <img src="{{ asset('assets/images/default/no_img.jpg') }}" alt="{{ $vehicle->title }} Image">
+                                @endif
                             </a>
                         </div>
 

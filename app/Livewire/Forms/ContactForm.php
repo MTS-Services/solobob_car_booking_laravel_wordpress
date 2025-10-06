@@ -13,7 +13,7 @@ class ContactForm extends Form
    public $first_name = '';
 
    
-   #[Validate('required')]
+   #[Validate('nullable')]
    public $last_name = '';
 
    

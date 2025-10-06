@@ -187,20 +187,7 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-
-                    {{-- Transmission Type (Missing in original view, adding for completeness) --}}
-                    <div>
-                        <label class="block text-sm font-medium text-zinc-300 mb-2">Transmission Type *</label>
-                        <select wire:model="transmission_type"
-                            class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                            {{-- Assuming Vehicle model has constants like TRANSMISSION_AUTOMATIC and TRANSMISSION_MANUAL --}}
-                            <option value="{{ \App\Models\Vehicle::TRANSMISSION_AUTOMATIC }}">Automatic</option>
-                            <option value="{{ \App\Models\Vehicle::TRANSMISSION_MANUAL }}">Manual</option>
-                        </select>
-                        @error('transmission_type')
-                            <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    
 
                     {{-- Instant Booking --}}
                     <div class="flex items-center pt-8">

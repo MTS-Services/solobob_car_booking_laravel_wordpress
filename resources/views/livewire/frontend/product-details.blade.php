@@ -36,7 +36,7 @@
                 <div
                     class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px] lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
-                        @php
+                        {{-- @php
                             $imagePath = asset('assets/images/default-car.png');
 
                             if ($vehicle->avatar) {
@@ -44,23 +44,25 @@
                                 $cleanPath = ltrim($cleanPath, '/');
                                 $imagePath = asset('storage/' . $cleanPath);
                             }
-                        @endphp
+                        @endphp --}}
 
                         {{-- Main vehicle image --}}
-                        <div class="swiper-slide">
-                            <img src="{{ $imagePath }}" alt="{{ $vehicle->title }} image"
-                                class="w-full h-full object-cover"
-                                onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
-                        </div>
-
-                        {{-- Additional placeholder slides (you can add more images relation later) --}}
-                        @for ($i = 0; $i < 4; $i++)
+                        @foreach ($vehicle->images as $image)
                             <div class="swiper-slide">
-                                <img src="{{ $imagePath }}" alt="{{ $vehicle->title }} image {{ $i + 2 }}"
+                                <img src="{{ storage_url($image->image) }}" alt="{{ $vehicle->title }} image"
                                     class="w-full h-full object-cover"
                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
                             </div>
-                        @endfor
+                        @endforeach
+
+                        {{-- Additional placeholder slides (you can add more images relation later) --}}
+                        {{-- @for ($i = 0; $i < 4; $i++)
+                            <div class="swiper-slide">
+                                <img src="{{ storage_url($vehicle?->images?->first()?->image) }}" alt="{{ $vehicle->title }} image {{ $i + 2 }}"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
+                            </div>
+                        @endfor --}}
                     </div>
                     <div
                         class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
@@ -220,7 +222,7 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 transform scale-100"
             x-transition:leave-end="opacity-0 transform scale-90"
-            class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
             <div class="relative">
                 <button @click="modalOpen = false" type="button"
                     class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-light leading-none z-10">
@@ -230,24 +232,10 @@
 
             <div class="p-6 md:p-8">
                 <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
-                    {{ $vehicle->year }} {{ $vehicle->title }}
+                    {{ $vehicle->year }} | {{ $vehicle->title }}
                 </h2>
 
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="w-full">
-                        @php
-                            $imagePath = asset('assets/images/default-car.png');
-                            if ($vehicle->avatar) {
-                                $cleanPath = str_replace('storage/', '', $vehicle->avatar);
-                                $cleanPath = ltrim($cleanPath, '/');
-                                $imagePath = asset('storage/' . $cleanPath);
-                            }
-                        @endphp
-                        <img src="{{ $imagePath }}" alt="{{ $vehicle->title }}"
-                            class="w-full h-64 md:h-80 object-cover rounded-lg"
-                            onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
-                    </div>
-
+                {{-- <div class="">
                     <div class="space-y-4">
                         <form wire:submit.prevent="submitContact" method="POST">
                             @csrf
@@ -287,6 +275,71 @@
                                 class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors">
                                 Get in touch
                             </button>
+                        </form>
+                    </div>
+                </div> --}}
+                <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
+                    <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH
+                        </h2>
+
+                        <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
+                            @if (session()->has('submit_message'))
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <p class="text-primary"> {{ session('submit_message') }} </p>
+                                </div>
+                            @endif
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <input type="text" placeholder="First Name" wire:model="form.first_name"
+                                        class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @if ($errors->has('form.first_name'))
+                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                            {{ $errors->first('form.first_name') }}</small>
+                                    @endif
+                                </div>
+                                <div>
+                                    <input type="text" placeholder="Last Name" wire:model="form.last_name"
+                                        class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                    @if ($errors->has('form.last_name'))
+                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                            {{ $errors->first('form.last_name') }}</small>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <input type="email" placeholder="Email" wire:model="form.email"
+                                        class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
+                                    @if ($errors->has('form.email'))
+                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                            {{ $errors->first('form.last_name') }}</small>
+                                    @endif
+                                </div>
+                                <div>
+                                    <input type="tel" placeholder="Phone Number" wire:model="form.phone"
+                                        class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
+                                    @if ($errors->has('form.phone'))
+                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                            {{ $errors->first('form.phone') }}</small>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div>
+                                <textarea placeholder="Message" rows="4" wire:model="form.message"
+                                    class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
+                                @if ($errors->has('form.message'))
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                        {{ $errors->first('form.message') }}</small>
+                                @endif
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
+                                SUBMIT
+                            </button>
+
                         </form>
                     </div>
                 </div>
@@ -355,7 +408,7 @@
 
     @push('scripts')
         <script>
-            document.addEventListener('livewire:initialized', function() {
+            document.addEventListener('livewire:navigated', function() {
                 const swiper = new Swiper(".details-swiper", {
                     loop: true,
                     navigation: {
@@ -363,20 +416,20 @@
                         prevEl: ".swiper-button-prev",
                     },
                 });
-            });
 
-            function copyCurrentUrl(el) {
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(() => {
-                    el.innerHTML = `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
-                    setTimeout(() => {
-                        el.innerHTML =
-                            `<flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />`;
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-            }
+                function copyCurrentUrl(el) {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url).then(() => {
+                        el.innerHTML = `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
+                        setTimeout(() => {
+                            el.innerHTML =
+                                `<flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />`;
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+                }
+            });
         </script>
     @endpush
 </section>

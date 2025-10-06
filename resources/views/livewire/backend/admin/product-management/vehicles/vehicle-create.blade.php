@@ -73,7 +73,7 @@
 
 
                     <div>
-                         <label class="block text-sm font-medium text-zinc-300 mb-2">Year *</label> <input
+                        <label class="block text-sm font-medium text-zinc-300 mb-2">Year *</label> <input
                             wire:model="year" type="number"
                             class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600"
                             placeholder="2024"> @error('year')
@@ -125,7 +125,7 @@
                         @enderror
                     </div>
 
-                    
+
 
                     {{-- Weekly Rate --}}
                     <div>
@@ -184,18 +184,17 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
+                    {{-- <div>
                         <label class="block text-sm font-medium text-zinc-300 mb-2">Transmission Type *</label>
                         <select wire:model="transmission_type"
                             class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                            {{-- Assuming Vehicle model has constants like TRANSMISSION_AUTOMATIC and TRANSMISSION_MANUAL --}}
                             <option value="{{ \App\Models\Vehicle::TRANSMISSION_AUTOMATIC }}">Automatic</option>
                             <option value="{{ \App\Models\Vehicle::TRANSMISSION_MANUAL }}">Manual</option>
                         </select>
                         @error('transmission_type')
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- Instant Booking --}}
                     <div class="flex items-center pt-8">
@@ -230,25 +229,29 @@
                     <div class="md:col-span-3">
                         <label class="block text-sm font-medium text-zinc-300 mb-2">Vehicle Image</label>
                         <div class="flex items-start gap-4">
-                            @if ($avatar)
-                                <div class="relative">
-                                    <img src="{{ $avatar->temporaryUrl() }}"
-                                        class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
-                                    <button type="button" wire:click="removeAvatar"
-                                        class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </button>
-                                </div>
+                            @if ($images)
+                                @foreach ($images as $image)
+                                    <div class="relative">
+                                        <img src="{{ $image->temporaryUrl() }}"
+                                            class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
+                                        <button type="button" wire:click="removeAvatar"
+                                            class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18">
+                                                </line>
+                                                <line x1="6" y1="6" x2="18" y2="18">
+                                                </line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                @endforeach
                             @endif
                             <div class="flex-1">
-                                <input wire:model="avatar" type="file" accept="image/*"
-                                    class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+                                <input wire:model="images" type="file" accept="image/*"
+                                    class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600"
+                                    multiple>
                                 <p class="mt-2 text-xs text-zinc-500">Maximum file size: 2MB. Supported formats: JPG,
                                     PNG, GIF</p>
                                 @error('avatar')
