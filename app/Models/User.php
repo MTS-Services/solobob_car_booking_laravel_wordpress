@@ -19,7 +19,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * *** MODEL CONSTANTS ***
      ================================================================ */
     public const ROLE_ADMIN = true;
-
     public const ROLE_USER = false;
 
     /* ================================================================

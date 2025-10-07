@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class Category extends BaseModel
 {
@@ -36,7 +37,10 @@ class Category extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'status_label',
+            'status_color',
+        ]);
     }
 
     /* ================================================================
@@ -73,10 +77,10 @@ class Category extends BaseModel
     }
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',
-            default => 'secondary',
+        return match ((int) $this->status) {
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-warning',
+            default => 'badge-secondary',
         };
     }
     /* ================================================================
@@ -84,7 +88,15 @@ class Category extends BaseModel
      ================================================================ */
 
     //
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', self::STATUS_ACTIVE);
+    }
 
+    public function scopeInactive(Builder $query): void
+    {
+        $query->where('status', self::STATUS_INACTIVE);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***
