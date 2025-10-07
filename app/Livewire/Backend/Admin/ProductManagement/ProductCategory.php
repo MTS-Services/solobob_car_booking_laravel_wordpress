@@ -189,6 +189,14 @@ class ProductCategory extends Component
 
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
             ['key' => 'slug', 'label' => 'slug', 'width' => '25%'],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'width' => '10%',
+                'format' => function ($productCategorie) {
+                    return '<span class="badge badge-soft ' . $productCategorie->status_color . '">' . ucfirst($productCategorie->status_label) . '</span>';
+                }
+            ],
 
             [
                 'key' => 'created_at',
