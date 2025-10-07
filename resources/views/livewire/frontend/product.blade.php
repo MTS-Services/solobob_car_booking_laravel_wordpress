@@ -62,8 +62,9 @@
                         <!-- Dynamic Category Tag -->
                         <span
                             class="absolute bottom-2 left-2 bg-accent text-white text-xs xxs:text-sm font-semibold px-3 py-1.5 rounded-md shadow-lg tracking-wider">
-                            {{ $vehicle->category?->name ?? 'Uncategorized' }}
+                            {{ Str::limit($vehicle->category?->name ?? 'Uncategorized', 16, '...') }}
                         </span>
+
                     </div>
 
                     <div class="p-4">
@@ -73,20 +74,20 @@
                                     <!-- Dynamic Vehicle Title -->
                                     <p
                                         class="text-xs xs:text-sm md:text-base font-normal text-gray-700 uppercase leading-snug">
-                                        {{ $vehicle->title }}
+                                        {{Str::limit($vehicle->title ?? 'Car Title', 20, '...') }}
                                     </p>
                                 </a>
                                 <div class="text-right text-gray-900 font-bold text-lg md:text-xl flex-shrink-0 ml-2">
                                     <!-- Dynamic Daily Rate -->
                                     ${{ number_format($vehicle->weekly_rate, 2) }}
-                                    <span class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Day</span>
+                                    <span class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Week</span>
                                 </div>
                             </div>
 
                             <!-- Dynamic Owner Location -->
                             <div class="flex items-center text-xs sm:text-sm text-gray-500">
                                 <flux:icon name="map-pin" class="text-zinc-500 mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                <span>{{ $vehicle->owner?->city ?? 'Location Not Set' }}</span>
+                                <span>{{ Str::limit($vehicle->owner?->city ?? 'Location Not Set', 22, '...') }}</span>
                             </div>
                         </div>
 
