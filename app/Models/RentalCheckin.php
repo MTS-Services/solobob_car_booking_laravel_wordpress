@@ -16,11 +16,51 @@ class RentalCheckin extends BaseModel
     public const FUEL_LEVEL_THREE_QUARTER = 3;
     public const FUEL_LEVEL_FULL          = 4;
 
+
+
+
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->appends = array_merge(parent::getAppends(), []);
+    }
+
+    /* ================================================================
+     * *** ATTRIBUTES ***
+     ================================================================ */
+    public function getFuelLavelStartLabelAttribute()
+    {
+        return match ($this->fuel_level_start) {
+            self::FUEL_LEVEL_EMPTY => 'Empty',
+            self::FUEL_LEVEL_QUARTER => 'Quarter',
+            self::FUEL_LEVEL_HALF => 'Half',
+            self::FUEL_LEVEL_THREE_QUARTER => 'Three Quarter',
+            self::FUEL_LEVEL_FULL => 'Full',
+            default => 'Unknown',
+        };
+    }
+    public function getFuelLavelStartColorAttribute()
+    {
+        return match ((int)$this->fuel_level_start) {
+            self::FUEL_LEVEL_EMPTY => 'badge-danger',
+            self::FUEL_LEVEL_QUARTER => 'badge-warning',
+            self::FUEL_LEVEL_HALF => 'badge-info',
+            self::FUEL_LEVEL_THREE_QUARTER => 'badge-primary',
+            self::FUEL_LEVEL_FULL => 'badge-success',
+            default => 'badge-secondary',
+        };
+    }
+
+
+
+
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'booking_id',
         'checkin_datetime',
         'mileage_start',
@@ -40,37 +80,7 @@ class RentalCheckin extends BaseModel
         'fuel_level_start' => 'integer',
     ];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
-    }
 
-    /* ================================================================
-     * *** ATTRIBUTES ***
-     ================================================================ */
-     public function getFuelLavelStartLabelAttribute()
-     {
-         return match ($this->fuel_level_start) {
-             self::FUEL_LEVEL_EMPTY => 'Empty',
-             self::FUEL_LEVEL_QUARTER => 'Quarter',
-             self::FUEL_LEVEL_HALF => 'Half',
-             self::FUEL_LEVEL_THREE_QUARTER => 'Three Quarter',
-             self::FUEL_LEVEL_FULL => 'Full',
-             default => 'Unknown',
-         };
-     }
-     public function getFuelLavelStartColorAttribute()
-     {
-         return match ($this->fuel_level_start) {
-             self::FUEL_LEVEL_EMPTY => 'danger',
-             self::FUEL_LEVEL_QUARTER => 'warning',
-             self::FUEL_LEVEL_HALF => 'warning',
-             self::FUEL_LEVEL_THREE_QUARTER => 'warning',
-             self::FUEL_LEVEL_FULL => 'success',
-             default => 'primary',
-         };
-     }
 
     /* ================================================================
      * *** RELATIONS ***
@@ -90,7 +100,31 @@ class RentalCheckin extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    public function scopeSelf($query)
+    {
+        return $query->where('user_id', user()->id);
+    }
+    public function scopeEmpty($query)
+    {
+        return $query->where('fuel_level_start', self::FUEL_LEVEL_EMPTY);
+    }
+    public function scopeQuarter($query)
+    {
+        return $query->where('fuel_level_start', self::FUEL_LEVEL_QUARTER);
+    }
+    public function scopeHalf($query)
+    {
+        return $query->where('fuel_level_start', self::FUEL_LEVEL_HALF);
+    }
+    public function scopeThreeQuarter($query)
+    {
+        return $query->where('fuel_level_start', self::FUEL_LEVEL_THREE_QUARTER);
+    }
+    public function scopeFull($query)
+    {
+        return $query->where('fuel_level_start', self::FUEL_LEVEL_FULL);
+    }
+    // public function sc
 
     /* ================================================================
      * *** ACCESSORS ***
