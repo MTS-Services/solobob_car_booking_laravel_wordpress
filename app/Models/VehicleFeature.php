@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class VehicleFeature extends BaseModel
 {
@@ -15,6 +16,35 @@ class VehicleFeature extends BaseModel
     public const FEATURE_CATEGORY_ENTERTAINMENT = 3;
     public const FEATURE_CATEGORY_OTHER         = 4;
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->appends = array_merge(parent::getAppends(), [
+            'feture_category_label',
+            'feture_category_color',
+        ]);
+    }
+    public function getFetureCategoryLabelAttribute()
+    {
+        return match ($this->feature_category) {
+            self::FEATURE_CATEGORY_SAFETY => 'Safety',
+            self::FEATURE_CATEGORY_COMFORT => 'Comfort',
+            self::FEATURE_CATEGORY_ENTERTAINMENT => 'Entertainment',
+            self::FEATURE_CATEGORY_OTHER => 'Other',
+            default => 'Unknown',
+        };
+    }
+    public function getFetureCategoryColorAttribute()
+    {
+        return match ($this->feature_category) {
+            self::FEATURE_CATEGORY_SAFETY => 'danger',
+            self::FEATURE_CATEGORY_COMFORT => 'success',
+            self::FEATURE_CATEGORY_ENTERTAINMENT => 'warning',
+            self::FEATURE_CATEGORY_OTHER => 'secondary',
+            default => 'secondary',
+        };
+    }
+    
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
@@ -45,34 +75,7 @@ class VehicleFeature extends BaseModel
         ];
     }
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            'feture_category_label',
-            'feture_category_color',
-        ]);
-    }
-    public function getFetureCategoryLabelAttribute()
-    {
-        return match ($this->feature_category) {
-            self::FEATURE_CATEGORY_SAFETY => 'Safety',
-            self::FEATURE_CATEGORY_COMFORT => 'Comfort',
-            self::FEATURE_CATEGORY_ENTERTAINMENT => 'Entertainment',
-            self::FEATURE_CATEGORY_OTHER => 'Other',
-            default => 'Unknown',
-        };
-    }
-    public function getFetureCategoryColorAttribute()
-    {
-        return match ($this->feature_category) {
-            self::FEATURE_CATEGORY_SAFETY => 'danger',
-            self::FEATURE_CATEGORY_COMFORT => 'success',
-            self::FEATURE_CATEGORY_ENTERTAINMENT => 'warning',
-            self::FEATURE_CATEGORY_OTHER => 'secondary',
-            default => 'secondary',
-        };
-    }
+    
 
      /* ================================================================
      * *** RELATIONS ***

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class UserDocuments extends BaseModel
 {
@@ -84,7 +85,7 @@ class UserDocuments extends BaseModel
 
     public function scopeSelf(Builder $query) : Builder
     {
-        return $query->where('user_id', Auth::id());
+        return $query->where('user_id', user()->id);
     }
 
    // Scope for Only this pending Verification
@@ -92,20 +93,20 @@ class UserDocuments extends BaseModel
 
     public function scopePending(Builder $query) : Builder
     {
-        return $query->where('verification_status', Self::VERIFICATION_PENDING);
+        return $query->where('verification_status', self::VERIFICATION_PENDING);
     }
 
     // Scope for Only this pending Verification
 
     public function scopeVerified(Builder $query) : Builder
     {
-        return $query->where('verification_status', Self::VERIFICATION_VERIFIED);
+        return $query->where('verification_status', self::VERIFICATION_VERIFIED);
     }
 
     // Scope for Only this pending Verification
     public function scopeRejected(Builder $query) : Builder
     {
-        return $query->where('verification_status', Self::VERIFICATION_REJECTED);
+        return $query->where('verification_status', self::VERIFICATION_REJECTED);
     }
 
 

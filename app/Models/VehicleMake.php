@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class VehicleMake extends BaseModel
 {
@@ -57,14 +58,14 @@ class VehicleMake extends BaseModel
 
     public function scopeActive(Builder $query):Builder 
     {
-        return $query->where('status', SELF::ACTIVE);
+        return $query->where('status', self::ACTIVE);
     }
 
     //Scope for Inactive
 
     public function scopeInActive(Builder $query):Builder 
     {
-        return $query->where('status', SELF::INACTIVE);
+        return $query->where('status', self::INACTIVE);
     }
 
     /* ================================================================

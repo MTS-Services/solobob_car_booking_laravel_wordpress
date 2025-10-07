@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Addresse extends BaseModel
 {
@@ -63,10 +64,7 @@ class Addresse extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
-    //     public const PERSONAL    = 0;
-    // public const RESIDENTIAL = 1;
-    // public const PARKING     = 2;
+  
 
 
     /**
@@ -84,7 +82,7 @@ class Addresse extends BaseModel
      */
     public function scopeSelf(Builder $query) : Builder 
     {
-        return $query->where('user_id', AUTH::id());
+        return $query->where('user_id', user()->id);
     }
 
      /**
@@ -93,7 +91,7 @@ class Addresse extends BaseModel
      */
     public function scopePersonal(Builder $query) : Builder 
     {
-        return $query->where('address_type', Self::PERSONAL);
+        return $query->where('address_type', self::PERSONAL);
     }
 
   /**
@@ -102,7 +100,7 @@ class Addresse extends BaseModel
      */
     public function scopeResidential(Builder $query) : Builder 
     {
-        return $query->where('address_type', Self::RESIDENTIAL);
+        return $query->where('address_type', self::RESIDENTIAL);
     }
 
      /**
@@ -111,7 +109,7 @@ class Addresse extends BaseModel
      */
     public function scopeParking(Builder $query) : Builder 
     {
-        return $query->where('address_type', Self::PARKING);
+        return $query->where('address_type', self::PARKING);
     }
 
 

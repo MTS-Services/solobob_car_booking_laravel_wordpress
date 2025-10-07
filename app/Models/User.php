@@ -177,7 +177,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * Scope a query to include only Status active
      */
     
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builderer $query) : Builder
     {
         return $query->where('status', self::STATUS_ACTIVE);
     }
