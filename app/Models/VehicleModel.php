@@ -19,7 +19,12 @@ class VehicleModel extends BaseModel
 
     protected $fillable = [
         'name',
-        'slug',
+        'sort_order',
+        'status',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];
@@ -45,16 +50,16 @@ class VehicleModel extends BaseModel
     {
         return match ($this->status) {
             self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
+            self::STATUS_INACTIVE => 'Inactive',
             default => 'Unknown',
         };
     }
     public function getStatusColorAttribute()
     {
         return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',            
-            default => 'secondary',
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-warning',
+            default => 'badge-secondary',
         };
     }
     /* ================================================================
