@@ -61,10 +61,41 @@ class VehicleList extends Component
             ->with(['category', 'owner'])
             ->latest()
             ->paginate(10);
+        $columns = [
+            ['key' => 'title', 'label' => 'Title', 'width' => '20%'],
+            ['key' => 'license_plate', 'label' => 'License Plate', 'width' => '15%'],
+            ['key' => 'owner', 'label' => 'Owner', 'width' => '15%', 'format' => fn($v) => $v->owner?->name ?? 'N/A'],
+            ['key' => 'category', 'label' => 'Category', 'width' => '15%', 'format' => fn($v) => $v->category?->name ?? 'N/A'],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'width' => '10%',
+                'format' => fn($v) => '<span class="badge badge-soft ' . $v->status_color . '">' . ucfirst($v->status_label) . '</span>',
+            ],
+            [
+                'key' => 'created_at',
+                'label' => 'Created At',
+                'width' => '15%',
+                'format' => fn($v) => $v->created_at_formatted,
+            ],
+            [
+                'key' => 'created_by',
+                'label' => 'Created By',
+                'width' => '15%',
+                'format' => fn($v) => $v->createdBy?->name ?? 'System',
+            ],
+        ];
 
-       return view('livewire.backend.admin.product-management.vehicles.vehicle-list', [
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'route' => 'admin.pm.vehicle-details'],
+            ['key' => 'id', 'label' => 'Edit', 'route' => 'admin.pm.vehicle-edit'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+        ];
+
+        return view('livewire.backend.admin.product-management.vehicles.vehicle-list', [
             'vehicles' => $vehicles,
+            'columns' => $columns,
+            'actions' => $actions
         ]);
     }
 }
-  

@@ -25,7 +25,7 @@
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         APPLICATION
                     </a> --}}
-                    <a href="#"
+                    <a href="{{ route('contact') }}" wire:navigate
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         CONTACT
                     </a>
@@ -63,15 +63,14 @@
 
                     <!-- Mobile Menu Button (Visible only on small screens) -->
                     <button @click="toggleMenu = !toggleMenu"
-                        class="lg:hidden p-2 rounded-lg bg-zinc-700 hover:bg-zinc-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
+                        class="lg:hidden p-2 rounded-lg bg-zinc-700 hover:bg-zinc-600 transition-colors ">
+                        <svg stroke="white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
                         </svg>
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -104,7 +103,7 @@
                 <a href="#"
                     class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Sign
                     Agreement</a>
-
+                
                 <!-- If user is authenticated -->
                 <a href="/profile"
                     class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Profile</a>

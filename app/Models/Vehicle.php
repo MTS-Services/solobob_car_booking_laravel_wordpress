@@ -23,7 +23,7 @@ class Vehicle extends BaseModel
     // public const APPROVAL_REJECTED = 2;
 
     public const STATUS = [
-        self::STATUS_AVAILABLE => 'Available',
+        self::STATUS_AVAILABLE => 'Active',
         self::STATUS_RENTED => 'Rented',
         self::STATUS_MAINTENANCE => 'Under Maintenance',
         self::STATUS_INACTIVE => 'Inactive',
@@ -124,8 +124,8 @@ class Vehicle extends BaseModel
     {
         parent::__construct($attributes);
         $this->appends = array_merge(parent::getAppends(), [
-
-
+            'status_label',
+            'status_color',
         ]);
     }
 
@@ -138,6 +138,11 @@ class Vehicle extends BaseModel
     public function owner()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(VehicleImage::class, 'vehicle_id', 'id');
     }
 
     public function category()

@@ -19,8 +19,7 @@ class VehicleImage extends BaseModel
 
     protected $fillable = [
         'vehicle_id',
-        'image_url',
-        'order_image',
+        'image',
         'is_primary',
     ];
 

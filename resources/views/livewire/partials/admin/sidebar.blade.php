@@ -125,9 +125,15 @@
                 active="deposit-management" :page_slug="$active" />
                 {{-- order management --}}
 
-            <x-backend.navlink type="single" icon="shopping-cart" name="Order Management" :route="route('admin.orders')"
-                active="order-management" :page_slug="$active" />
-
+             <x-backend.navlink type="dropdown" icon="user-group" name="Order Management" :page_slug="$active"
+                :items="[
+                    [
+                        'name' => 'Orders',
+                        'route' => route('admin.om.index'),
+                        'icon' => 'user',
+                        'active' => 'order-management',
+                    ]
+                ]" />
             <x-backend.navlink type="single" icon="currency-dollar" name="Payments" :route="route('admin.payments')"
                 active="payments" :page_slug="$active" />
 

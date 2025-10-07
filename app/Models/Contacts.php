@@ -17,34 +17,36 @@ class Contacts extends BaseModel
      * *** PROPERTIES ***
      ================================================================ */
 
-    // protected $fillable = [
-       
-    // ];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'message',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
 
     protected $guarded = [];
-    protected $hidden = [
-        
-    ];
+    protected $hidden = [];
 
     /**
      * Define the attribute casts for the model.
      */
     protected function casts(): array
     {
-        return [
-            
-        ];
+        return [];
     }
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            
-        ]);
+        $this->appends = array_merge(parent::getAppends(), []);
     }
 
-     /* ================================================================
+    /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
 
@@ -54,16 +56,15 @@ class Contacts extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-     //
+    //
 
-      /* ================================================================
+    /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
 
-     //
+    //
 
-     /* ================================================================
+    /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
-
 }

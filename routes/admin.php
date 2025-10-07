@@ -18,8 +18,11 @@ use App\Livewire\Backend\Admin\ProductManagement\VehicleTransmissions;
 
 // Other Management Components
 use App\Livewire\Backend\Admin\DepositManagement\DepositComponent;
+use App\Livewire\Backend\Admin\DepositManagement\DepositDetail;
 use App\Livewire\Backend\Admin\OrderManagement\OrderComponent;
-use App\Livewire\Backend\Admin\PaymentComponent;
+use App\Livewire\Backend\Admin\OrderManagement\OrderDetails;
+use App\Livewire\Backend\Admin\PaymentManagement\PaymentComponent;
+use App\Livewire\Backend\Admin\PaymentManagement\PaymentDetailsComponent;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleCreate;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleDetails;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleEdit;
@@ -35,7 +38,20 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/admins', Admin::class)->name('admins');
 
-    Route::get('/deposits', DepositComponent::class)->name('deposits');
+    Route::group(['as' => 'om.', 'prefix' => 'order-management'], function () {
+        Route::get('/index', OrderComponent::class)->name('index');
+        Route::get('/details/{id}', OrderDetails::class)->name('details');
+    });
+
+
+    Route::group([], function(){
+         Route::get('/deposit-management', DepositComponent::class)->name('deposits');
+          Route::get('/deposits', DepositComponent::class)->name('deposits');
+          route::get('/deposit/details/{id}', DepositDetail::class)->name('deposit.detail');
+    });
+
+
+   
     Route::get('/orders', OrderComponent::class)->name('orders');
     Route::get('/payments', PaymentComponent::class)->name('payments');
 
@@ -52,5 +68,36 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
         Route::get('/vehicle-edit/{id}', VehicleEdit::class)->name('vehicle-edit');
         Route::get('/vehicle-details/{id}', VehicleDetails::class)->name('vehicle-details');
         Route::get('/vehicle-trash', VehicleTrash::class)->name('vehicle-trash');
+    });
+});
+
+Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
+
+    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
+        Route::get('/category', ProductCategory::class)->name('product-category');
+    });
+
+    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
+        Route::get('/vehicle', VehicleMakes::class)->name('vehicle-makes');
+    });
+    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
+        Route::get('/vehiclefuel', Vehiclefuels::class)->name('vehicle-fuel');
+    });
+    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
+        Route::get('/vehiclemodel', VehicleModels::class)->name('vehicle-model');
+    });
+
+    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
+        Route::get('/vehicletransmission', VehicleTransmissions::class)->name('vehicle-transmission');
+    });
+
+    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
+        Route::get('/vehicleproduct', Vehicles::class)->name('vehicle-product');
+    });
+
+    //   Route::get('/payments', PaymentComponent::class)->name('payments');
+    Route::group(['prefix' => 'payment-management'], function () {
+        Route::get('/', PaymentComponent::class)->name('payments');
+        Route::get('/details/{id}', PaymentDetailsComponent::class)->name('payment-details');
     });
 });

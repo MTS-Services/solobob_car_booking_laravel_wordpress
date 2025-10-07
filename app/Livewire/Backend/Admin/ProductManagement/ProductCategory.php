@@ -192,24 +192,24 @@ class ProductCategory extends Component
 
             [
                 'key' => 'created_at',
-                'label' => 'Created',
+                'label' => 'Created At',
                 'width' => '15%',
-                'format' => function ($admin) {
-                    return $admin->created_at_formatted;
+                'format' => function ($productCategorie) {
+                    return $productCategorie->created_at_formatted;
                 }
             ],
 
             [
                 'key' => 'created_by',
-                'label' => 'Created',
+                'label' => 'Created By',
                 'width' => '15%',
-                'format' => function ($admin) {
-                    return $admin->createdBy?->name ?? 'System';
+                'format' => function ($productCategorie) {
+                    return $productCategorie->createdBy?->name ?? 'System';
                 }
             ]
         ];
-         $actions = [
-            ['key' => 'id', 'label' => 'View', 'href' => route('admin.product-category.view')],
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
             ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
             ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
         ];

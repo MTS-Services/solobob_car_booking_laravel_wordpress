@@ -1,4 +1,4 @@
-<flux:header container class="bg-zinc-50 dark:bg-zinc-950/40 border-b border-zinc-200 dark:border-zinc-700">
+<flux:header container class="bg-zinc-50 dark:bg-zinc-950/40 border-b border-zinc-200 dark:border-zinc-700 ">
 
     <style>
         [data-current] {

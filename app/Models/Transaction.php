@@ -56,9 +56,92 @@ class Transaction extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'transaction_status_label',
+            'transaction_status_color',
+            'transaction_type_label',
+            'transaction_type_color',
+        ]);
     }
-
+    
+    /* ================================================================
+     * *** Attributes ***
+     ================================================================ */
+        public function getTransactionStatusLabelAttribute()
+        {
+            return match ($this->transaction_status) {
+                self::STATUS_PENDING   => 'Pending',
+                self::STATUS_COMPLETED => 'Completed',
+                self::STATUS_FAILED    => 'Failed',
+                default => 'Unknown',
+            };
+        }
+        public function getTransactionStatusColorAttribute()
+        {
+            return match ($this->transaction_status) {
+                self::STATUS_PENDING   => 'warning',
+                self::STATUS_COMPLETED => 'success',
+                self::STATUS_FAILED    => 'danger',
+                default => 'warning',
+            };
+        }
+        public function getTransactionTypeLabelAttribute()
+        {
+            return match ($this->transaction_type) {
+                self::TYPE_BOOKING_PAYMENT   => 'Booking Payment',
+                self::TYPE_SECURITY_DEPOSIT  => 'Security Deposit',
+                self::TYPE_REFUND            => 'Refund',
+                self::TYPE_PAYOUT            => 'Payout',
+                self::TYPE_ADDITIONAL_CHARGE => 'Additional Charge',
+                default => 'Unknown',
+            };
+        }
+        public function getTransactionTypeColorAttribute()
+        {
+            return match ($this->transaction_type) {
+                self::TYPE_BOOKING_PAYMENT   => 'warning',
+                self::TYPE_SECURITY_DEPOSIT  => 'warning',
+                self::TYPE_REFUND            => 'danger',
+                self::TYPE_PAYOUT            => 'success',
+                self::TYPE_ADDITIONAL_CHARGE => 'warning',
+                default => 'warning',
+            };
+        }
+     /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
+    public function scopeSelf()
+    {
+        return $this->where('user_id', user()->id);
+    }
+    public function scopeBookingPayment()
+    {
+        return $this->where('transaction_type', self::TYPE_BOOKING_PAYMENT);
+    }
+    public function scopeSecurityDeposit()
+    {
+        return $this->where('transaction_type', self::TYPE_SECURITY_DEPOSIT);   
+    }
+    public function scopeRefund()
+    {
+        return $this->where('transaction_type', self::TYPE_REFUND);
+    }
+    public function scopePayout()
+    {
+        return $this->where('transaction_type', self::TYPE_PAYOUT);
+    }
+    public function scopePending()
+    {
+        return $this->where('transaction_status', self::STATUS_PENDING);
+    }
+    public function scopeCompleted()
+    {
+        return $this->where('transaction_status', self::STATUS_COMPLETED);
+    }
+    public function scopeFailed()
+    {
+        return $this->where('transaction_status', self::STATUS_FAILED);
+    }
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */

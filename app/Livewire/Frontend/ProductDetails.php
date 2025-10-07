@@ -2,32 +2,54 @@
 
 namespace App\Livewire\Frontend;
 
+use App\Livewire\Forms\ContactForm;
+use App\Models\Contacts;
+use App\Models\Vehicle;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 #[Layout(
     'app',
     [
-        'title' => 'Product-details',
-        'breadcrumb' => 'Product-details',
+        'title' => 'Product Details',
+        'breadcrumb' => 'Product Details',
         'page_slug' => 'product-details'
     ]
 )]
 class ProductDetails extends Component
 {
+    public $vehicle;
 
-    public $showModal = false;
-
-    public function openModal()
+    public function mount($slug)
     {
-        $this->showModal = true;
-        $this->dispatch('modal-opened');
+        // Fetch vehicle with relationships
+        $this->vehicle = Vehicle::where('slug', $slug)
+            ->with(['category', 'owner', 'images'])
+            ->where('status', Vehicle::STATUS_AVAILABLE)
+            ->firstOrFail();
     }
 
-    public function closeModal()
+    public function back()
     {
-        $this->showModal = false;
+        return $this->redirect(route('products'), navigate: true);
     }
+
+    // Contact message
+
+    public ContactForm $form;
+
+    public function contactSubmit()
+    {
+
+        $this->validate();
+
+        Contacts::create($this->form->all());
+
+        session()->flash('submit_message', 'Message has been sent successfully');
+
+        $this->reset(['form.first_name', 'form.last_name', 'form.phone', 'form.email', 'form.message']);
+    }
+
     public function render()
     {
         return view('livewire.frontend.product-details');

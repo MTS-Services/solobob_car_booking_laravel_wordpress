@@ -77,7 +77,7 @@
                     <div>
                         {{-- NOTE: This input should probably be a text/number input for 'year' and not a 'date' type based on the Livewire component's `$year` validation (integer, min 1900, max current year + 1). I will keep the 'date' type as you had it, but be aware of the potential inconsistency. --}}
                         <label class="block text-sm font-medium text-zinc-300 mb-2">Year *</label>
-                        <input wire:model="year" type="date"
+                        <input wire:model="year" type="number"
                             class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
                         @error('year')
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
@@ -128,16 +128,6 @@
                         @enderror
                     </div>
 
-                    {{-- Daily Rate --}}
-                    <div>
-                        <label class="block text-sm font-medium text-zinc-300 mb-2">Daily Rate *</label>
-                        <input wire:model="daily_rate" type="number" step="0.01"
-                            class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600"
-                            placeholder="50.00">
-                        @error('daily_rate')
-                            <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                        @enderror
-                    </div>
 
                     {{-- Weekly Rate --}}
                     <div>
@@ -197,20 +187,7 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-
-                    {{-- Transmission Type (Missing in original view, adding for completeness) --}}
-                    <div>
-                        <label class="block text-sm font-medium text-zinc-300 mb-2">Transmission Type *</label>
-                        <select wire:model="transmission_type"
-                            class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                            {{-- Assuming Vehicle model has constants like TRANSMISSION_AUTOMATIC and TRANSMISSION_MANUAL --}}
-                            <option value="{{ \App\Models\Vehicle::TRANSMISSION_AUTOMATIC }}">Automatic</option>
-                            <option value="{{ \App\Models\Vehicle::TRANSMISSION_MANUAL }}">Manual</option>
-                        </select>
-                        @error('transmission_type')
-                            <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    
 
                     {{-- Instant Booking --}}
                     <div class="flex items-center pt-8">

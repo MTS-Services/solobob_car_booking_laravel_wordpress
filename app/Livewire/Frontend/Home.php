@@ -75,6 +75,7 @@ class Home extends Component
     public function contactSubmit()
     {
         
+       $this->validate();
        
         Contacts::create($this->form->all());
 
