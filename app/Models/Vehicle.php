@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class Vehicle extends BaseModel
 {
@@ -194,7 +194,7 @@ class Vehicle extends BaseModel
 
     public function scopeAutomatice(Builder $query): Builder 
     {
-        return $query->where('transmission_type', self::transmission_type);
+        return $query->where('transmission_type', self::TRANSMISSION_AUTOMATIC);
     }
 
     // Scope Manuall

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleFeature extends BaseModel
 {
@@ -44,7 +44,7 @@ class VehicleFeature extends BaseModel
             default => 'secondary',
         };
     }
-    
+
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
