@@ -37,7 +37,7 @@
                     {{-- Main Selected Image --}}
                     <div class="flex justify-center mb-4">
                         <img src="{{ asset('storage/' . $selectedImage) }}" alt="{{ $vehicle->title }}"
-                            class="w-full max-w-4xl h-96 object-cover rounded-2xl border-2 border-zinc-200 shadow-lg">
+                            class="w-full max-w-4xl h-96 object-cover rounded-2xl border-2 border-zinc-100 shadow-lg">
                     </div>
 
                     {{-- Thumbnail Gallery --}}
@@ -46,7 +46,7 @@
                             <div wire:click="selectImage('{{ $image->image }}')"
                                 class="relative group cursor-pointer transition-all duration-200 {{ $selectedImage === $image->image ? 'ring-2 ring-amber-500' : '' }}">
                                 <img src="{{ asset('storage/' . $image->image) }}" alt="{{ $vehicle->title }}"
-                                    class="w-24 h-24 object-cover rounded-lg border-2 {{ $selectedImage === $image->image ? 'border-amber-500' : 'border-zinc-200' }} hover:border-amber-400">
+                                    class="w-24 h-24 object-cover rounded-lg border-2 {{ $selectedImage === $image->image ? 'border-amber-500' : 'border-zinc-100' }} hover:border-amber-400">
 
                                 {{-- Primary Badge --}}
                                 @if ($image->is_primary)
@@ -73,7 +73,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Title</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->title }}
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Slug</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->slug }}
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Owner</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->owner->name ?? 'N/A' }}
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Category</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->category->name ?? 'N/A' }}
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Year</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->year }}
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Color</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->color }}
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">License Plate</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->license_plate }}
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Seating Capacity</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->seating_capacity }}
                         {{ $vehicle->seating_capacity == 1 ? 'Person' : 'People' }}
                     </div>
@@ -146,7 +146,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Mileage</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ number_format($vehicle->mileage) }} km
                     </div>
                 </div>
@@ -155,7 +155,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Weekly Rate</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->weekly_rate ? '$' . number_format($vehicle->weekly_rate, 2) : 'N/A' }}
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Monthly Rate</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->monthly_rate ? '$' . number_format($vehicle->monthly_rate, 2) : 'N/A' }}
                     </div>
                 </div>
@@ -173,7 +173,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Security Deposit</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->security_deposit ? '$' . number_format($vehicle->security_deposit, 2) : 'N/A' }}
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Delivery Fee</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->delivery_fee ? '$' . number_format($vehicle->delivery_fee, 2) : 'N/A' }}
                     </div>
                 </div>
@@ -190,9 +190,9 @@
                 {{-- Status --}}
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Status</label>
-                    <div class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 bg-zinc-50">
+                    <div class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 bg-zinc-50">
                         <span
-                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $vehicle->status_color }}">
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border badge badge-soft {{ $vehicle->status_color }}">
                             {{ $vehicle->status_label }}
                         </span>
                     </div>
@@ -202,7 +202,7 @@
                 <div>
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Transmission Type</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                         {{ $vehicle->transmission_type }}
                     </div>
                 </div>
@@ -211,7 +211,7 @@
                 <div class="flex items-center pt-8">
                     <label class="flex items-center cursor-not-allowed">
                         <input type="checkbox" disabled {{ $vehicle->instant_booking ? 'checked' : '' }}
-                            class="w-4 h-4 text-emerald-600 bg-zinc-800 border-zinc-200 rounded focus:ring-zinc-600">
+                            class="w-4 h-4 text-emerald-600 bg-zinc-800 border-zinc-100 rounded focus:ring-zinc-600">
                         <span class="ml-2 text-sm font-medium text-zinc-500">Instant Booking</span>
                     </label>
                 </div>
@@ -220,7 +220,7 @@
                 <div class="flex items-center pt-8">
                     <label class="flex items-center cursor-not-allowed">
                         <input type="checkbox" disabled {{ $vehicle->delivery_available ? 'checked' : '' }}
-                            class="w-4 h-4 text-emerald-600 bg-zinc-800 border-zinc-200 rounded focus:ring-zinc-600">
+                            class="w-4 h-4 text-emerald-600 bg-zinc-800 border-zinc-100 rounded focus:ring-zinc-600">
                         <span class="ml-2 text-sm font-medium text-zinc-500">Delivery Available</span>
                     </label>
                 </div>
@@ -229,21 +229,21 @@
                 <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-zinc-600 mb-2">Description</label>
                     <div
-                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50 min-h-[100px]">
+                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50 min-h-[100px]">
                         {{ $vehicle->description }}
                     </div>
                 </div>
 
                 {{-- Audit Information --}}
                 <div class="md:col-span-3">
-                    <div class="border-t border-zinc-200 pt-6 mt-6">
+                    <div class="border-t border-zinc-100 pt-6 mt-6">
                         <h3 class="text-lg font-semibold text-zinc-600 mb-4">Audit Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {{-- Created At --}}
                             <div>
                                 <label class="block text-sm font-medium text-zinc-600 mb-2">Created At</label>
                                 <div
-                                    class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                                    class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                                     {{ $vehicle->created_at->format('M d, Y H:i A') }}
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-zinc-600 mb-2">Created By</label>
                                 <div
-                                    class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                                    class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                                     {{ $vehicle->createdBy->name ?? 'N/A' }}
                                 </div>
                             </div>
@@ -262,7 +262,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-zinc-600 mb-2">Updated At</label>
                                     <div
-                                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                                         {{ $vehicle->updated_at->format('M d, Y H:i A') }}
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-zinc-600 mb-2">Updated By</label>
                                     <div
-                                        class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
+                                        class="w-full border border-zinc-100 rounded-lg px-4 py-2.5 text-zinc-500 bg-zinc-50">
                                         {{ $vehicle->updatedBy->name ?? 'N/A' }}
                                     </div>
                                 </div>

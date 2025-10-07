@@ -286,7 +286,7 @@
                         <div>
                             <input wire:model="newImage" type="file" accept="image/*" id="image-upload" multiple
                                 class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                            <p class="mt-2 text-xs text-zinc-500">Supported formats: JPG, PNG, GIF. Max 10MB per image. You can select one or multiple files.</p>
+                            <p class="mt-2 text-xs text-zinc-500">Supported formats: JPG, PNG, GIF.You can select one or multiple files.</p>
                             @error('newImage')
                                 <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                             @enderror
