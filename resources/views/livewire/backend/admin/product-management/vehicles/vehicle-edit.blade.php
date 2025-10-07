@@ -3,7 +3,6 @@
         {{-- Header --}}
         <div class="glass-card rounded-2xl p-6 mb-6">
             <div class="flex items-center justify-between">
-                {{-- UPDATED: Title changed from 'Create New Vehicle' to 'Edit Vehicle' --}}
                 <h2 class="text-xl font-bold text-accent">{{ __('Edit Vehicle') }}</h2>
                 <a href="{{ route('admin.pm.vehicle-list') }}" wire:navigate
                     class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-200 hover:bg-zinc-300 text-zinc-500 rounded-lg transition-colors duration-200">
@@ -42,6 +41,7 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
+
                     {{-- Owner --}}
                     <div>
                         <label class="block text-sm font-medium text-zinc-300 mb-2">Owner *</label>
@@ -72,13 +72,12 @@
                         @enderror
                     </div>
 
-
-
+                    {{-- Year --}}
                     <div>
-                        {{-- NOTE: This input should probably be a text/number input for 'year' and not a 'date' type based on the Livewire component's `$year` validation (integer, min 1900, max current year + 1). I will keep the 'date' type as you had it, but be aware of the potential inconsistency. --}}
                         <label class="block text-sm font-medium text-zinc-300 mb-2">Year *</label>
                         <input wire:model="year" type="number"
-                            class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+                            class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600"
+                            placeholder="Enter vehicle year (e.g., 2024)">
                         @error('year')
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
@@ -127,7 +126,6 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-
 
                     {{-- Weekly Rate --}}
                     <div>
@@ -178,7 +176,6 @@
                         <label class="block text-sm font-medium text-zinc-300 mb-2">Status *</label>
                         <select wire:model="status"
                             class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                            {{-- This loop iterates over the 'statuses' array passed from the component's render method --}}
                             @foreach ($statuses as $key => $label)
                                 <option value="{{ $key }}">{{ $label }}</option>
                             @endforeach
@@ -187,7 +184,20 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-                    
+
+                    {{-- Transmission Type --}}
+                    <div>
+                        <label class="block text-sm font-medium text-zinc-300 mb-2">Transmission Type *</label>
+                        <select wire:model="transmission_type"
+                            class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+                            @foreach ($transmissions as $key => $label)
+                                <option value="{{ $key }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('transmission_type')
+                            <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     {{-- Instant Booking --}}
                     <div class="flex items-center pt-8">
@@ -218,53 +228,71 @@
                         @enderror
                     </div>
 
-                    {{-- Avatar Upload & Existing Avatar Display --}}
+                    {{-- Vehicle Images --}}
                     <div class="md:col-span-3">
-                        <label class="block text-sm font-medium text-zinc-300 mb-2">Vehicle Image</label>
-                        <div class="flex items-start gap-4">
-                            {{-- Display Existing Avatar if no new file is uploaded --}}
-                            @if ($existingAvatar && !$avatar)
-                                <div class="relative">
-                                    <img src="{{ $existingAvatar }}"
-                                        class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
-                                    <button type="button" wire:click="removeAvatar"
-                                        class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </button>
+                        <label class="block text-sm font-medium text-zinc-300 mb-2">Vehicle Images</label>
+                        
+                        {{-- Existing Images (not marked for deletion) --}}
+                        @if (!empty($existingImages))
+                            <div class="mb-4">
+                                <p class="text-xs text-zinc-400 mb-2">Existing Images:</p>
+                                <div class="flex flex-wrap gap-4">
+                                    @foreach ($existingImages as $existingImage)
+                                        <div class="relative">
+                                            <img src="{{ Storage::url($existingImage['image']) }}"
+                                                class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
+                                            @if ($existingImage['is_primary'])
+                                                <span class="absolute top-1 left-1 bg-emerald-500 text-white text-xs px-2 py-1 rounded">Primary</span>
+                                            @endif
+                                            <button type="button" wire:click="markImageForDeletion({{ $existingImage['id'] }})"
+                                                class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                {{-- Display Temporary New Avatar --}}
-                            @elseif ($avatar)
-                                <div class="relative">
-                                    <img src="{{ $avatar->temporaryUrl() }}"
-                                        class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
-                                    <button type="button" wire:click="removeAvatar"
-                                        class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </button>
-                                </div>
-                            @endif
-
-                            <div class="flex-1">
-                                <input wire:model="avatar" type="file" accept="image/*"
-                                    class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                                <p class="mt-2 text-xs text-zinc-500">Maximum file size: 2MB. Supported formats: JPG,
-                                    PNG, GIF</p>
-                                @error('avatar')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
                             </div>
+                        @endif
+
+                        {{-- New Images Preview --}}
+                        @if (!empty($images))
+                            <div class="mb-4">
+                                <p class="text-xs text-zinc-400 mb-2">New Images to Upload:</p>
+                                <div class="flex flex-wrap gap-4">
+                                    @foreach ($images as $index => $image)
+                                        <div class="relative">
+                                            <img src="{{ $image->temporaryUrl() }}"
+                                                class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
+                                            <button type="button" wire:click="removeNewImage({{ $index }})"
+                                                class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2">
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- File Upload Input --}}
+                        <div>
+                            <input wire:model="images" type="file" accept="image/*" multiple
+                                class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+                            <p class="mt-2 text-xs text-zinc-500">Supported formats: JPG, PNG, GIF</p>
+                            @error('images.*')
+                                <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
+                            @error('images')
+                                <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -275,7 +303,6 @@
                         class="px-6 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-500 rounded-lg transition-colors duration-200">
                         Cancel
                     </a>
-                    {{-- UPDATED: Button text changed from 'Create Vehicle' to 'Update Vehicle' --}}
                     <button type="submit"
                         class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors duration-200">
                         Update Vehicle

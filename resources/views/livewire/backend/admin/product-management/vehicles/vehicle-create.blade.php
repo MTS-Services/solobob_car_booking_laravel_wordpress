@@ -15,7 +15,6 @@
                 </a>
             </div>
         </div>
-
         {{-- Form --}}
         <div class="glass-card rounded-2xl p-6">
             <form wire:submit="save">
@@ -124,8 +123,6 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-
-
 
                     {{-- Weekly Rate --}}
                     <div>
