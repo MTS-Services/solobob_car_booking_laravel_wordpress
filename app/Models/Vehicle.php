@@ -165,6 +165,16 @@ class Vehicle extends BaseModel
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
+    public function relations()
+    {
+        return $this->hasMany(VehicleRelation::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */

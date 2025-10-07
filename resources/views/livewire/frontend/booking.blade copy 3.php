@@ -218,346 +218,127 @@
                 <div class="bg-white rounded-lg shadow-sm p-6 lg:col-span-2">
                     @switch($currentStep)
                         @case(2)
-                            <div>
+                            {{-- <div>
                                 <h2 class="text-xl font-semibold mb-6">Trip Date & Time</h2>
 
-                                @if ($errors->has('dateRange'))
-                                    <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                                        <p class="text-red-600 text-sm">{{ $errors->first('dateRange') }}</p>
-                                    </div>
-                                @endif
+                                <div class="flex items-center justify-between gap-5">
+                                    <label class="block text-sm font-medium mb-2 flex-1">
+                                        <span class="label">Pickup Date</span>
+                                        <x-input type="time" />
+                                    </label>
+                                    <label class="block text-sm font-medium mb-2 flex-1">
+                                        <span class="label">Pickup Time</span>
+                                        <x-input type="time" />
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between gap-5">
+                                    <label class="block text-sm font-medium mb-2 flex-1">
+                                        <span class="label">Return Date</span>
+                                        <x-input type="time" />
+                                    </label>
+                                    <label class="block text-sm font-medium mb-2 flex-1">
+                                        <span class="label">Return Time</span>
+                                        <x-input type="time" />
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="calendar">
+                                </div>
+
+                                <div class="flex gap-4 flex-col sm:flex-row">
+                                    <button x-on:click="currentStep++"
+                                        class="flex-1 bg-zinc-500 text-white py-3 rounded-lg hover:bg-zinc-500 transition font-medium">
+                                        Continue Booking
+                                    </button>
+                                    <a href="#"
+                                        class="block text-center flex-1 bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition font-medium">
+                                        Back to Car Details
+                                    </a>
+                                </div>
+                            </div> --}}
+                            <div>
+                                <h2 class="text-xl font-semibold mb-6">Trip Date & Time</h2>
 
                                 <div class="flex items-center justify-between gap-5">
                                     <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
                                         <span class="label">Pickup Date</span>
-                                        <x-input type="text" id="pickup-date" wire:model="pickupDate" readonly
-                                            placeholder="Select pickup date" />
+                                        <p class="text-xs py-3 w-full border border-zinc-200 px-4 rounded-lg text-zinc-400">
+                                            dd/mm/yyyy</p>
                                     </label>
                                     <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
                                         <span class="label">Pickup Time</span>
-                                        <x-input type="time" wire:model="pickupTime" />
+                                        <x-input type="time" />
                                     </label>
                                 </div>
-
                                 <div class="flex items-center justify-between gap-5">
-                                    <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
+                                    <label class="block text-sm font-medium mb-2 flex-1">
                                         <span class="label">Return Date</span>
-                                        <x-input type="text" id="return-date" wire:model="returnDate" readonly
-                                            placeholder="Select return date" />
+                                        <p class="text-xs py-3 w-full border border-zinc-200 px-4 rounded-lg text-zinc-400">
+                                            dd/mm/yyyy</p>
                                     </label>
-                                    <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
+                                    <label class="block text-sm font-medium mb-2 flex-1">
                                         <span class="label">Return Time</span>
-                                        <x-input type="time" wire:model="returnTime" />
+                                        <x-input type="time" />
                                     </label>
                                 </div>
 
-                                <div class="mt-6 mb-4">
-                                    <!-- Calendar Container - will be populated by Flatpickr -->
-                                    <div>
-                                        <div id="inline-date-calendar" class="w-full"></div>
-                                        <p class="text-sm text-red-600 text-center mt-2" id="inline-date-calendar-error"></p>
-                                    </div>
+                                <div class="mt-4">
+                                    <div id="inline-date-calendar" class="w-full"></div>
                                 </div>
 
                                 <div class="flex gap-4 flex-col sm:flex-row mt-6">
-                                    <button wire:click="nextStep" type="button"
-                                        class="flex-1 bg-zinc-500 text-white py-3 rounded-lg hover:bg-zinc-600 transition font-medium">
+                                    <button x-on:click="currentStep++"
+                                        class="flex-1 bg-zinc-500 text-white py-3 rounded-lg hover:bg-zinc-500 transition font-medium">
                                         Continue Booking
                                     </button>
-                                    <a href="{{ route('product-details', $vehicle->slug) }}" wire:navigate
+                                    <a {{-- href="{{route('product-details', $product->slug)}}" wire:navigate --}}
                                         class="block text-center flex-1 bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition font-medium">
                                         Back to Car Details
                                     </a>
                                 </div>
                             </div>
 
-                            @push('styles')
-                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-                                <style>
-                                    /* Full width calendar styling */
-                                    .flatpickr-calendar.inline {
-                                        width: 100% !important;
-                                        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-                                        display: block !important;
-                                        padding: 10px;
-                                    }
-
-                                    .flatpickr-calendar .flatpickr-rContainer {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-months {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-month {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-days {
-                                        width: 100% !important;
-                                    }
-
-                                    .dayContainer {
-                                        width: 100% !important;
-                                        min-width: 100% !important;
-                                        max-width: 100% !important;
-                                        display: flex !important;
-                                        flex-wrap: wrap !important;
-                                        =
-                                    }
-
-                                    .flatpickr-day {
-                                        flex: 0 0 14.28% !important;
-                                        max-width: 14.28% !important;
-                                        height: 42px !important;
-                                        line-height: 42px !important;
-                                    }
-
-                                    /* Highlight disabled dates */
-                                    .flatpickr-day.flatpickr-disabled,
-                                    .flatpickr-day.flatpickr-disabled:hover {
-                                        background: #fee2e2 !important;
-                                        color: #991b1b !important;
-                                        cursor: not-allowed !important;
-                                        border-color: #fecaca !important;
-                                    }
-
-                                    /* Selected range styling */
-                                    .flatpickr-day.selected,
-                                    .flatpickr-day.startRange,
-                                    .flatpickr-day.endRange {
-                                        background: #71717a !important;
-                                        border-color: #71717a !important;
-                                        color: white !important;
-                                    }
-
-                                    .flatpickr-day.selected.inRange,
-                                    .flatpickr-day.startRange.inRange,
-                                    .flatpickr-day.endRange.inRange,
-                                    .flatpickr-day.inRange {
-                                        background: #e4e4e7 !important;
-                                        border-color: #e4e4e7 !important;
-                                        color: #18181b !important;
-                                        box-shadow: -5px 0 0 #e4e4e7, 5px 0 0 #e4e4e7 !important;
-                                    }
-
-                                    .flatpickr-day.selected.startRange,
-                                    .flatpickr-day.startRange.startRange,
-                                    .flatpickr-day.endRange.startRange {
-                                        border-radius: 50px 0 0 50px !important;
-                                    }
-
-                                    .flatpickr-day.selected.endRange,
-                                    .flatpickr-day.startRange.endRange,
-                                    .flatpickr-day.endRange.endRange {
-                                        border-radius: 0 50px 50px 0 !important;
-                                    }
-
-                                    .flatpickr-day:hover:not(.flatpickr-disabled) {
-                                        background: #f4f4f5 !important;
-                                        border-color: #e4e4e7 !important;
-                                    }
-                                </style>
-                            @endpush
-
                             @push('scripts')
                                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
                                 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
                                 <script>
-                                    (function() {
-                                        'use strict';
+                                    // NOTE: This assumes you have already included the Flatpickr CSS and JS files in your project.
 
-                                        // Wait for both DOM and Livewire to be ready
-                                        function initializeCalendar() {
-                                            // Check if Livewire is ready
-                                            if (typeof Livewire === 'undefined') {
-                                                setTimeout(initializeCalendar, 100);
-                                                return;
+                                    flatpickr("#inline-date-calendar", {
+                                        // Renders the calendar visible on the page, not just on click
+                                        inline: true,
+                                        // Allows selecting two dates (a start and an end date)
+                                        mode: "range",
+                                        // Forces the date format to YYYY-MM-DD, which is standard for form submission
+                                        dateFormat: "Y-m-d",
+
+                                        // This function runs every time the selected date(s) change
+                                        onChange: function(selectedDates, dateStr, instance) {
+                                            const pickupInput = document.getElementById('pickup-date');
+                                            const returnInput = document.getElementById('return-date');
+
+                                            if (selectedDates.length === 2) {
+                                                // If both start and end dates are selected
+                                                const pickupDate = flatpickr.formatDate(selectedDates[0], "Y-m-d");
+                                                const returnDate = flatpickr.formatDate(selectedDates[1], "Y-m-d");
+
+                                                // Update the hidden text fields
+                                                pickupInput.value = pickupDate;
+                                                returnInput.value = returnDate;
+                                            } else if (selectedDates.length === 1) {
+                                                // If only the start date is selected
+                                                const pickupDate = flatpickr.formatDate(selectedDates[0], "Y-m-d");
+
+                                                // Update pickup and clear return date
+                                                pickupInput.value = pickupDate;
+                                                returnInput.value = '';
+                                            } else {
+                                                // If selection is cleared
+                                                pickupInput.value = '';
+                                                returnInput.value = '';
                                             }
-
-                                            // Check if element exists
-                                            const calendarElement = document.getElementById('inline-date-calendar');
-                                            const calenderErrorElement = document.getElementById('inline-date-calendar-error');
-                                            if (!calendarElement) {
-                                                setTimeout(initializeCalendar, 100);
-                                                return;
-                                            }
-
-                                            // Get data from Livewire component
-                                            const disabledDates = @json($disabledDates ?? []);
-                                            const requiredDays = {{ $requiredDays ?? 7 }};
-
-                                            let calendarInstance = null;
-
-                                            console.log('Initializing calendar with:', {
-                                                disabledDates,
-                                                requiredDays,
-                                                calendarElement
-                                            });
-
-                                            function createCalendar() {
-                                                // Destroy existing instance if any
-                                                if (calendarInstance) {
-                                                    calendarInstance.destroy();
-                                                }
-
-                                                console.log('Creating calendar with:', {
-                                                    disabledDates,
-                                                    requiredDays,
-                                                    calendarElement,
-                                                    calendarInstance
-                                                });
-
-                                                calendarInstance = flatpickr("#inline-date-calendar", {
-                                                    inline: true,
-                                                    mode: "range",
-                                                    dateFormat: "Y-m-d",
-                                                    minDate: "today",
-                                                    showMonths: 1,
-                                                    // disable: disabledDates,
-
-                                                    onReady: function(selectedDates, dateStr, instance) {
-                                                        console.log('Calendar ready!');
-
-                                                        // Ensure full width
-                                                        const calendar = instance.calendarContainer;
-                                                        if (calendar) {
-                                                            calendar.style.width = '100%';
-                                                            calendar.style.display = 'block';
-                                                        }
-                                                    },
-
-                                                    onChange: function(selectedDates, dateStr, instance) {
-                                                        console.log('Dates selected:', selectedDates);
-
-                                                        const pickupInput = document.getElementById('pickup-date');
-                                                        const returnInput = document.getElementById('return-date');
-
-                                                        if (selectedDates.length === 2) {
-                                                            const start = selectedDates[0];
-                                                            const end = selectedDates[1];
-
-                                                            // Calculate days difference
-                                                            const diffTime = Math.abs(end - start);
-                                                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-                                                            console.log('Days selected:', diffDays, 'Required:', requiredDays);
-
-                                                            // Validate exact days requirement
-                                                            if (diffDays !== requiredDays) {
-                                                                const rentalType = requiredDays === 7 ? 'weekly' : 'monthly';
-                                                                calenderErrorElement.textContent =
-                                                                    `Please select exactly ${requiredDays} days for your ${rentalType} rental. You selected ${diffDays} days.`;
-                                                                instance.clear();
-                                                                // Livewire.find('{{ $_instance->getId() }}').set('pickupDate', '');
-                                                                // Livewire.find('{{ $_instance->getId() }}').set('returnDate', '');
-                                                                if (pickupInput) pickupInput.value = '';
-                                                                if (returnInput) returnInput.value = '';
-                                                                return;
-                                                            }
-
-                                                            // Check if any date in range is disabled
-                                                            let hasDisabledDate = false;
-                                                            let currentDate = new Date(start);
-
-                                                            while (currentDate <= end) {
-                                                                const year = currentDate.getFullYear();
-                                                                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                                                                const day = String(currentDate.getDate()).padStart(2, '0');
-                                                                const dateString = `${year}-${month}-${day}`;
-
-                                                                if (disabledDates.includes(dateString)) {
-                                                                    hasDisabledDate = true;
-                                                                    break;
-                                                                }
-                                                                currentDate.setDate(currentDate.getDate() + 1);
-                                                            }
-
-                                                            if (hasDisabledDate) {
-                                                                calenderErrorElement.textContent =
-                                                                    'Please select a date that is not disabled.';
-                                                                instance.clear();
-                                                                // Livewire.find('{{ $_instance->getId() }}').set('pickupDate', '');
-                                                                // Livewire.find('{{ $_instance->getId() }}').set('returnDate', '');
-                                                                if (pickupInput) pickupInput.value = '';
-                                                                if (returnInput) returnInput.value = '';
-                                                                return;
-                                                            }
-
-                                                            // Format dates
-                                                            const formatDate = (date) => {
-                                                                const d = String(date.getDate()).padStart(2, '0');
-                                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const y = date.getFullYear();
-                                                                return {
-                                                                    display: `${d}/${m}/${y}`,
-                                                                    value: `${y}-${m}-${d}`
-                                                                };
-                                                            };
-
-                                                            const pickupFormatted = formatDate(start);
-                                                            const returnFormatted = formatDate(end);
-
-                                                            if (pickupInput) pickupInput.value = pickupFormatted.display;
-                                                            if (returnInput) returnInput.value = returnFormatted.display;
-
-                                                            // Livewire.find('{{ $_instance->getId() }}').set('pickupDate',
-                                                            //     pickupFormatted.value);
-                                                            // Livewire.find('{{ $_instance->getId() }}').set('returnDate',
-                                                            //     returnFormatted.value);
-
-                                                        } else if (selectedDates.length === 1) {
-                                                            const date = selectedDates[0];
-                                                            const formatDate = (date) => {
-                                                                const d = String(date.getDate()).padStart(2, '0');
-                                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const y = date.getFullYear();
-                                                                return {
-                                                                    display: `${d}/${m}/${y}`,
-                                                                    value: `${y}-${m}-${d}`
-                                                                };
-                                                            };
-
-                                                            const formatted = formatDate(date);
-                                                            if (pickupInput) pickupInput.value = formatted.display;
-                                                            if (returnInput) returnInput.value = '';
-
-                                                            // Livewire.find('{{ $_instance->getId() }}').set('pickupDate', formatted
-                                                            //     .value);
-                                                            // Livewire.find('{{ $_instance->getId() }}').set('returnDate', '');
-                                                        } else {
-                                                            if (pickupInput) pickupInput.value = '';
-                                                            if (returnInput) returnInput.value = '';
-                                                            // Livewire.find('{{ $_instance->getId() }}').set('pickupDate', '');
-                                                            // Livewire.find('{{ $_instance->getId() }}').set('returnDate', '');
-                                                        }
-                                                    }
-
-                                                });
-
-                                                console.log('Calendar instance created:', calendarInstance);
-                                            }
-
-                                            // Create the calendar
-                                            createCalendar();
-
-                                            // Listen for rental range changes
-                                            window.addEventListener('reset-calendar', function() {
-                                                console.log('Resetting calendar');
-                                                if (calendarInstance) {
-                                                    calendarInstance.clear();
-                                                }
-                                            });
                                         }
-
-                                        // Start initialization when DOM is ready
-                                        if (document.readyState === 'loading') {
-                                            document.addEventListener('livewire:initialized', initializeCalendar);
-                                        } else {
-                                            initializeCalendar();
-                                        }
-                                    })();
+                                    });
                                 </script>
                             @endpush
                         @break
