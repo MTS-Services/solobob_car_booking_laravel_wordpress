@@ -18,10 +18,10 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
                 <div class="flex items-center gap-2">
-                    <x-button wire:click="openTrashModal" icon="trash-2" type='secondary'
-                        permission="product-category-trash" class="text-white">
+                    <button wire:click="openTrashModal" icon="trash-2" type='secondary'
+                        permission="product-category-trash" class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                         {{ __('Trash') }}
-                    </x-button>
+                    </button>
                     <button wire:click="openCreateModal"
                         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -60,11 +60,11 @@
 
                     <div class="px-6 py-6">
                         {{-- Trash Search --}}
-                        <div class="mb-4">
+                        <div class="mb-4 w-[20%]">
                             <div class="relative">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    viewBox="0 0 24 24" fill="none" stroke="gray" stroke-width="2">
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                 </svg>
