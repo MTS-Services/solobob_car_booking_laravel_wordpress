@@ -40,8 +40,9 @@
                                 <flux:icon name="photo" class="w-4 h-4 text-white" />
                             </span>
                             <span class="text-gray-200 font-medium">
-                                {{ $vehicle->id }}
+                                {{ $loop->iteration }}
                             </span>
+
                         </div>
 
                         <div class="h-64">
@@ -120,8 +121,7 @@
                                 Book
                             </a>
 
-                            <button 
-                                @click="modalOpen = true; document.body.style.overflow = 'hidden'"
+                            <button @click="modalOpen = true; document.body.style.overflow = 'hidden'"
                                 wire:click="selectVehicle('{{ $vehicle->title }}', '{{ $vehicle->year }}')"
                                 class="flex-1 flex items-center justify-center bg-gray-800 text-white py-2 px-2 text-sm rounded-lg font-semibold shadow-md hover:bg-gray-700 transition duration-150 transform hover:scale-[1.01]">
                                 Get In touch
@@ -213,7 +213,7 @@
                 </button>
             </div>
         @endif
-        
+
         {{-- Contact Modal --}}
         <div x-show="modalOpen" x-cloak @click="modalOpen = false; document.body.style.overflow = ''"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
