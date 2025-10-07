@@ -234,50 +234,6 @@
                 <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
                     {{ $vehicle->year }} | {{ $vehicle->title }}
                 </h2>
-
-                {{-- <div class="">
-                    <div class="space-y-4">
-                        <form wire:submit.prevent="submitContact" method="POST">
-                            @csrf
-                            <div class="mb-4">
-                                <input type="text" name="name" placeholder="Your Name"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            </div>
-
-                            <div class="mb-4">
-                                <input type="tel" name="phone" placeholder="Phone Number"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            </div>
-
-                            <div class="mb-4">
-                                <input type="email" name="email" placeholder="Email Address"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            </div>
-
-                            <div class="mb-4">
-                                <textarea name="message" placeholder="Message *" rows="4"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"></textarea>
-                            </div>
-
-                            <div class="flex items-start space-x-2 mb-4">
-                                <input type="checkbox" name="sms_alerts" id="sms-alerts"
-                                    class="mt-1 w-4 h-4 text-cyan-500 border-gray-300 rounded focus:ring-cyan-500">
-                                <label for="sms-alerts" class="text-sm text-gray-700 leading-tight">
-                                    Yes, I'd like to receive SMS alerts for booking confirmations and updates.
-                                </label>
-                            </div>
-
-                            <p class="text-xs text-gray-500 italic mb-6">
-                                Message and data rates may apply. Reply STOP to unsubscribe.
-                            </p>
-
-                            <button type="submit"
-                                class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors">
-                                Get in touch
-                            </button>
-                        </form>
-                    </div>
-                </div> --}}
                 <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
                     <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
                         <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH
