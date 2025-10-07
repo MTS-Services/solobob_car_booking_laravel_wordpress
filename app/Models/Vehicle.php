@@ -71,6 +71,7 @@ class Vehicle extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'owner_id',
         'category_id',
         'title',
@@ -81,14 +82,18 @@ class Vehicle extends BaseModel
         'seating_capacity',
         'mileage',
         'description',
-        'daily_rate',
         'weekly_rate',
+        'monthly_rate',
+        'security_deposit_weekly',
+        'security_deposit_monthly',
+
         'transmission_type',
+
         'instant_booking',
         'delivery_available',
         'delivery_fee',
         'status',
-        'approval_status',
+        
         'created_by',
         'updated_by',
         'deleted_by',

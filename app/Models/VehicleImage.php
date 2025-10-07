@@ -18,9 +18,14 @@ class VehicleImage extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'vehicle_id',
         'image',
         'is_primary',
+    
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];

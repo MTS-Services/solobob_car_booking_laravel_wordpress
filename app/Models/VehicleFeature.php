@@ -20,10 +20,15 @@ class VehicleFeature extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
        'name',
        'slug',
        'icon',
        'feature_category',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [

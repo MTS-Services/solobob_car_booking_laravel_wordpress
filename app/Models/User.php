@@ -25,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * *** PROPERTIES ***
      ================================================================ */
     protected $fillable = [
+        'sort_order',
         'name',
         'email',
         'password',

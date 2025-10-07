@@ -28,6 +28,10 @@ class UserDocuments extends BaseModel
         'expiry_date',
         'verification_status',
         'verified_at',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $casts = [

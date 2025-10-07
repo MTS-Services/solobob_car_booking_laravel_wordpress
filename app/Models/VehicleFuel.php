@@ -18,7 +18,13 @@ class VehicleFuel extends BaseModel
      ================================================================ */
 
     protected $fillable = [
-        'name'
+        'sort_order',
+        'name',
+        'status',
+
+         'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];

@@ -18,6 +18,7 @@ class VehicleLocation extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'vehicle_id',
         'address',
         'city',

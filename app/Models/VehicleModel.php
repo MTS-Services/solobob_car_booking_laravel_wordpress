@@ -19,7 +19,12 @@ class VehicleModel extends BaseModel
 
     protected $fillable = [
         'name',
-        'slug',
+        'sort_order',
+        'status',
+        
+         'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];
