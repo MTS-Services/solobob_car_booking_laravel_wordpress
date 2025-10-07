@@ -190,70 +190,68 @@
 
             <div class="p-6 md:p-8">
                 <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
-                    {{ $vehicle->year }} | {{ $vehicle->title }}
+                    {{ $selectedVehicleYear }} | {{ $selectedVehicleTitle }}
                 </h2>
-                <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
+                <div class="w-full bg-transparent flex items-start justify-end z-1">
                     <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
                         <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH
                         </h2>
 
                         <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
                             @if (session()->has('submit_message'))
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    <p class="text-primary"> {{ session('submit_message') }} </p>
+                                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+                                    <span class="font-medium">Success!</span> {{ session('submit_message') }}
                                 </div>
                             @endif
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <input type="text" placeholder="First Name" wire:model="form.first_name"
-                                        class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.first_name'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.first_name') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.first_name') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.first_name')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div>
                                     <input type="text" placeholder="Last Name" wire:model="form.last_name"
-                                        class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.last_name'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.last_name') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.last_name') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.last_name')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <input type="email" placeholder="Email" wire:model="form.email"
-                                        class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.email'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.last_name') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.email') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.email')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div>
                                     <input type="tel" placeholder="Phone Number" wire:model="form.phone"
-                                        class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.phone'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.phone') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.phone') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.phone')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div>
                                 <textarea placeholder="Message" rows="4" wire:model="form.message"
-                                    class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
-                                @if ($errors->has('form.message'))
-                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                        {{ $errors->first('form.message') }}</small>
-                                @endif
+                                    class="w-full px-3 py-2 border @error('form.message') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600"></textarea>
+                                @error('form.message')
+                                    <small class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                @enderror
                             </div>
                             <button type="submit"
-                                class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
+                                class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-zinc-600 transition">
                                 SUBMIT
                             </button>
-
                         </form>
                     </div>
                 </div>
@@ -331,10 +329,11 @@
                     },
                 });
 
-                function copyCurrentUrl(el) {
+                window.copyCurrentUrl = function(el) {
                     const url = window.location.href;
                     navigator.clipboard.writeText(url).then(() => {
-                        el.innerHTML = `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
+                        el.innerHTML =
+                            `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
                         setTimeout(() => {
                             el.innerHTML =
                                 `<flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />`;

@@ -68,13 +68,13 @@
                     <div class="p-4">
                         <div class="grow">
                             <div class="flex justify-between items-center mb-2">
-                                <div>
+                                <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
                                     <!-- Dynamic Vehicle Title -->
                                     <p
                                         class="text-xs xs:text-sm md:text-base font-normal text-gray-700 uppercase leading-snug">
                                         {{ $vehicle->title }}
                                     </p>
-                                </div>
+                                </a>
                                 <div class="text-right text-gray-900 font-bold text-lg md:text-xl flex-shrink-0 ml-2">
                                     <!-- Dynamic Daily Rate -->
                                     ${{ number_format($vehicle->weekly_rate, 2) }}
