@@ -1,4 +1,4 @@
-<section class="bg-white" x-data="{ showModal: false, modalOpen: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
+<section class="bg-white" x-data="{ showModal: false, modalOpen: false }">
     @push('styles')
         <style>
             .swiper-button-next::after,
@@ -36,16 +36,6 @@
                 <div
                     class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px] lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
-                        {{-- @php
-                            $imagePath = asset('assets/images/default-car.png');
-
-                            if ($vehicle->avatar) {
-                                $cleanPath = str_replace('storage/', '', $vehicle->avatar);
-                                $cleanPath = ltrim($cleanPath, '/');
-                                $imagePath = asset('storage/' . $cleanPath);
-                            }
-                        @endphp --}}
-
                         {{-- Main vehicle image --}}
                         @foreach ($vehicle->images as $image)
                             <div class="swiper-slide">
@@ -54,15 +44,6 @@
                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
                             </div>
                         @endforeach
-
-                        {{-- Additional placeholder slides (you can add more images relation later) --}}
-                        {{-- @for ($i = 0; $i < 4; $i++)
-                            <div class="swiper-slide">
-                                <img src="{{ storage_url($vehicle?->images?->first()?->image) }}" alt="{{ $vehicle->title }} image {{ $i + 2 }}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
-                            </div>
-                        @endfor --}}
                     </div>
                     <div
                         class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
@@ -139,29 +120,6 @@
                             </div>
                         </div>
                     @endif
-
-                    {{-- Additional Features --}}
-                    {{-- @if ($vehicle->instant_booking || $vehicle->delivery_available)
-                        <div class="flex gap-2 flex-wrap">
-                            @if ($vehicle->instant_booking)
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <flux:icon name="bolt" class="w-3 h-3 mr-1" />
-                                    Instant Booking
-                                </span>
-                            @endif
-                            @if ($vehicle->delivery_available)
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    <flux:icon name="truck" class="w-3 h-3 mr-1" />
-                                    Delivery Available
-                                    @if ($vehicle->delivery_fee)
-                                        (${{ number_format($vehicle->delivery_fee, 2) }})
-                                    @endif
-                                </span>
-                            @endif
-                        </div>
-                    @endif --}}
                 </div>
             </div>
 
@@ -178,7 +136,7 @@
                             Book Now
                         </button>
 
-                        <button @click="modalOpen = true; document.body.classList.add('overflow-hidden')"
+                        <button @click="modalOpen = true; document.body.style.overflow = 'hidden'"
                             class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 xs:py-3 rounded-lg transition-colors text-sm xs:text-base">
                             Get in touch
                         </button>
@@ -201,7 +159,7 @@
                             <p class="text-sm xs:text-base text-gray-600 leading-relaxed">
                                 I hereby agree to the terms and conditions of the Lease Agreement with Host
                             </p>
-                            <button @click="showModal = true"
+                            <button @click="showModal = true; document.body.style.overflow = 'hidden'"
                                 class="text-zinc-600 hover:text-zinc-700 text-sm xs:text-base font-medium mt-1 xs:mt-2 transition-colors">
                                 View Details
                             </button>
@@ -213,7 +171,7 @@
     </div>
 
     {{-- Contact Modal --}}
-    <div x-show="modalOpen" x-cloak @click="modalOpen = false"
+    <div x-show="modalOpen" x-cloak @click="modalOpen = false; document.body.style.overflow = ''"
         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
         style="display: none;">
         <div @click.stop x-transition:enter="transition ease-out duration-300"
@@ -224,7 +182,7 @@
             x-transition:leave-end="opacity-0 transform scale-90"
             class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
             <div class="relative">
-                <button @click="modalOpen = false" type="button"
+                <button @click="modalOpen = false; document.body.style.overflow = ''" type="button"
                     class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-light leading-none z-10">
                     &times;
                 </button>
@@ -232,114 +190,68 @@
 
             <div class="p-6 md:p-8">
                 <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
-                    {{ $vehicle->year }} | {{ $vehicle->title }}
+                    {{ $selectedVehicleYear }} | {{ $selectedVehicleTitle }}
                 </h2>
-
-                {{-- <div class="">
-                    <div class="space-y-4">
-                        <form wire:submit.prevent="submitContact" method="POST">
-                            @csrf
-                            <div class="mb-4">
-                                <input type="text" name="name" placeholder="Your Name"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            </div>
-
-                            <div class="mb-4">
-                                <input type="tel" name="phone" placeholder="Phone Number"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            </div>
-
-                            <div class="mb-4">
-                                <input type="email" name="email" placeholder="Email Address"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
-                            </div>
-
-                            <div class="mb-4">
-                                <textarea name="message" placeholder="Message *" rows="4"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"></textarea>
-                            </div>
-
-                            <div class="flex items-start space-x-2 mb-4">
-                                <input type="checkbox" name="sms_alerts" id="sms-alerts"
-                                    class="mt-1 w-4 h-4 text-cyan-500 border-gray-300 rounded focus:ring-cyan-500">
-                                <label for="sms-alerts" class="text-sm text-gray-700 leading-tight">
-                                    Yes, I'd like to receive SMS alerts for booking confirmations and updates.
-                                </label>
-                            </div>
-
-                            <p class="text-xs text-gray-500 italic mb-6">
-                                Message and data rates may apply. Reply STOP to unsubscribe.
-                            </p>
-
-                            <button type="submit"
-                                class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors">
-                                Get in touch
-                            </button>
-                        </form>
-                    </div>
-                </div> --}}
-                <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
+                <div class="w-full bg-transparent flex items-start justify-end z-1">
                     <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
                         <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH
                         </h2>
 
                         <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
                             @if (session()->has('submit_message'))
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    <p class="text-primary"> {{ session('submit_message') }} </p>
+                                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+                                    <span class="font-medium">Success!</span> {{ session('submit_message') }}
                                 </div>
                             @endif
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <input type="text" placeholder="First Name" wire:model="form.first_name"
-                                        class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.first_name'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.first_name') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.first_name') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.first_name')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div>
                                     <input type="text" placeholder="Last Name" wire:model="form.last_name"
-                                        class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.last_name'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.last_name') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.last_name') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.last_name')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <input type="email" placeholder="Email" wire:model="form.email"
-                                        class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.email'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.last_name') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.email') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.email')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div>
                                     <input type="tel" placeholder="Phone Number" wire:model="form.phone"
-                                        class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
-                                    @if ($errors->has('form.phone'))
-                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                            {{ $errors->first('form.phone') }}</small>
-                                    @endif
+                                        class="w-full px-3 py-2 border @error('form.phone') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600">
+                                    @error('form.phone')
+                                        <small
+                                            class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div>
                                 <textarea placeholder="Message" rows="4" wire:model="form.message"
-                                    class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
-                                @if ($errors->has('form.message'))
-                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                        {{ $errors->first('form.message') }}</small>
-                                @endif
+                                    class="w-full px-3 py-2 border @error('form.message') border-red-500 text-red-500 @else border-gray-300 text-gray-700 @enderror rounded bg-white focus:outline-none focus:border-zinc-600"></textarea>
+                                @error('form.message')
+                                    <small class="text-red-500 font-medium text-xs mt-1 block">{{ $message }}</small>
+                                @enderror
                             </div>
                             <button type="submit"
-                                class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
+                                class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-zinc-600 transition">
                                 SUBMIT
                             </button>
-
                         </form>
                     </div>
                 </div>
@@ -348,10 +260,12 @@
     </div>
 
     {{-- Terms Modal --}}
-    <div x-show="showModal" x-transition.opacity.duration.300ms @keydown.escape.window="showModal = false"
+    <div x-show="showModal" x-transition.opacity.duration.300ms
+        @keydown.escape.window="showModal = false; document.body.style.overflow = ''"
         class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true"
         style="display: none;">
-        <div class="fixed inset-0 bg-black/30 bg-opacity-50 transition-opacity" @click="showModal = false"></div>
+        <div class="fixed inset-0 bg-black/30 bg-opacity-50 transition-opacity"
+            @click="showModal = false; document.body.style.overflow = ''"></div>
 
         <div class="flex min-h-screen items-center justify-center p-4">
             <div x-show="showModal" x-transition:enter="transition ease-out duration-300"
@@ -360,7 +274,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                @click.away="showModal = false"
+                @click.away="showModal = false; document.body.style.overflow = ''"
                 class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
                 <div class="flex items-start justify-between p-6 border-b border-gray-200 flex-shrink-0">
                     <div>
@@ -368,7 +282,7 @@
                             Rental Agreement Terms & Conditions
                         </h3>
                     </div>
-                    <button @click="showModal = false" type="button"
+                    <button @click="showModal = false; document.body.style.overflow = ''" type="button"
                         class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -385,7 +299,7 @@
                         }
                     </style>
 
-                    {{-- Terms content here (keeping original terms) --}}
+                    {{-- Terms content here --}}
                     <div>
                         <h4 class="text-base font-semibold text-gray-900 mb-2">
                             1. Rental Term, Booking Details & Extension Clause
@@ -399,8 +313,6 @@
                             period shall automatically extend on a day-to-day basis at the same daily rental rate.
                         </p>
                     </div>
-
-                    {{-- Add more terms sections as needed --}}
                 </div>
             </div>
         </div>
@@ -417,10 +329,11 @@
                     },
                 });
 
-                function copyCurrentUrl(el) {
+                window.copyCurrentUrl = function(el) {
                     const url = window.location.href;
                     navigator.clipboard.writeText(url).then(() => {
-                        el.innerHTML = `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
+                        el.innerHTML =
+                            `<flux:icon name='check' class='w-6 h-6 text-green-600 transition' />`;
                         setTimeout(() => {
                             el.innerHTML =
                                 `<flux:icon name='link' class='w-6 h-6 text-gray-600 hover:text-blue-500 transition' />`;

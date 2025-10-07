@@ -20,6 +20,16 @@ class Product extends Component
     use WithPagination;
 
     public $perPage = 12; // Items per page
+    
+    // Properties for selected vehicle in modal
+    public $selectedVehicleTitle = '';
+    public $selectedVehicleYear = '';
+
+    public function selectVehicle($title, $year)
+    {
+        $this->selectedVehicleTitle = $title;
+        $this->selectedVehicleYear = $year;
+    }
 
     public function render()
     {
