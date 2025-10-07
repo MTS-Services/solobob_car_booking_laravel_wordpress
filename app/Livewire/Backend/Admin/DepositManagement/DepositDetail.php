@@ -20,9 +20,10 @@ class DepositDetail extends Component
     public  $showModal = false;
 
     public function mount($id){
-
-        $this->depositDetail = Payment::findOrFail($id)
-                            ->with(['booking','user','paymentMethod'])
+       
+        $this->depositDetail = Payment::
+                            with(['booking','user','paymentMethod'])
+                            ->find($id)
                             ->first();
 
     }
