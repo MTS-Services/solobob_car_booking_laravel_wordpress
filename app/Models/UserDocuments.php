@@ -80,7 +80,34 @@ class UserDocuments extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    // Scope for Only this user's
+
+    public function scopeSelf(Builder $query) : Builder
+    {
+        return $query->where('user_id', Auth::id());
+    }
+
+   // Scope for Only this pending Verification
+
+
+    public function scopePending(Builder $query) : Builder
+    {
+        return $query->where('verification_status', Self::VERIFICATION_PENDING);
+    }
+
+    // Scope for Only this pending Verification
+
+    public function scopeVerified(Builder $query) : Builder
+    {
+        return $query->where('verification_status', Self::VERIFICATION_VERIFIED);
+    }
+
+    // Scope for Only this pending Verification
+    public function scopeRejected(Builder $query) : Builder
+    {
+        return $query->where('verification_status', Self::VERIFICATION_REJECTED);
+    }
+
 
     /* ================================================================
      * *** ACCESSORS ***

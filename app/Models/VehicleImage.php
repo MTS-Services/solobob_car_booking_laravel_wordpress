@@ -13,6 +13,8 @@ class VehicleImage extends BaseModel
     // public const ACTIVE = 1;
     // public const INACTIVE = 0;
 
+    public const IS_PRIMARY = true;
+
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
@@ -56,8 +58,13 @@ class VehicleImage extends BaseModel
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
+    
+    // Is Primary
 
-    //
+    public function scopeIsPrimary(Builder $query): Builder
+    {
+        return $query->where('is_primary', self::IS_PRIMARY );
+    }
 
     /* ================================================================
      * *** ACCESSORS ***

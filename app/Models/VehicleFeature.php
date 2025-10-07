@@ -84,6 +84,27 @@ class VehicleFeature extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
+    public function scopeCategorySafety(Builder $query):Builder 
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_SAFETY);
+    }
+
+    public function scopeCategoryComfort(Builder $query):Builder 
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_COMFORT);
+    }
+    
+    public function scopeCategoryEntertainment(Builder $query):Builder 
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_ENTERTAINMENT);
+    }
+
+    public function scopeCategoryOther(Builder $query):Builder 
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_OTHER);
+    }
+
+
       /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */

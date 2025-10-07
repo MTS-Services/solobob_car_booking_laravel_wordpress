@@ -88,15 +88,17 @@ class Category extends BaseModel
      ================================================================ */
 
     //
-    public function scopeActive(Builder $query): void
+    public function scopeActive(Builder $query): Builder
     {
-        $query->where('status', self::STATUS_ACTIVE);
+      return  $query->where('status', self::STATUS_ACTIVE);
     }
 
-    public function scopeInactive(Builder $query): void
+    public function scopeInactive(Builder $query): Builder
     {
-        $query->where('status', self::STATUS_INACTIVE);
+      return  $query->where('status', self::STATUS_INACTIVE);
     }
+
+    
 
     /* ================================================================
      * *** ACCESSORS ***

@@ -13,11 +13,12 @@ class Addresse extends BaseModel
     public const RESIDENTIAL = 1;
     public const PARKING     = 2;
 
+    public const IS_DEFAULT = true;
 
     public const TYPES = [
-        0 => 'personal',
-        1 => 'residential',
-        2 => 'parking',
+        self::PERSONAL => 'personal',
+        self::RESIDENTIAL => 'residential',
+        self::PARKING => 'parking',
     ];
 
     /* ================================================================
@@ -63,6 +64,56 @@ class Addresse extends BaseModel
      ================================================================ */
 
     //
+    //     public const PERSONAL    = 0;
+    // public const RESIDENTIAL = 1;
+    // public const PARKING     = 2;
+
+
+    /**
+     * This scope for is_default
+     * 
+     */
+    public function scopeIsdefault(Builder $query) : Builder 
+    {
+        return $query->where('is_default', self::IS_DEFAULT );
+    }
+
+     /**
+     * This scope for USER
+     * 
+     */
+    public function scopeSelf(Builder $query) : Builder 
+    {
+        return $query->where('user_id', AUTH::id());
+    }
+
+     /**
+     * This scope for Adress Personal
+     * 
+     */
+    public function scopePersonal(Builder $query) : Builder 
+    {
+        return $query->where('address_type', Self::PERSONAL);
+    }
+
+  /**
+     * This scope for Adress Residential
+     * 
+     */
+    public function scopeResidential(Builder $query) : Builder 
+    {
+        return $query->where('address_type', Self::RESIDENTIAL);
+    }
+
+     /**
+     * This scope for Adress PARKING
+     * 
+     */
+    public function scopeParking(Builder $query) : Builder 
+    {
+        return $query->where('address_type', Self::PARKING);
+    }
+
 
     /* ================================================================
      * *** ACCESSORS ***

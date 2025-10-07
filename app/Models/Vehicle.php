@@ -160,6 +160,50 @@ class Vehicle extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
+
+    // Scope Availalbe
+
+    public function scopeAvailable(Builder $query): Builder 
+    {
+        return $query->where('status', self::STATUS_AVAILABLE);
+    }
+    
+    // Scope Rented
+
+    public function scopeRented(Builder $query): Builder 
+    {
+        return $query->where('status', self::STATUS_RENTED);
+    }
+
+    // Scope Maintenance
+
+    public function scopeMaintenance(Builder $query): Builder 
+    {
+        return $query->where('status', self::STATUS_MAINTENANCE);
+    }
+
+    // Scope Inactive
+
+    public function scopeInactive(Builder $query): Builder 
+    {
+        return $query->where('status', self::STATUS_INACTIVE);
+    }
+
+    // Scope Automatic
+
+    public function scopeAutomatice(Builder $query): Builder 
+    {
+        return $query->where('transmission_type', self::transmission_type);
+    }
+
+    // Scope Manuall
+
+    public function scopeManual(Builder $query): Builder 
+    {
+        return $query->where('transmission_type', self::TRANSMISSION_MANUAL);
+    }
+
+
     //
 
     /* ================================================================

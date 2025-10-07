@@ -53,7 +53,19 @@ class VehicleMake extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    //
+    //Scope for Active
+
+    public function scopeActive(Builder $query):Builder 
+    {
+        return $query->where('status', SELF::ACTIVE);
+    }
+
+    //Scope for Inactive
+
+    public function scopeInActive(Builder $query):Builder 
+    {
+        return $query->where('status', SELF::INACTIVE);
+    }
 
     /* ================================================================
      * *** ACCESSORS ***
