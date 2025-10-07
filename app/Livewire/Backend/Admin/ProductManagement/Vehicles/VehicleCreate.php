@@ -160,8 +160,8 @@ class VehicleCreate extends Component
                 Vehicle::STATUS_MAINTENANCE,
                 Vehicle::STATUS_INACTIVE
             ]),
-            'images.*' => 'nullable|image|max:2048',
-            'images' => 'nullable|array|max:5', // max number of images
+            'images.*' => 'nullable|image|max:10240',
+            'images' => 'nullable|array|max:5', 
         ]);
 
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
@@ -191,8 +191,6 @@ class VehicleCreate extends Component
                 ]);
             }
 
-            // Optionally set first image as avatar
-            // $vehicle->update(['avatar' => VehicleImage::where('vehicle_id', $vehicle->id)->where('is_primary', true)->value('image')]);
         }
 
         session()->flash('message', 'Vehicle created with images successfully.');
@@ -203,9 +201,10 @@ class VehicleCreate extends Component
     public function render()
     {
         return view('livewire.backend.admin.product-management.vehicles.vehicle-create', [
-            'categories' => Category::where('status', Category::STATUS_ACTIVE)->pluck('name', 'id'),
+            'categories' => Category::active()->pluck('name', 'id'),
             'owners' => User::pluck('name', 'id'),
             'statuses' => Vehicle::STATUS,
+            'transmissions' => Vehicle::getTransmission(),
         ]);
     }
 }
