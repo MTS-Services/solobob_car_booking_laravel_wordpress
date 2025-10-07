@@ -11,15 +11,17 @@
             {{ session('error') }}
         </div>
     @endif
-    
+
     <section>
         {{-- Header Section --}}
         <div class="glass-card rounded-2xl p-6 mb-6">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
                 <div class="flex items-center gap-2">
-                    <button wire:click="openTrashModal" icon="trash-2" type='secondary'
-                        permission="product-category-trash" class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
+                    <button wire:click="openTrashModal" permission="product-category-trash"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
+                        {{-- Add the flux:icon component for the trash icon --}}
+                        <flux:icon name="trash-2" class="w-4 h-4" />
                         {{ __('Trash') }}
                     </button>
                     <button wire:click="openCreateModal"
