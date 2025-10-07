@@ -28,7 +28,6 @@
 
     <div class="max-w-7xl bg-white mx-auto px-4 py-4 sm:px-6 lg:px-8 xl:py-14">
         <div class="grid grid-cols-1 xxs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-
             <!-- Loop through the dynamic products data -->
             @forelse ($products as $vehicle)
                 <div
@@ -53,7 +52,8 @@
                                         src="{{ storage_url($vehicle?->images?->first()?->image) }}"
                                         alt="{{ $vehicle->title }} Image">
                                 @else
-                                    <img src="{{ asset('assets/images/default/no_img.jpg') }}" alt="{{ $vehicle->title }} Image">
+                                    <img src="{{ asset('assets/images/default/no_img.jpg') }}"
+                                        alt="{{ $vehicle->title }} Image">
                                 @endif
                             </a>
                         </div>
@@ -124,7 +124,7 @@
                                 Book
                             </a>
 
-                            <button @click="modalOpen = true; document.body.classList.add('overflow-hidden')"
+                            <button @click="modalOpen = true; document.body.style.overflow = 'hidden'"
                                 class="flex-1 flex items-center justify-center bg-gray-800 text-white py-2 px-2 text-sm rounded-lg font-semibold shadow-md hover:bg-gray-700 transition duration-150 transform hover:scale-[1.01]">
                                 Get In touch
                             </button>
@@ -215,8 +215,7 @@
                 </button>
             </div>
         @endif
-        {{-- Contact Modal --}}
-        <div x-show="modalOpen" x-cloak @click="modalOpen = false"
+        <div x-show="modalOpen" x-cloak @click="modalOpen = false; document.body.style.overflow = ''"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
             style="display: none;">
             <div @click.stop x-transition:enter="transition ease-out duration-300"
@@ -227,7 +226,7 @@
                 x-transition:leave-end="opacity-0 transform scale-90"
                 class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <div class="relative">
-                    <button @click="modalOpen = false" type="button"
+                    <button @click="modalOpen = false; document.body.style.overflow = ''" type="button"
                         class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-light leading-none z-10">
                         &times;
                     </button>
