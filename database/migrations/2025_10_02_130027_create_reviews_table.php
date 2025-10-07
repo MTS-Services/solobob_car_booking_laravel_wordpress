@@ -26,8 +26,8 @@ return new class extends Migration
 
             // Review fields
             $table->decimal('rating', 2, 1)->check('rating >= 1.0 and rating <= 5.0');
-            $table->string('title', 255)->nullable();
-            $table->text('comment')->nullable();
+            $table->string('title', 255);
+            $table->text('comment');
 
             // Review status
             $table->tinyInteger('review_status')->default(Review::STATUS_PENDING);
