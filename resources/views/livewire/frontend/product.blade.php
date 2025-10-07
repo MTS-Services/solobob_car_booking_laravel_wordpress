@@ -63,10 +63,6 @@
                             class="absolute bottom-2 left-2 bg-accent text-white text-xs xxs:text-sm font-semibold px-3 py-1.5 rounded-md shadow-lg tracking-wider">
                             {{ $vehicle->category?->name ?? 'Uncategorized' }}
                         </span>
-
-                        {{-- <div class="absolute bottom-2 right-4 text-zinc-500 p-1">
-                            <flux:icon name="eye" class="w-5 h-5" />
-                        </div> --}}
                     </div>
 
                     <div class="p-4">
@@ -124,7 +120,9 @@
                                 Book
                             </a>
 
-                            <button @click="modalOpen = true; document.body.style.overflow = 'hidden'"
+                            <button 
+                                @click="modalOpen = true; document.body.style.overflow = 'hidden'"
+                                wire:click="selectVehicle('{{ $vehicle->title }}', '{{ $vehicle->year }}')"
                                 class="flex-1 flex items-center justify-center bg-gray-800 text-white py-2 px-2 text-sm rounded-lg font-semibold shadow-md hover:bg-gray-700 transition duration-150 transform hover:scale-[1.01]">
                                 Get In touch
                             </button>
@@ -215,6 +213,7 @@
                 </button>
             </div>
         @endif
+        
         {{-- Contact Modal --}}
         <div x-show="modalOpen" x-cloak @click="modalOpen = false; document.body.style.overflow = ''"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
@@ -235,7 +234,7 @@
 
                 <div class="p-6 md:p-8">
                     <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
-                        {{ $vehicle->year }} | {{ $vehicle->title }}
+                        {{ $selectedVehicleYear }} | {{ $selectedVehicleTitle }}
                     </h2>
                     <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
                         <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
@@ -305,7 +304,6 @@
                 </div>
             </div>
         </div>
-
 
     </div>
 
