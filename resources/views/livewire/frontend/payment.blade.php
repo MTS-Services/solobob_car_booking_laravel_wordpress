@@ -314,11 +314,8 @@
 
                             <div>
                                 <h1 class="text-3xl font-bold p-2">Total Payment:$1000.00</h1>
-                                <p class="text-gray-600 p-3 font-semibold">Recently Days: 7 Day</p>
+                                <p class="text-gray-600 p-3 font-semibold">Rental Days: 7 Day</p>
                                 <p class="text-gray-600 p-3 font-semibold">Rental Car: 2020 Nissan Rogue</p>
-                                <p class="flex text-gray-600 p-3  font-semibold">Images: <img
-                                        src="https://default.houzez.co/wp-content/uploads/2020/03/placeholder.png"
-                                        alt="Card" class="p-2 h-20 w-30 opacity-60"></p>
                             </div>
 
                         </div>
@@ -377,13 +374,13 @@
                                             <label class="form-label">Expire Date</label>
                                             <span class="expiration flex">
                                                 <input type="text" name="month"
-                                                    class="w-[30%] px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent"
+                                                    class="w-[40%] px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent"
                                                     placeholder="MM" maxlength="2" required>
 
                                                 <span></span>
 
                                                 <input type="text" name="year"
-                                                    class="w-[30%] px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent"
+                                                    class="w-[40%] px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B79347] focus:border-transparent"
                                                     placeholder="YY" maxlength="2" required>
                                             </span>
                                         </div>
