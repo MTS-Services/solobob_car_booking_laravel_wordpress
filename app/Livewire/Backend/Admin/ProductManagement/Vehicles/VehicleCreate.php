@@ -47,92 +47,72 @@ class VehicleCreate extends Component
     public $delivery_fee = '';
     public $status = Vehicle::STATUS_AVAILABLE;
     public array $images = [];
-    public $avaters = [];
+    public $newImage; // Single or multiple image upload
 
     public function boot(FileUploadService $fileUploadService)
     {
         $this->fileUploadService = $fileUploadService;
     }
 
-    public function removeAvatar()
+    // Remove specific image
+    public function removeAvatar($index)
     {
-        $this->images = [];
+        if (isset($this->images[$index])) {
+            unset($this->images[$index]);
+            $this->images = array_values($this->images); // Re-index array
+        }
     }
 
-    // public function save()
-    // {
-    //     $this->validate([
-    //         'owner_id' => 'required|exists:users,id',
-    //         'category_id' => 'required|exists:categories,id',
-    //         'sort_order' => 'nullable|integer|min:0',
-    //         'title' => 'required|string|max:255',
-    //         'slug' => 'required|string|max:255|unique:vehicles,slug',
-    //         'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
-    //         'color' => 'required|string|max:255',
-    //         'license_plate' => 'required|string|max:255|unique:vehicles,license_plate',
-    //         'seating_capacity' => 'required|integer|min:1',
-    //         'mileage' => 'required|numeric|min:0',
-    //         'description' => 'required|string',
-    //         'weekly_rate' => 'nullable|numeric|min:0',
-    //         'monthly_rate' => 'nullable|numeric|min:0',
-    //         'security_deposit' => 'nullable|numeric|min:0',
-    //         'transmission_type' => 'required|in:' . Vehicle::TRANSMISSION_AUTOMATIC . ',' . Vehicle::TRANSMISSION_MANUAL,
-    //         'instant_booking' => 'nullable|boolean',
-    //         'delivery_available' => 'nullable|boolean',
-    //         'delivery_fee' => 'nullable|numeric|min:0',
-    //         'status' => 'required|in:' . implode(',', [Vehicle::STATUS_AVAILABLE, Vehicle::STATUS_RENTED, Vehicle::STATUS_MAINTENANCE, Vehicle::STATUS_INACTIVE]),
-    //         'avatar' => 'nullable|image|max:2048',
-    //     ]);
+    // Handle single or multiple image uploads
+    public function updatedNewImage()
+    {
+        // Validate based on whether single or multiple files
+        if (is_array($this->newImage)) {
+            // Multiple files selected
+            $this->validate([
+                'newImage' => 'required|array',
+                'newImage.*' => 'required|image|max:10240', // 10MB max per file
+            ], [
+                'newImage.required' => 'Please select at least one image',
+                'newImage.array' => 'Invalid file selection',
+                'newImage.*.required' => 'All files are required',
+                'newImage.*.image' => 'All files must be images',
+                'newImage.*.max' => 'Each image must not exceed 10MB',
+            ]);
 
-    //     $data = [
-    //         'owner_id' => $this->owner_id,
-    //         'category_id' => $this->category_id,
-    //         'sort_order' => $this->sort_order ?? 0,
-    //         'title' => $this->title,
-    //         'slug' => $this->slug,
-    //         'year' => $this->year,
-    //         'color' => $this->color,
-    //         'license_plate' => $this->license_plate,
-    //         'seating_capacity' => $this->seating_capacity,
-    //         'mileage' => $this->mileage,
-    //         'description' => $this->description,
-    //         'weekly_rate' => $this->weekly_rate,
-    //         'monthly_rate' => $this->monthly_rate,
-    //         'security_deposit' => $this->security_deposit,
-    //         'transmission_type' => $this->transmission_type,
-    //         'instant_booking' => $this->instant_booking ?? false,
-    //         'delivery_available' => $this->delivery_available ?? false,
-    //         'delivery_fee' => $this->delivery_fee,
-    //         'status' => $this->status,
-    //         'created_by' => user()->id,
-    //     ];
+            // Add each image to the array
+            foreach ($this->newImage as $image) {
+                $this->images[] = $image;
+            }
+        } else {
+            // Single file selected
+            $this->validate([
+                'newImage' => 'required|image|max:10240', // 10MB max
+            ], [
+                'newImage.required' => 'Please select at least one image',
+                'newImage.image' => 'The file must be an image',
+                'newImage.max' => 'The image must not exceed 10MB',
+            ]);
 
-    //     if ($this->avatar) {
-    //         $images['avatar'] = $this->fileUploadService->uploadImage(
-    //             file: $this->avatar,
-    //             directory: 'vehicles/avatars',
-    //             width: 800,
-    //             height: 600,
-    //             disk: 'public',
-    //             maintainAspectRatio: true
-    //         );
-    //     }
+            $this->images[] = $this->newImage;
+        }
 
-    //     if ($images) {
-    //         $data = array_merge($data, $images);
-    //     }
-    //     $vehicle = Vehicle::create($data);
-    //     VehicleImage::create([
-    //         'vehicle_id' => $vehicle->id,
-    //         'image' => $images['avatar'],
-    //         'is_primary' => true
-    //     ]);
+        // Clear the input
+        $this->reset('newImage');
+    }
 
+    // Reorder images via drag and drop
+    public function reorderImages($orderedIds)
+    {
+        $reordered = [];
+        foreach ($orderedIds as $id) {
+            if (isset($this->images[$id])) {
+                $reordered[] = $this->images[$id];
+            }
+        }
+        $this->images = $reordered;
+    }
 
-
-    //     session()->flash('message', 'Vehicle created successfully.');
-    //     return $this->redirect(route('admin.pm.vehicle-list'), navigate: true);
-    // }
     public function save()
     {
         $validated = $this->validate([
@@ -160,8 +140,8 @@ class VehicleCreate extends Component
                 Vehicle::STATUS_MAINTENANCE,
                 Vehicle::STATUS_INACTIVE
             ]),
-            'images.*' => 'nullable|image|max:10240',
-            'images' => 'nullable|array|max:5', 
+            'images.*' => 'nullable|image',
+            'images' => 'nullable|array|min:1',
         ]);
 
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
@@ -188,15 +168,14 @@ class VehicleCreate extends Component
                     'vehicle_id' => $vehicle->id,
                     'image' => $path,
                     'is_primary' => $index === 0, // first image is primary
+                    'sort_order' => $index,
                 ]);
             }
-
         }
 
         session()->flash('message', 'Vehicle created with images successfully.');
         return $this->redirectRoute('admin.pm.vehicle-list');
     }
-
 
     public function render()
     {
