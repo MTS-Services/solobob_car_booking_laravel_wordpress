@@ -4,8 +4,8 @@ namespace App\Livewire\Backend\Admin\ProductManagement\Vehicles;
 
 use App\Models\Vehicle;
 use App\Services\FileUpload\FileUploadService;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout(
@@ -13,9 +13,10 @@ use Livewire\WithPagination;
     [
         'title' => 'vehicle-trash',
         'breadcrumb' => 'vehicle-trash',
-        'page_slug' => 'vehicle-trash'
+        'page_slug' => 'vehicle-list',
     ]
 )]
+
 class VehicleTrash extends Component
 {
     use WithPagination;
@@ -23,9 +24,13 @@ class VehicleTrash extends Component
     protected FileUploadService $fileUploadService;
 
     public $search = '';
+
     public $showRestoreModal = false;
+
     public $showPermanentDeleteModal = false;
+
     public $vehicleIdToRestore = null;
+
     public $vehicleIdToDelete = null;
 
     protected $queryString = ['search'];
@@ -71,13 +76,13 @@ class VehicleTrash extends Component
             $vehicle->restore();
 
             $this->closeRestoreModal();
-            
+
             session()->flash('message', 'Vehicle restored successfully.');
-            
+
             $this->dispatch('$refresh');
         } catch (\Exception $e) {
             $this->closeRestoreModal();
-            session()->flash('error', 'Failed to restore vehicle: ' . $e->getMessage());
+            session()->flash('error', 'Failed to restore vehicle: '.$e->getMessage());
         }
     }
 
@@ -94,13 +99,13 @@ class VehicleTrash extends Component
             $vehicle->forceDelete();
 
             $this->closePermanentDeleteModal();
-            
+
             session()->flash('message', 'Vehicle permanently deleted.');
-            
+
             $this->dispatch('$refresh');
         } catch (\Exception $e) {
             $this->closePermanentDeleteModal();
-            session()->flash('error', 'Failed to delete vehicle: ' . $e->getMessage());
+            session()->flash('error', 'Failed to delete vehicle: '.$e->getMessage());
         }
     }
 
@@ -109,8 +114,8 @@ class VehicleTrash extends Component
         $vehicles = Vehicle::onlyTrashed()
             ->when($this->search, function ($q) {
                 $q->where(function ($sq) {
-                    $sq->where('title', 'like', '%' . $this->search . '%')
-                        ->orWhere('license_plate', 'like', '%' . $this->search . '%');
+                    $sq->where('title', 'like', '%'.$this->search.'%')
+                        ->orWhere('license_plate', 'like', '%'.$this->search.'%');
                 });
             })
             ->with(['category', 'owner', 'deletedBy'])
