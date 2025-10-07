@@ -1,4 +1,4 @@
-<section class="bg-white" x-data="{ showModal: false, modalOpen: false }" x-init="$watch('showModal', value => document.body.style.overflow = value ? 'hidden' : '')">
+<section class="bg-white" x-data="{ showModal: false, modalOpen: false }">
     @push('styles')
         <style>
             .swiper-button-next::after,
@@ -36,16 +36,6 @@
                 <div
                     class="swiper details-swiper bg-gray-100 w-96 xxs:w-[450px] xs:w-[550px] sm:w-[650px] md:w-[800px] lg:w-[950px] xl:w-[700px] 2xl:w-full h-64 xs:h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] rounded-lg overflow-hidden relative">
                     <div class="swiper-wrapper">
-                        {{-- @php
-                            $imagePath = asset('assets/images/default-car.png');
-
-                            if ($vehicle->avatar) {
-                                $cleanPath = str_replace('storage/', '', $vehicle->avatar);
-                                $cleanPath = ltrim($cleanPath, '/');
-                                $imagePath = asset('storage/' . $cleanPath);
-                            }
-                        @endphp --}}
-
                         {{-- Main vehicle image --}}
                         @foreach ($vehicle->images as $image)
                             <div class="swiper-slide">
@@ -54,15 +44,6 @@
                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
                             </div>
                         @endforeach
-
-                        {{-- Additional placeholder slides (you can add more images relation later) --}}
-                        {{-- @for ($i = 0; $i < 4; $i++)
-                            <div class="swiper-slide">
-                                <img src="{{ storage_url($vehicle?->images?->first()?->image) }}" alt="{{ $vehicle->title }} image {{ $i + 2 }}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.onerror=null; this.src='{{ asset('assets/images/default-car.png') }}';">
-                            </div>
-                        @endfor --}}
                     </div>
                     <div
                         class="swiper-button-next !w-10 !h-10 xs:w-12! xs:!h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-zinc-400 hover:scale-110 transition-all duration-300">
@@ -139,29 +120,6 @@
                             </div>
                         </div>
                     @endif
-
-                    {{-- Additional Features --}}
-                    {{-- @if ($vehicle->instant_booking || $vehicle->delivery_available)
-                        <div class="flex gap-2 flex-wrap">
-                            @if ($vehicle->instant_booking)
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <flux:icon name="bolt" class="w-3 h-3 mr-1" />
-                                    Instant Booking
-                                </span>
-                            @endif
-                            @if ($vehicle->delivery_available)
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    <flux:icon name="truck" class="w-3 h-3 mr-1" />
-                                    Delivery Available
-                                    @if ($vehicle->delivery_fee)
-                                        (${{ number_format($vehicle->delivery_fee, 2) }})
-                                    @endif
-                                </span>
-                            @endif
-                        </div>
-                    @endif --}}
                 </div>
             </div>
 
@@ -178,7 +136,7 @@
                             Book Now
                         </button>
 
-                        <button @click="modalOpen = true; document.body.classList.add('overflow-hidden')"
+                        <button @click="modalOpen = true; document.body.style.overflow = 'hidden'"
                             class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 xs:py-3 rounded-lg transition-colors text-sm xs:text-base">
                             Get in touch
                         </button>
@@ -201,7 +159,7 @@
                             <p class="text-sm xs:text-base text-gray-600 leading-relaxed">
                                 I hereby agree to the terms and conditions of the Lease Agreement with Host
                             </p>
-                            <button @click="showModal = true"
+                            <button @click="showModal = true; document.body.style.overflow = 'hidden'"
                                 class="text-zinc-600 hover:text-zinc-700 text-sm xs:text-base font-medium mt-1 xs:mt-2 transition-colors">
                                 View Details
                             </button>
@@ -213,7 +171,7 @@
     </div>
 
     {{-- Contact Modal --}}
-    <div x-show="modalOpen" x-cloak @click="modalOpen = false"
+    <div x-show="modalOpen" x-cloak @click="modalOpen = false; document.body.style.overflow = ''"
         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
         style="display: none;">
         <div @click.stop x-transition:enter="transition ease-out duration-300"
@@ -224,7 +182,7 @@
             x-transition:leave-end="opacity-0 transform scale-90"
             class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
             <div class="relative">
-                <button @click="modalOpen = false" type="button"
+                <button @click="modalOpen = false; document.body.style.overflow = ''" type="button"
                     class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-light leading-none z-10">
                     &times;
                 </button>
@@ -304,10 +262,12 @@
     </div>
 
     {{-- Terms Modal --}}
-    <div x-show="showModal" x-transition.opacity.duration.300ms @keydown.escape.window="showModal = false"
+    <div x-show="showModal" x-transition.opacity.duration.300ms
+        @keydown.escape.window="showModal = false; document.body.style.overflow = ''"
         class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true"
         style="display: none;">
-        <div class="fixed inset-0 bg-black/30 bg-opacity-50 transition-opacity" @click="showModal = false"></div>
+        <div class="fixed inset-0 bg-black/30 bg-opacity-50 transition-opacity"
+            @click="showModal = false; document.body.style.overflow = ''"></div>
 
         <div class="flex min-h-screen items-center justify-center p-4">
             <div x-show="showModal" x-transition:enter="transition ease-out duration-300"
@@ -316,7 +276,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                @click.away="showModal = false"
+                @click.away="showModal = false; document.body.style.overflow = ''"
                 class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
                 <div class="flex items-start justify-between p-6 border-b border-gray-200 flex-shrink-0">
                     <div>
@@ -324,7 +284,7 @@
                             Rental Agreement Terms & Conditions
                         </h3>
                     </div>
-                    <button @click="showModal = false" type="button"
+                    <button @click="showModal = false; document.body.style.overflow = ''" type="button"
                         class="text-gray-400 hover:text-gray-500 transition-colors focus:outline-none">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -341,7 +301,7 @@
                         }
                     </style>
 
-                    {{-- Terms content here (keeping original terms) --}}
+                    {{-- Terms content here --}}
                     <div>
                         <h4 class="text-base font-semibold text-gray-900 mb-2">
                             1. Rental Term, Booking Details & Extension Clause
@@ -355,8 +315,6 @@
                             period shall automatically extend on a day-to-day basis at the same daily rental rate.
                         </p>
                     </div>
-
-                    {{-- Add more terms sections as needed --}}
                 </div>
             </div>
         </div>
