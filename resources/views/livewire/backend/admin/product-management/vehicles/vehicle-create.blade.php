@@ -15,7 +15,6 @@
                 </a>
             </div>
         </div>
-
         {{-- Form --}}
         <div class="glass-card rounded-2xl p-6">
             <form wire:submit="save">
@@ -71,12 +70,12 @@
                         @enderror
                     </div>
 
-
                     <div>
-                        <label class="block text-sm font-medium text-zinc-600 mb-2">Year *</label> <input
-                            wire:model="year" type="number"
+                        <label class="block text-sm font-medium text-zinc-600 mb-2">Year *</label>
+                        <input wire:model="year" type="number"
                             class="w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 placeholder-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-600"
-                            placeholder="Enter your vehicle year (e.g., 2024)"> @error('year')
+                            placeholder="Enter your vehicle year (e.g., 2024)">
+                        @error('year')
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
@@ -124,8 +123,6 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
-
-
 
                     {{-- Weekly Rate --}}
                     <div>
@@ -185,6 +182,7 @@
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
+
                     <div>
                         <label class="block text-sm font-medium text-zinc-600 mb-2">Transmission Type *</label>
                         <select wire:model="transmission_type"
@@ -228,17 +226,48 @@
                         @enderror
                     </div>
 
-                    {{-- Avatar Upload --}}
+                    {{-- Vehicle Images - One by One Upload --}}
                     <div class="md:col-span-3">
                         <label class="block text-sm font-medium text-zinc-600 mb-2">Vehicle Image</label>
-                        <div class="flex items-start gap-4">
-                            @if ($images)
-                                @foreach ($images as $image)
-                                    <div class="relative">
+                        {{-- Loading Indicator --}}
+                        <div wire:loading wire:target="newImage" class="mt-3">
+                            <div class="flex items-center gap-2 text-amber-600">
+                                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                <span class="text-sm">Uploading image(s)...</span>
+                            </div>
+                        </div>
+                        {{-- Images Preview Grid --}}
+                        @if (!empty($images))
+                            <div class="mt-4 flex flex-wrap gap-4">
+                                @foreach ($images as $index => $image)
+                                    <div class="relative group">
                                         <img src="{{ $image->temporaryUrl() }}"
-                                            class="w-32 h-32 object-cover rounded-lg border border-zinc-200">
-                                        <button type="button" wire:click="removeAvatar"
-                                            class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors">
+                                            class="w-32 h-32 object-cover rounded-lg border-2 border-zinc-200 transition-all duration-200 group-hover:border-amber-400">
+
+                                        {{-- Primary Badge --}}
+                                        @if ($index === 0)
+                                            <div
+                                                class="absolute top-2 left-2 bg-emerald-600 text-white text-xs px-2 py-1 rounded">
+                                                Primary
+                                            </div>
+                                        @endif
+
+                                        {{-- Image Number --}}
+                                        <div
+                                            class="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                                            {{ $index + 1 }}
+                                        </div>
+
+                                        {{-- Remove Button --}}
+                                        <button type="button" wire:click="removeAvatar({{ $index }})"
+                                            class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-all duration-200 ">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2">
@@ -250,17 +279,20 @@
                                         </button>
                                     </div>
                                 @endforeach
-                            @endif
-                            <div class="flex-1">
-                                <input wire:model="images" type="file" accept="image/*"
-                                    class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600"
-                                    multiple>
-                                <p class="mt-2 text-xs text-zinc-500">Maximum file size: 10MB. Supported formats: JPG,
-                                    PNG, GIF</p>
-                                @error('avatar')
-                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                                @enderror
                             </div>
+                        @endif
+
+                        {{-- Upload Area --}}
+                        <div>
+                            <input wire:model="newImage" type="file" accept="image/*" id="image-upload" multiple
+                                class="w-full bg-zinc-800/50 border border-zinc-200 rounded-lg px-4 py-2.5 text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-zinc-700 file:text-zinc-500 hover:file:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+                            <p class="mt-2 text-xs text-zinc-500">Supported formats: JPG, PNG, GIF.You can select one or multiple files.</p>
+                            @error('newImage')
+                                <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
+                            @error('images')
+                                <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
