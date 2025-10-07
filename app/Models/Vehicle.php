@@ -18,47 +18,40 @@ class Vehicle extends BaseModel
     public const TRANSMISSION_AUTOMATIC = 0;
     public const TRANSMISSION_MANUAL = 1;
 
-    // public const APPROVAL_PENDING = 0;
-    // public const APPROVAL_APPROVED = 1;
-    // public const APPROVAL_REJECTED = 2;
 
     public const STATUS = [
-        self::STATUS_AVAILABLE => 'Active',
+        self::STATUS_AVAILABLE => 'Abailable',
         self::STATUS_RENTED => 'Rented',
         self::STATUS_MAINTENANCE => 'Under Maintenance',
         self::STATUS_INACTIVE => 'Inactive',
     ];
 
-    // public const APPROVAL_STATUS = [
-    //     self::APPROVAL_PENDING => 'Pending',
-    //     self::APPROVAL_APPROVED => 'Approved',
-    //     self::APPROVAL_REJECTED => 'Rejected',
-    // ];
+    public static function getTransmission(): array
+    {
+        return [
+            self::TRANSMISSION_AUTOMATIC => 'Automatic',
+            self::TRANSMISSION_MANUAL => 'Manual',
+        ];
+    }
+
+    public function getTransmissionLabelAttribute()
+    {
+        return isset($this->transmission_type) ? self::getTransmission()[$this->transmission_type] : 'Unknown';
+    }
+
     public static function getStatus(): array
     {
         return [
-            self::STATUS_AVAILABLE => 'Active',
+            self::STATUS_AVAILABLE => 'Abailable',
             self::STATUS_INACTIVE => 'Inactive',
             self::STATUS_RENTED => 'Rented',
             self::STATUS_MAINTENANCE => 'Under Maintenance',
         ];
     }
-    // public static function getApprovalStatus(): array
-    // {
-    //     return [
-    //         self::APPROVAL_PENDING => 'Active',
-    //         self::APPROVAL_APPROVED => 'Inactive',
-    //     ];
-    // }
     public function getStatusLabelAttribute()
     {
         return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
-
-    // public function getApprovalStatusLabelAttribute()
-    // {
-    //     return self::APPROVAL_STATUS[$this->approval_status] ?? 'Unknown';
-    // }
 
     public function getStatusColorAttribute()
     {
@@ -71,15 +64,7 @@ class Vehicle extends BaseModel
         };
     }
 
-    // public function getApprovalStatusColorAttribute()
-    // {
-    //     return match ($this->approval_status) {
-    //         self::APPROVAL_PENDING => 'warning',
-    //         self::APPROVAL_APPROVED => 'success',
-    //         self::APPROVAL_REJECTED => 'danger',
-    //         default => 'secondary',
-    //     };
-    // }
+ 
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -126,6 +111,7 @@ class Vehicle extends BaseModel
         $this->appends = array_merge(parent::getAppends(), [
             'status_label',
             'status_color',
+            'transmission_label',
         ]);
     }
 
