@@ -10,8 +10,8 @@ class VehicleMake extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
-    // public const ACTIVE = 1;
-    // public const INACTIVE = 0;
+    public const ACTIVE = 1;
+    public const INACTIVE = 0;
 
     /* ================================================================
      * *** PROPERTIES ***

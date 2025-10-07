@@ -20,7 +20,8 @@ class Favorite extends BaseModel
     protected $fillable = [
         'user_id',
         'vehicle_id',
-
+        'sort_order',
+        
         'created_by',
         'updated_by',
         'deleted_by',

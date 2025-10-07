@@ -18,6 +18,7 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
+            
             $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('user_id');
             

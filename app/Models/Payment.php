@@ -36,6 +36,7 @@ class Payment extends BaseModel
         'status',
         'amount',
         'note',
+        
         'created_by',
         'updated_by',
         'deleted_by',

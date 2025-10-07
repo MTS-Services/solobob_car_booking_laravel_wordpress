@@ -32,6 +32,11 @@ class Addresse extends BaseModel
         'state',
         'postal_code',
         'is_default',
+        'sort_order',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $casts = [

@@ -20,6 +20,7 @@ class UserDocuments extends BaseModel
 
     protected $fillable = [
         'user_id',
+        'sort_order',
         'licence',
         'selfe_licence',
         'address_proof',
