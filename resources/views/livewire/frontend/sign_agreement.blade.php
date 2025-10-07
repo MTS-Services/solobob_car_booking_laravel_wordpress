@@ -187,8 +187,9 @@
                 </section>
 
                 Agreement Confirmation
+
                 <section class="border-t border-gray-700 pt-8 mt-12">
-                    <p class="text-gray-300 italic mb-6 leading-relaxed">
+                    {{-- <p class="text-gray-300 italic mb-6 leading-relaxed">
                         By checking the boxes and signing below, Renter affirms they have read and agree to this
                         Agreement.
                     </p>
@@ -253,7 +254,7 @@
                                 </span>
                             </label>
                         </div>
-                    </div>
+                    </div> --}}
                 </section>
             </main>
         </div>
