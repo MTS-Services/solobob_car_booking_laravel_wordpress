@@ -86,6 +86,7 @@ class Booking extends BaseModel
         return $this->belongsTo(User::class);
     }
 
+    
     public function pickupLocation()
     {
         return $this->belongsTo(VehicleLocation::class, 'pickup_location_id');

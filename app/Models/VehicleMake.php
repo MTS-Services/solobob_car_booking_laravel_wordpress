@@ -51,7 +51,10 @@ class VehicleMake extends BaseModel
      * *** RELATIONS ***
      ================================================================ */
 
-    //
+    // public function vehicleRelation()
+    public function vehicleRelation(){
+        return $this->hasMany(VehicleRelation::class, 'make_id', 'id');
+    }
 
     /* ================================================================
      * *** SCOPES ***

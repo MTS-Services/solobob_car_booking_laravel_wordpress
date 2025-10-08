@@ -58,7 +58,13 @@ class VehicleFeature extends BaseModel
      ================================================================ */
 
     //
-
+    public function category(){
+        return $this->belongsTo(Category::class, 'feature_category', 'id');
+    }
+    public function vehicleRelation()
+    {
+        return $this->hasMany(VehicleRelation::class, 'feature_id', 'id');
+    }
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */

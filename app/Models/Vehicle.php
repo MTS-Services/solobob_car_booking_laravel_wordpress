@@ -84,7 +84,10 @@ class Vehicle extends BaseModel
      ================================================================ */
 
     //
-
+    public function vehicleRelation()
+    {
+        return $this->hasMany(VehicleRelation::class, 'vehicle_id', 'id');
+    }
     public function owner()
     {
         return $this->belongsTo(User::class);
