@@ -17,6 +17,29 @@ class BookingStatusTimeline extends BaseModel
     public const STATUS_CANCELLED  = 5;
     public const STATUS_REJECTED   = 6;
 
+    /* ================================================================
+     * *** PROPERTIES ***
+     ================================================================ */
+
+    protected $fillable = [
+        'sort_order',
+        'booking_id',
+        'booking_status',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+    /**
+     * Define the attribute casts for the model.
+     */
+
+    protected $casts = [
+        'booking_status' => 'integer',
+    ];
+
+
+
 
 
     public function __construct(array $attributes = [])
@@ -28,7 +51,52 @@ class BookingStatusTimeline extends BaseModel
         ]);
     }
 
+    /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
 
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id', 'id');
+    }
+
+    /* ================================================================
+     * *** SCOPES ***
+     ================================================================ */
+
+    public function scopePending($query)
+    {
+        return $query->where('booking_status', self::STATUS_PENDING);
+    }
+    public function scopeAccepted($query)
+    {
+        return $query->where('booking_status', self::STATUS_ACCEPTED);
+    }
+    public function scopeDeposited($query)
+    {
+        return $query->where('booking_status', self::STATUS_DEPOSITED);
+    }
+    public function scopeDelivered($query)
+    {
+        return $query->where('booking_status', self::STATUS_DELIVERED);
+    }
+    public function scopeReturned($query)
+    {
+        return $query->where('booking_status', self::STATUS_RETURNED);
+    }
+    public function scopeCancelled($query)
+    {
+        return $query->where('booking_status', self::STATUS_CANCELLED);
+    }
+    public function scopeRejected($query)
+    {
+        return $query->where('booking_status', self::STATUS_REJECTED);
+    }
+
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
 
     public function getStatus(): array
     {
@@ -46,12 +114,12 @@ class BookingStatusTimeline extends BaseModel
     // Helper method
     public function getStatusLabelAttribute(): string
     {
-         return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
-
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
 
 
-    public function getStatusColorAttribute(){
+    public function getStatusColorAttribute()
+    {
         return match ((int)$this->booking_status) {
             self::STATUS_PENDING => 'badge-warning',
             self::STATUS_ACCEPTED => 'badge-primary',
@@ -63,72 +131,6 @@ class BookingStatusTimeline extends BaseModel
             default => 'badge-light',
         };
     }
-
-    /* ================================================================
-     * *** PROPERTIES ***
-     ================================================================ */
-
-    protected $fillable = [
-        'sort_order',
-        'booking_id',
-        'booking_status',
-        
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ];
-    /**
-     * Define the attribute casts for the model.
-     */
-
-    protected $casts = [
-        'booking_status' => 'integer',
-    ];
-
-
-    
-
-    /* ================================================================
-     * *** RELATIONS ***
-     ================================================================ */
-
-    public function booking()
-    {
-        return $this->belongsTo(Booking::class, 'booking_id', 'id');
-    }
-
-    /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-    public function scopePending($query){
-        return $query->where('booking_status', self::STATUS_PENDING);
-    }
-    public function scopeAccepted($query){
-        return $query->where('booking_status', self::STATUS_ACCEPTED);
-    }
-    public function scopeDeposited($query){
-        return $query->where('booking_status', self::STATUS_DEPOSITED);
-    }
-    public function scopeDelivered($query){
-        return $query->where('booking_status', self::STATUS_DELIVERED);
-    }
-    public function scopeReturned($query){
-        return $query->where('booking_status', self::STATUS_RETURNED);
-    }
-    public function scopeCancelled($query){
-        return $query->where('booking_status', self::STATUS_CANCELLED);
-    }
-    public function scopeRejected($query){
-        return $query->where('booking_status', self::STATUS_REJECTED);
-    }
-    
-
-    /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-    //
 
     /* ================================================================
      * *** UTILITY METHODS ***

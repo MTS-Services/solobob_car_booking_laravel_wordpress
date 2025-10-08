@@ -18,42 +18,10 @@ class RentalCheckin extends BaseModel
 
 
 
-
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            'status_label',
-            'status_color',
-        ]);
-    }
-
     /* ================================================================
      * *** ATTRIBUTES ***
      ================================================================ */
-    public function getFuelLavelStartLabelAttribute()
-    {
-        return match ($this->fuel_level_start) {
-            self::FUEL_LEVEL_EMPTY => 'Empty',
-            self::FUEL_LEVEL_QUARTER => 'Quarter',
-            self::FUEL_LEVEL_HALF => 'Half',
-            self::FUEL_LEVEL_THREE_QUARTER => 'Three Quarter',
-            self::FUEL_LEVEL_FULL => 'Full',
-            default => 'Unknown',
-        };
-    }
-    public function getFuelLavelStartColorAttribute()
-    {
-        return match ((int)$this->fuel_level_start) {
-            self::FUEL_LEVEL_EMPTY => 'badge-danger',
-            self::FUEL_LEVEL_QUARTER => 'badge-warning',
-            self::FUEL_LEVEL_HALF => 'badge-info',
-            self::FUEL_LEVEL_THREE_QUARTER => 'badge-primary',
-            self::FUEL_LEVEL_FULL => 'badge-success',
-            default => 'badge-secondary',
-        };
-    }
+
 
 
 
@@ -84,6 +52,14 @@ class RentalCheckin extends BaseModel
     ];
 
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->appends = array_merge(parent::getAppends(), [
+            'status_label',
+            'status_color',
+        ]);
+    }
 
     /* ================================================================
      * *** RELATIONS ***
@@ -91,7 +67,7 @@ class RentalCheckin extends BaseModel
 
     public function booking()
     {
-        return $this->belongsTo(Booking::class,'booking_id', 'id');
+        return $this->belongsTo(Booking::class, 'booking_id', 'id');
     }
 
     public function performedBy()
@@ -133,7 +109,28 @@ class RentalCheckin extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+    public function getFuelLavelStartLabelAttribute()
+    {
+        return match ($this->fuel_level_start) {
+            self::FUEL_LEVEL_EMPTY => 'Empty',
+            self::FUEL_LEVEL_QUARTER => 'Quarter',
+            self::FUEL_LEVEL_HALF => 'Half',
+            self::FUEL_LEVEL_THREE_QUARTER => 'Three Quarter',
+            self::FUEL_LEVEL_FULL => 'Full',
+            default => 'Unknown',
+        };
+    }
+    public function getFuelLavelStartColorAttribute()
+    {
+        return match ((int)$this->fuel_level_start) {
+            self::FUEL_LEVEL_EMPTY => 'badge-danger',
+            self::FUEL_LEVEL_QUARTER => 'badge-warning',
+            self::FUEL_LEVEL_HALF => 'badge-info',
+            self::FUEL_LEVEL_THREE_QUARTER => 'badge-primary',
+            self::FUEL_LEVEL_FULL => 'badge-success',
+            default => 'badge-secondary',
+        };
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

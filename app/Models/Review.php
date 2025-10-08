@@ -14,42 +14,10 @@ class Review extends BaseModel
     const STATUS_FLAGGED   = 2;
     const STATUS_REMOVED   = 3;
 
-
-
-
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            'review_status_label',
-            'review_status_color',
-        ]);
-    }
-
     /* ================================================================
      * *** ATTRIBUTES ***
      ================================================================ */
-    public function getReviewStatusLabelAttribute()
-    {
-        return match ($this->review_status) {
-            self::STATUS_PENDING => 'Pending',
-            self::STATUS_PUBLISHED => 'Published',
-            self::STATUS_FLAGGED => 'Flagged',
-            self::STATUS_REMOVED => 'Removed',
-            default => 'Unknown',
-        };
-    }
-    public function getReviewStatusColorAttribute()
-    {
-        return match ($this->review_status) {
-            self::STATUS_PENDING => 'badge-warning',
-            self::STATUS_PUBLISHED => 'badge-success',
-            self::STATUS_FLAGGED => 'badge-danger',
-            self::STATUS_REMOVED => 'badge-danger',
-            default => 'badge-warning',
-        };
-    }
+
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -71,6 +39,17 @@ class Review extends BaseModel
 
 
 
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->appends = array_merge(parent::getAppends(), [
+            'review_status_label',
+            'review_status_color',
+        ]);
+    }
+
+    
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
@@ -112,7 +91,26 @@ class Review extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+    public function getReviewStatusLabelAttribute()
+    {
+        return match ($this->review_status) {
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PUBLISHED => 'Published',
+            self::STATUS_FLAGGED => 'Flagged',
+            self::STATUS_REMOVED => 'Removed',
+            default => 'Unknown',
+        };
+    }
+    public function getReviewStatusColorAttribute()
+    {
+        return match ((int)$this->review_status) {
+            self::STATUS_PENDING => 'badge-warning',
+            self::STATUS_PUBLISHED => 'badge-success',
+            self::STATUS_FLAGGED => 'badge-danger',
+            self::STATUS_REMOVED => 'badge-danger',
+            default => 'badge-warning',
+        };
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***
