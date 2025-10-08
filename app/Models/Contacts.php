@@ -18,6 +18,7 @@ class Contacts extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'first_name',
         'last_name',
         'email',

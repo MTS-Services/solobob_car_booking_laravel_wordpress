@@ -70,32 +70,7 @@ class Booking extends BaseModel
 
         ]);
     }
-    public function getBookingStatusLabelAttribute()
-    {
-        return match ($this->attributes['booking_status']) {
-            self::BOOKING_STATUS_PENDING => 'Pending',
-            self::BOOKING_STATUS_ACCEPTED => 'Accepted',
-            self::BOOKING_STATUS_DEPOSITED => 'Deposited',
-            self::BOOKING_STATUS_DELIVERED => 'Delivered',
-            self::BOOKING_STATUS_RETURNED => 'Returned',
-            self::BOOKING_STATUS_CANCELLED => 'Cancelled',
-            self::BOOKING_STATUS_REJECTED => 'Rejected',
-            default => 'Unknown',
-        };
-    }
-    public function getBookingStatusColorAttribute()
-    {
-        return match ($this->attributes['booking_status']) {
-            self::BOOKING_STATUS_PENDING => 'badge-secondary',
-            self::BOOKING_STATUS_ACCEPTED => 'badge-info',
-            self::BOOKING_STATUS_DEPOSITED => 'badge-info',
-            self::BOOKING_STATUS_DELIVERED => 'badge-success',
-            self::BOOKING_STATUS_RETURNED => 'badge-success',
-            self::BOOKING_STATUS_CANCELLED => 'badge-danger',
-            self::BOOKING_STATUS_REJECTED => 'badge-danger',
-            default => 'badge-secondary',
-        };
-    }
+
 
     /* ================================================================
      * *** RELATIONS ***
@@ -104,28 +79,44 @@ class Booking extends BaseModel
     // Relations
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function pickupLocation()
     {
-        return $this->belongsTo(VehicleLocation::class, 'pickup_location_id');
+        return $this->belongsTo(VehicleLocation::class, 'pickup_location_id', 'id');
     }
 
 
     public function auditor()
     {
-        return $this->belongsTo(User::class, 'audit_by');
+        return $this->belongsTo(User::class, 'audit_by', 'id');
     }
 
     public function timeline()
     {
-        return $this->hasOne(BookingStatusTimeline::class, 'booking_id', 'id');
+        return $this->hasMany(BookingStatusTimeline::class, 'booking_id', 'id');
+    }
+    public function rentalCheckin()
+    {
+        return $this->hasMany(RentalCheckin::class, 'booking_id', 'id');
+    }
+    public function rentalCheckout()
+    {
+        return $this->hasMany(Rentalcheckout::class, 'booking_id', 'id');
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'booking_id', 'id');
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'booking_id', 'id');
     }
 
 
@@ -201,7 +192,38 @@ class Booking extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+
+
+    public function getBookingStatusLabelAttribute()
+    {
+        return match ($this->attributes['booking_status']) {
+            self::BOOKING_STATUS_PENDING => 'Pending',
+            self::BOOKING_STATUS_ACCEPTED => 'Accepted',
+            self::BOOKING_STATUS_DEPOSITED => 'Deposited',
+            self::BOOKING_STATUS_DELIVERED => 'Delivered',
+            self::BOOKING_STATUS_RETURNED => 'Returned',
+            self::BOOKING_STATUS_CANCELLED => 'Cancelled',
+            self::BOOKING_STATUS_REJECTED => 'Rejected',
+            default => 'Unknown',
+        };
+    }
+    public function getBookingStatusColorAttribute()
+    {
+        return match ((int)$this->booking_status) {
+            self::BOOKING_STATUS_PENDING => 'badge-secondary',
+            self::BOOKING_STATUS_ACCEPTED => 'badge-info',
+            self::BOOKING_STATUS_DEPOSITED => 'badge-info',
+            self::BOOKING_STATUS_DELIVERED => 'badge-success',
+            self::BOOKING_STATUS_RETURNED => 'badge-success',
+            self::BOOKING_STATUS_CANCELLED => 'badge-danger',
+            self::BOOKING_STATUS_REJECTED => 'badge-danger',
+            default => 'badge-secondary',
+        };
+    }
+
+
+
+
     public function humanReadableDateTime($row_date)
     {
         return Carbon::parse($row_date)->format('d M, Y h:i A');
