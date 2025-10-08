@@ -71,8 +71,8 @@
                         <a href="#"
                             class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-tl-xl rounded-tr-xl">
                             {{ __('Profile') }}</a>
-                        <a href="#"
-                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a>
+                        {{-- <a href="#"
+                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a> --}}
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"
