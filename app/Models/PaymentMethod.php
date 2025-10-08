@@ -19,37 +19,6 @@ class PaymentMethod extends BaseModel
     public const METHOD_TYPE_BANK_ACCOUNT = 4;
 
 
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), [
-            'method_type_label',
-            'method_type_color',
-        ]);
-    }
-
-    public function getMethodTypeLabelAttribute()
-    {
-        return match ($this->method_type) {
-            self::METHOD_TYPE_CREDIT_CARD => 'Credit Card',
-            self::METHOD_TYPE_DEBIT_CARD => 'Debit Card',
-            self::METHOD_TYPE_PAYPAL => 'PayPal',
-            self::METHOD_TYPE_BANK_ACCOUNT => 'Bank Account',
-            default => 'Unknown',
-        };
-    }
-
-    public function getMethodTypeColorAttribute()
-    {
-        return match ($this->method_type) {
-            self::METHOD_TYPE_CREDIT_CARD => 'badge-info',
-            self::METHOD_TYPE_DEBIT_CARD => 'badge-info',
-            self::METHOD_TYPE_PAYPAL => 'badge-info',
-            self::METHOD_TYPE_BANK_ACCOUNT => 'badge-info',
-            default => 'badge-info',
-        };
-    }
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
@@ -83,6 +52,15 @@ class PaymentMethod extends BaseModel
     }
 
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->appends = array_merge(parent::getAppends(), [
+            'method_type_label',
+            'method_type_color',
+        ]);
+    }
+
 
     /* ================================================================
      * *** RELATIONS ***
@@ -111,26 +89,50 @@ class PaymentMethod extends BaseModel
     {
         return $query->where('user_id', user()->id);
     }
-    public function scopeCretditCard($query){
+    public function scopeCretditCard($query)
+    {
         return $query->where('method_type', self::METHOD_TYPE_CREDIT_CARD);
     }
-    public function scopeDebitCard($query){
+    public function scopeDebitCard($query)
+    {
         return $query->where('method_type', self::METHOD_TYPE_DEBIT_CARD);
     }
-    public function scopePaypal($query){
+    public function scopePaypal($query)
+    {
         return $query->where('method_type', self::METHOD_TYPE_PAYPAL);
     }
-    public function scopeBankAccount($query){
+    public function scopeBankAccount($query)
+    {
         return $query->where('method_type', self::METHOD_TYPE_BANK_ACCOUNT);
     }
-    
+
     // METHOD_TYPE_CREDIT_CARD
 
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+    public function getMethodTypeLabelAttribute()
+    {
+        return match ($this->method_type) {
+            self::METHOD_TYPE_CREDIT_CARD => 'Credit Card',
+            self::METHOD_TYPE_DEBIT_CARD => 'Debit Card',
+            self::METHOD_TYPE_PAYPAL => 'PayPal',
+            self::METHOD_TYPE_BANK_ACCOUNT => 'Bank Account',
+            default => 'Unknown',
+        };
+    }
+
+    public function getMethodTypeColorAttribute()
+    {
+        return match ((int)$this->method_type) {
+            self::METHOD_TYPE_CREDIT_CARD => 'badge-info',
+            self::METHOD_TYPE_DEBIT_CARD => 'badge-info',
+            self::METHOD_TYPE_PAYPAL => 'badge-info',
+            self::METHOD_TYPE_BANK_ACCOUNT => 'badge-info',
+            default => 'badge-info',
+        };
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***
