@@ -265,10 +265,47 @@ class User extends Component
             ->with(['createdBy', 'updatedBy'])
             ->latest()
             ->paginate(10);
+        $columns = [
+            ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+            ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'width' => '10%',
+                'format' => function ($admin) {
+                    return '<span class="badge badge-soft ' . $admin->status_color . '">' . ucfirst($admin->status_label) . '</span>';
+                }
+            ],
+            [
+                'key' => 'created_at',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($admin) {
+                    return $admin->created_at_formatted;
+                }
+            ],
 
+            [
+                'key' => 'created_by',
+                'label' => 'Created',
+                'width' => '15%',
+                'format' => function ($admin) {
+                    return $admin->createdBy?->name ?? 'System';
+                }
+            ]
+        ];
+
+        $actions = [
+            ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
+            ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openForceDeleteModal'],
+            
+        ];
         return view('livewire.backend.admin.user-management.user', [
-            'users' => $users,
+             'items' => $users,
             'statuses' => ModelsUser::getStatus(),
+            'columns' => $columns,
+            'actions' => $actions,
         ]);
     }
 }

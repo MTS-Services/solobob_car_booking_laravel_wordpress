@@ -43,7 +43,7 @@
         </div>
         {{-- Table Section --}}
        <x-backend.table :columns="$columns" :data="$vehicles" :actions="$actions" search-property="search"
-            per-page-property="perPage" empty-message="No admins found." />
+            per-page-property="perPage" empty-message="No Vehicle found." />
     </section>
 
     {{-- Delete Confirmation Modal --}}
