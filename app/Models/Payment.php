@@ -146,8 +146,8 @@ class Payment extends BaseModel
     public function getPaymentMethodColorAttribute(): string
     {
         return match ((int)$this->payment_method) {
-            self::METHOD_STRIPE => 'badge-info',
-            self::METHOD_PAYPAL => 'badge-success',
+            self::METHOD_STRIPE => 'bg-blue-400 text-white',    // Stripe -> Blue
+            self::METHOD_PAYPAL => 'bg-green-400 text-white',
             default => 'badge-secondary',
         };
     }

@@ -86,10 +86,13 @@ class PaymentComponent extends Component
              }],
              
              ['key' => 'type', 'label' => 'Payment Type', 'width' => '20%', 'format' => function($payments){
-                return $payments->getTypeLabelAttribute();
+                return '<span class="badge badge-soft ' . $payments->type_color . '">' . ucfirst($payments->type_label) . '</span>';
              }],
              ['key' => 'status', 'label' => 'Payment Status', 'width' => '20%', 'format' => function($payments){
-                return $payments->getStatusLabelAttribute();
+                return '<span class="badge badge-soft ' . $payments->status_color . '">' . ucfirst($payments->status_label) . '</span>';
+             }],
+             ['key' => 'status', 'label' => 'Payment Method', 'width' => '20%', 'format' => function($payments){
+                return '<span class="badge badge-soft ' . $payments->payment_method_color . '">' . ucfirst($payments->payment_method_label) . '</span>';
              }],
              ['key' => 'amount', 'label' => 'Amount', 'width' => '20%', 'format' => function($payments){
                 return '$'. $payments->amount_formatted;
