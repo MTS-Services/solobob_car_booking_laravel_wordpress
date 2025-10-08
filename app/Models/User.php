@@ -114,7 +114,28 @@ class User extends Authenticatable implements MustVerifyEmail
      * *** RELATIONS ***
      ================================================================ */
 
-    public function bookings(){
+    public function rentalCheckinPerformedBy()
+    {
+        return $this->hasMany(RentalCheckin::class, 'performed_by', 'id');
+    }
+    public function rentalCheckoutPerformedBy()
+    {
+        return $this->hasMany(Rentalcheckout::class, 'performed_by', 'id');
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'id');
+    }
+    public function paymentMethoad()
+    {
+        return $this->hasMany(PaymentMethod::class, 'user_id', 'id');
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'user_id', 'id');
+    }
+    public function bookings()
+    {
         return $this->hasMany(Booking::class, 'user_id', 'id');
     }
     public function addresses()
@@ -164,7 +185,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Accessor for human-readable 'created_at' time (e.g., "3 days ago").
      */
-        public function getCreatedAtHumanAttribute(): string
+    public function getCreatedAtHumanAttribute(): string
     {
         return $this->created_at ? $this->created_at->diffForHumans() : 'Null';
     }
@@ -216,7 +237,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 

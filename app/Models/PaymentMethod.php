@@ -90,17 +90,17 @@ class PaymentMethod extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function billingAddress()
     {
-        return $this->belongsTo(Address::class, 'billing_address_id');
+        return $this->belongsTo(Address::class, 'billing_address_id', 'id');
     }
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class);
+        return $this->belongsTo(Payment::class, 'payment_id', 'id');
     }
 
     /* ================================================================

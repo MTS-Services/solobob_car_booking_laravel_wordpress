@@ -125,7 +125,23 @@ class Booking extends BaseModel
 
     public function timeline()
     {
-        return $this->hasOne(BookingStatusTimeline::class, 'booking_id', 'id');
+        return $this->hasMany(BookingStatusTimeline::class, 'booking_id', 'id');
+    }
+    public function rentalCheckin()
+    {
+        return $this->hasMany(RentalCheckin::class, 'booking_id', 'id');
+    }
+    public function rentalCheckout()
+    {
+        return $this->hasMany(Rentalcheckout::class, 'booking_id', 'id');
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'booking_id', 'id');
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'booking_id', 'id');
     }
 
 
