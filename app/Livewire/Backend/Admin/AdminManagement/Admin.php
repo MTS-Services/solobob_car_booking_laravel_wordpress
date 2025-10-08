@@ -182,18 +182,11 @@ class Admin extends Component
         $this->showForceDeleteModal = false;
     }
 
-    public function restore($id)
-    {
-        $admin = User::onlyTrashed()->findOrFail($id);
-        $admin->restore();
-
-        session()->flash('message', 'Admin restored successfully!');
-    }
 
     public function forceDelete()
     {
         if ($this->forceDeleteId) {
-            $admin = User::onlyTrashed()->findOrFail($this->forceDeleteId);
+            $admin = User::findOrFail($this->forceDeleteId);
 
             // Delete avatar if exists
             if ($admin->avatar) {
@@ -391,7 +384,8 @@ class Admin extends Component
         $actions = [
             ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
             ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
-            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openForceDeleteModal'],
+            
         ];
 
 
