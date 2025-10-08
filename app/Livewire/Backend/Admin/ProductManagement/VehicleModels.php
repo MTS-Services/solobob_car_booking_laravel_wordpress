@@ -32,6 +32,7 @@ class VehicleModels extends Component
     public $name = '';
     public $slug = '';
     public $status = VehicleModel::STATUS_ACTIVE;
+     public $perPage = 10;
 
 
 
@@ -182,7 +183,7 @@ class VehicleModels extends Component
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
         $columns = [
 
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],

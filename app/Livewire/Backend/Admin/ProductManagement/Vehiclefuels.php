@@ -32,6 +32,7 @@ class Vehiclefuels extends Component
     public $adminId;
     public $name = '';
     public $slug = '';
+     public $perPage = 10;
 
  
   
@@ -181,7 +182,7 @@ class Vehiclefuels extends Component
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
              $columns = [
 
