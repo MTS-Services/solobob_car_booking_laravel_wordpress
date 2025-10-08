@@ -39,10 +39,10 @@
              <div class="flex items-center justify-between">
                  <h2 class="text-xl font-bold text-accent">{{ __(' User List') }}</h2>
                  <div class="flex items-center gap-2">
-                     <x-button href="{{ route('admin.users.trash') }}" icon="trash-2" type='secondary' permission="user-trash" class="text-white">
+                     {{-- <x-button href="{{ route('admin.users.trash') }}" icon="trash-2" type='secondary' permission="user-trash" class="text-white">
                          {{ __('Trash') }}
 
-                     </x-button>
+                     </x-button> --}}
                      <button wire:click="openCreateModal"
                          class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -57,7 +57,7 @@
          </div>
 
          {{-- Search Section --}}
-         <div class="bg-white rounded-lg shadow-sm border border-zinc-200 text-right w-[20%] mb-6 relative">
+         {{-- <div class="bg-white rounded-lg shadow-sm border border-zinc-200 text-right w-[20%] mb-6 relative">
              <div class="relative">
                  <svg xmlns="http://www.w3.org/2000/svg"
                      class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" viewBox="0 0 24 24"
@@ -80,7 +80,7 @@
                      </button>
                  @endif
              </div>
-         </div>
+         </div> --}}
 
          {{-- Table Section --}}
          <div class="glass-card rounded-2xl">

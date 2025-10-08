@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable; // Import for Scopes
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -18,13 +19,24 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
+
+    // Role Constant
     public const ROLE_ADMIN = true;
     public const ROLE_USER = false;
+
+    // Status Constand
+
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_SUSPENDED = 2;
+    public const STATUS_INACTIVE = 3;
+
+
 
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
     protected $fillable = [
+        'sort_order',
         'name',
         'email',
         'password',
@@ -78,9 +90,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** STATUS ***
      ================================================================ */
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_SUSPENDED = 2;
-    public const STATUS_INACTIVE = 3;
+
 
     public static function getStatus(): array
     {
@@ -158,24 +168,36 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
     }
 
+
+
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
-
-    /**
-     * Scope a query to include only admin users (is_admin = true).
-     */
-    public function scopeAdmins(Builder $query): void
+    public function scopeSelf(Builder $query):Builder
     {
-        $query->where('is_admin', self::ROLE_ADMIN);
+
+        return $query->where('user_id', Auth::id());
+
     }
-
-    /**
-     * Scope a query to include only basic/non-admin users (is_admin = false).
-     */
-    public function scopeUsers(Builder $query): void
+    public function scopeAdmin(Builder $query): Builder
     {
-        $query->where('is_admin', self::ROLE_USER);
+        return $query->where('is_admin', self::ROLE_ADMIN);
+    }
+    public function scopeUser(Builder $query): Builder
+    {
+        return $query->where('is_admin', self::ROLE_USER);
+    }
+    public function scopeActive(Builder $query) : Builder
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+    public function scopeSusepended(Builder $query) : Builder
+    {
+        return $query->where('status', self::STATUS_SUSPENDED);
+    }
+    public function scopeInactive(Builder $query) : Builder
+    {
+        return $query->where('status', self::STATUS_INACTIVE);
     }
 
     /* ================================================================

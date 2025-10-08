@@ -79,8 +79,30 @@ class PaymentComponent extends Component
             ->latest()
             ->paginate(10);
 
+        $columns = [
+             ['key' => 'booking_id', 'label' => 'Booking Referece', 'width' => '20%', 'format' => function($v) {
+                $url = route('admin.om.details', $v->booking_id);
+             return "<a href='{$url}' wire:navigate>View Booking</a>";
+             }],
+             
+             ['key' => 'type', 'label' => 'Payment Type', 'width' => '20%', 'format' => function($payments){
+                return $payments->getTypeLabelAttribute();
+             }],
+             ['key' => 'status', 'label' => 'Payment Status', 'width' => '20%', 'format' => function($payments){
+                return $payments->getStatusLabelAttribute();
+             }],
+             ['key' => 'amount', 'label' => 'Amount', 'width' => '20%', 'format' => function($payments){
+                return '$'. $payments->amount_formatted;
+             }],
+        ];
+        $actions = [
+             ['key' => 'id', 'label' => 'View', 'route' => 'admin.deposit.detail'],
+        ];
+
         return view('livewire.backend.admin.payment-component', [
-            'payments' => $payments,
+            'items' => $payments,
+            'columns'=> $columns,
+            'actions'=> $actions
         ]);
     }
 }

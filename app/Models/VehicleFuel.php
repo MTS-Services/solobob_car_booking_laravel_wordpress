@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleFuel extends BaseModel
 {
@@ -18,7 +19,13 @@ class VehicleFuel extends BaseModel
      ================================================================ */
 
     protected $fillable = [
-        'name'
+        'sort_order',
+        'name',
+        'status',
+
+         'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];
@@ -40,22 +47,7 @@ class VehicleFuel extends BaseModel
         ]);
     }
 
-    public function getStatusLabelAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
-            default => 'Unknown',
-        };
-    }
-    public function getStatusColorAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',            
-            default => 'secondary',
-        };
-    }
+
 
     /* ================================================================
      * *** RELATIONS ***
@@ -67,19 +59,25 @@ class VehicleFuel extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_ACTIVE);
     }
-    public function scopeInactive($query)
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_INACTIVE);
     }
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
-
-    //
+    public function getStatusLabelAttribute(): string
+    {
+        return $this->status ? 'Active' : 'Inactive';
+    }
+    public function getStatusColorAttribute(): string
+    {
+        return $this->status ? 'badge-success' : 'badge-danger';
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

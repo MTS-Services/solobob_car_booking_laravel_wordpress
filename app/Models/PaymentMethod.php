@@ -35,7 +35,9 @@ class PaymentMethod extends BaseModel
         'expiry_month',
         'expiry_year',
         'cardholder_name',
-
+        'is_verified',
+        'transaction_id',
+        
         'created_by',
         'updated_by',
         'deleted_by',
