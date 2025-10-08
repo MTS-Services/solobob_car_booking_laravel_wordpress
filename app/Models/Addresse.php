@@ -52,6 +52,10 @@ class Addresse extends BaseModel
     {
         return $this->belongsTo(User::class);
     }
+    public function paymentMethoad()
+    {
+        return $this->hasMany(PaymentMethod::class, 'id', 'billing_address_id');
+    }
 
     /* ================================================================
      * *** SCOPES ***

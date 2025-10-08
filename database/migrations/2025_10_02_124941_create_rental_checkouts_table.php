@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rentalcheckouts', function (Blueprint $table) {
+        Schema::create('rental_checkouts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sort_order')->default(0);
             
@@ -25,17 +25,16 @@ return new class extends Migration
                 ->onDelete('cascade')->onUpdate('cascade');
 
             // Checkout details
-            $table->timestamp('checkout_datetime')->nullable();
-            $table->integer('mileage_end')->nullable();
+            $table->timestamp('checkout_datetime');
+            $table->integer('mileage_end');
             $table->tinyInteger('fuel_level_end')
-                ->comment("0 = empty, 1 = quarter, 2 = half, 3 = three_quarter, 4 = full")
-                ->nullable();
-            $table->text('vehicle_condition_notes')->nullable();
-            $table->json('damage_photos')->nullable();
+                ->comment("1 = empty, 2 = quarter, 3 = half, 4 = three_quarter, 5 = full")->default(1);
+            $table->text('vehicle_condition_notes');
+            $table->json('damage_photos');
             $table->decimal('additional_charges', 10, 2)->default(0);
-            $table->text('additional_charges_reason')->nullable();
-            $table->string('checkout_signature_url', 500)->nullable();
-            $table->unsignedBigInteger('performed_by')->nullable();
+            $table->text('additional_charges_reason');
+            $table->string('checkout_signature_url', 500);
+            $table->unsignedBigInteger('performed_by');
 
             // Foreign Keys
             $table->foreign('performed_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

@@ -26,8 +26,8 @@ return new class extends Migration
 
             // Review fields
             $table->decimal('rating', 2, 1)->check('rating >= 1.0 and rating <= 5.0');
-            $table->string('title', 255)->nullable();
-            $table->text('comment')->nullable();
+            $table->string('title', 255);
+            $table->text('comment');
 
             // Review status
             $table->tinyInteger('review_status')->default(Review::STATUS_PENDING);
@@ -37,16 +37,12 @@ return new class extends Migration
             $table->softDeletes();
 
             // Admin audit trail
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
+            $this->addAdminAuditColumns($table);
+
 
             // Foreign keys
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

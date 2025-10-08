@@ -32,7 +32,7 @@ return new class extends Migration
                 ->default(Payment::STATUS_PENDING);
 
             $table->decimal('amount', 15, 2);
-            $table->text('note')->nullable();
+            $table->text('note');
 
             // Foreign keys
             $table->foreign('booking_id')

@@ -30,6 +30,7 @@ class BookingSeeder extends Seeder
         foreach (range(1, 20) as $i) {
             $user = $users->random();
             $vehicle = $vehicles->random();
+            
             $pickup = $locations->isNotEmpty() ? $locations->random() : null;
 
             $pickupDate = Carbon::now()->addDays(rand(1, 10));

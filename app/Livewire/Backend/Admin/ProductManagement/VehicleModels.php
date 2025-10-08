@@ -31,6 +31,7 @@ class VehicleModels extends Component
     public $adminId;
     public $name = '';
     public $slug = '';
+    public $status = VehicleModel::STATUS_ACTIVE;
 
 
 
@@ -46,9 +47,11 @@ class VehicleModels extends Component
     {
         $this->reset([
             'name',
+            'status'
 
         ]);
 
+        $this->status = VehicleModel::STATUS_ACTIVE;
         $this->resetValidation();
     }
 
@@ -79,6 +82,7 @@ class VehicleModels extends Component
 
         $this->adminId = $admin->id;
         $this->name = $admin->name;
+        $this->status = $admin->status ?? VehicleModel::STATUS_ACTIVE;
         $this->editMode = true;
         $this->showModal = true;
     }
@@ -182,6 +186,14 @@ class VehicleModels extends Component
         $columns = [
 
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'width' => '10%',
+                'format' => function ($vehicleModel) {
+                    return '<span class="badge badge-soft ' . $vehicleModel->status_color . '">' . ucfirst($vehicleModel->status_label) . '</span>';
+                }
+            ],
 
             [
                 'key' => 'created_at',

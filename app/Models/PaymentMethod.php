@@ -17,11 +17,14 @@ class PaymentMethod extends BaseModel
     public const METHOD_TYPE_DEBIT_CARD  = 2;
     public const METHOD_TYPE_PAYPAL      = 3;
     public const METHOD_TYPE_BANK_ACCOUNT = 4;
+
+
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'payment_id',
         'user_id',
         'billing_address_id',
@@ -48,6 +51,7 @@ class PaymentMethod extends BaseModel
         return [];
     }
 
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -56,6 +60,57 @@ class PaymentMethod extends BaseModel
             'method_type_color',
         ]);
     }
+
+
+    /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function billingAddress()
+    {
+        return $this->belongsTo(Address::class, 'billing_address_id', 'id');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'payment_id', 'id');
+    }
+
+    /* ================================================================
+     * *** SCOPES ***
+     ================================================================ */
+
+    public function scopeSelf($query)
+    {
+        return $query->where('user_id', user()->id);
+    }
+    public function scopeCretditCard($query)
+    {
+        return $query->where('method_type', self::METHOD_TYPE_CREDIT_CARD);
+    }
+    public function scopeDebitCard($query)
+    {
+        return $query->where('method_type', self::METHOD_TYPE_DEBIT_CARD);
+    }
+    public function scopePaypal($query)
+    {
+        return $query->where('method_type', self::METHOD_TYPE_PAYPAL);
+    }
+    public function scopeBankAccount($query)
+    {
+        return $query->where('method_type', self::METHOD_TYPE_BANK_ACCOUNT);
+    }
+
+    // METHOD_TYPE_CREDIT_CARD
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
 
     public function getMethodTypeLabelAttribute()
     {
@@ -70,7 +125,7 @@ class PaymentMethod extends BaseModel
 
     public function getMethodTypeColorAttribute()
     {
-        return match ($this->method_type) {
+        return match ((int)$this->method_type) {
             self::METHOD_TYPE_CREDIT_CARD => 'badge-info',
             self::METHOD_TYPE_DEBIT_CARD => 'badge-info',
             self::METHOD_TYPE_PAYPAL => 'badge-info',
@@ -78,40 +133,6 @@ class PaymentMethod extends BaseModel
             default => 'badge-info',
         };
     }
-
-    /* ================================================================
-     * *** RELATIONS ***
-     ================================================================ */
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function billingAddress()
-    {
-        return $this->belongsTo(Address::class, 'billing_address_id');
-    }
-
-    public function payment()
-    {
-        return $this->belongsTo(Payment::class);
-    }
-
-    /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-    public function scopeSelf($query)
-    {
-        return $query->where('user_id', user()->id);
-    }
-
-    /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-    //
 
     /* ================================================================
      * *** UTILITY METHODS ***

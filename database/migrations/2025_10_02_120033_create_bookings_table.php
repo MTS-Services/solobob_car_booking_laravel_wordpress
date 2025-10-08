@@ -23,8 +23,8 @@ return new class extends Migration
             // Relationships
             $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('pickup_location_id')->nullable();
-            $table->unsignedBigInteger('audit_by')->nullable();
+            $table->unsignedBigInteger('pickup_location_id');
+            $table->unsignedBigInteger('audit_by');
 
             // Booking details
             $table->string('booking_reference', 50)->unique();
@@ -32,9 +32,9 @@ return new class extends Migration
             $table->dateTime('return_date');
             $table->dateTime('booking_date');
 
-            $table->string('return_location')->nullable();
-            $table->text('special_requests')->nullable();
-            $table->text('reason')->nullable();
+            $table->string('return_location');
+            $table->text('special_requests');
+            $table->text('reason');
 
             // Financials
             $table->decimal('subtotal', 10, 2);
