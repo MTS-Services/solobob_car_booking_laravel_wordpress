@@ -15,7 +15,8 @@
         "livewire/flux": "^2.1.1",
         "livewire/volt": "^1.7.0",
         "openspout/openspout": "^4.28",
-        "power-components/livewire-powergrid": "^6.6"
+        "power-components/livewire-powergrid": "^6.6",
+        "srmklive/paypal": "^3.0"
     },
     "require-dev": {
         "composer/composer": "^2.8",
