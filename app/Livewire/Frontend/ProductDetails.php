@@ -19,6 +19,13 @@ use Livewire\Attributes\Layout;
 class ProductDetails extends Component
 {
     public $vehicle;
+    
+    // Properties for selected vehicle in modal
+    public $selectedVehicleTitle = '';
+    public $selectedVehicleYear = '';
+    
+    // Contact form
+    public ContactForm $form;
 
     public function mount($slug)
     {
@@ -27,6 +34,10 @@ class ProductDetails extends Component
             ->with(['category', 'owner', 'images'])
             ->where('status', Vehicle::STATUS_AVAILABLE)
             ->firstOrFail();
+            
+        // Set the selected vehicle details for the modal
+        $this->selectedVehicleTitle = $this->vehicle->title;
+        $this->selectedVehicleYear = $this->vehicle->year;
     }
 
     public function back()
@@ -34,16 +45,18 @@ class ProductDetails extends Component
         return $this->redirect(route('products'), navigate: true);
     }
 
-    // Contact message
-
-    public ContactForm $form;
-
     public function contactSubmit()
     {
-
         $this->validate();
 
-        Contacts::create($this->form->all());
+        // Create contact with vehicle information
+        Contacts::create(array_merge(
+            $this->form->all(),
+            [
+                'vehicle_info' => $this->selectedVehicleYear . ' ' . $this->selectedVehicleTitle,
+                'vehicle_id' => $this->vehicle->id
+            ]
+        ));
 
         session()->flash('submit_message', 'Message has been sent successfully');
 
