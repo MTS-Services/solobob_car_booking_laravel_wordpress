@@ -11,6 +11,8 @@ class Category extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
 
     /* ================================================================
@@ -43,46 +45,7 @@ class Category extends BaseModel
         ]);
     }
 
-    /* ================================================================
-     * *** Status ***
-     ================================================================ */
-
-    //
-
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_INACTIVE = 0;
-
-
-    public static function getStatus(): array
-    {
-        return [
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',
-        ];
-    }
-    public function getStatusLabelAttribute(): string
-    {
-        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
-    }
-
-    // public function getStatusLabelAttribute(): string
-    // {
-    //     return self::getStatus()[$this->status] ?? 'Unknown';
-    // }
-
-
-    public function getIsCategoryLabelAttribute(): string
-    {
-        return $this->is_admin ? 'Administrator' : 'User';
-    }
-    public function getStatusColorAttribute(): string
-    {
-        return match ((int) $this->status) {
-            self::STATUS_ACTIVE => 'badge-success',
-            self::STATUS_INACTIVE => 'badge-warning',
-            default => 'badge-secondary',
-        };
-    }
+ 
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
@@ -104,8 +67,30 @@ class Category extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
 
+    public static function getStatus(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',
+        ];
+    } 
+    public static function getColors(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-error',
+        ];
+    }
+    public function getStatusLabelAttribute(): string
+    {
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
+    }
+
+    public function getStatusColorAttribute(): string
+    {
+        return isset($this->status) ? self::getColors()[$this->status] : 'badge-secondary';
+    }
     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */

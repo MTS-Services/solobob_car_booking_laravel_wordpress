@@ -24,6 +24,70 @@ class VehicleFeature extends BaseModel
             'feture_category_color',
         ]);
     }
+
+    /* ================================================================
+     * *** PROPERTIES ***
+     ================================================================ */
+
+    protected $fillable = [
+        'sort_order',
+        'name',
+        'slug',
+        'icon',
+        'feature_category',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+    protected $hidden = [];
+
+    /**
+     * Define the attribute casts for the model.
+     */
+    protected function casts(): array
+    {
+        return [];
+    }
+
+
+
+    /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
+
+    //
+
+    /* ================================================================
+     * *** SCOPES ***
+     ================================================================ */
+
+    public function scopeCategorySafety(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_SAFETY);
+    }
+
+    public function scopeCategoryComfort(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_COMFORT);
+    }
+
+    public function scopeCategoryEntertainment(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_ENTERTAINMENT);
+    }
+
+    public function scopeCategoryOther(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_OTHER);
+    }
+
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
+
     public function getFetureCategoryLabelAttribute()
     {
         return match ($this->feature_category) {
@@ -45,77 +109,8 @@ class VehicleFeature extends BaseModel
         };
     }
 
-    /* ================================================================
-     * *** PROPERTIES ***
-     ================================================================ */
-
-    protected $fillable = [
-        'sort_order',
-       'name',
-       'slug',
-       'icon',
-       'feature_category',
-
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ];
-
-    protected $hidden = [
-        
-    ];
-
-    /**
-     * Define the attribute casts for the model.
-     */
-    protected function casts(): array
-    {
-        return [
-            
-        ];
-    }
-
-    
-
-     /* ================================================================
-     * *** RELATIONS ***
-     ================================================================ */
-
-    //
 
     /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-    public function scopeCategorySafety(Builder $query):Builder 
-    {
-        return $query->where('feature_category', self::FEATURE_CATEGORY_SAFETY);
-    }
-
-    public function scopeCategoryComfort(Builder $query):Builder 
-    {
-        return $query->where('feature_category', self::FEATURE_CATEGORY_COMFORT);
-    }
-    
-    public function scopeCategoryEntertainment(Builder $query):Builder 
-    {
-        return $query->where('feature_category', self::FEATURE_CATEGORY_ENTERTAINMENT);
-    }
-
-    public function scopeCategoryOther(Builder $query):Builder 
-    {
-        return $query->where('feature_category', self::FEATURE_CATEGORY_OTHER);
-    }
-
-
-      /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-     //
-
-     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
-
 }

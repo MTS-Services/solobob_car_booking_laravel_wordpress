@@ -47,22 +47,7 @@ class VehicleFuel extends BaseModel
         ]);
     }
 
-    public function getStatusLabelAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
-            default => 'Unknown',
-        };
-    }
-    public function getStatusColorAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',            
-            default => 'secondary',
-        };
-    }
+
 
     /* ================================================================
      * *** RELATIONS ***
@@ -85,8 +70,14 @@ class VehicleFuel extends BaseModel
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
-
-    //
+    public function getStatusLabelAttribute(): string
+    {
+        return $this->status ? 'Active' : 'Inactive';
+    }
+    public function getStatusColorAttribute(): string
+    {
+        return $this->status ? 'badge-success' : 'badge-danger';
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

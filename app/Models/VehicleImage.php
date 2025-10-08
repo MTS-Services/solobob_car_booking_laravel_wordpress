@@ -44,7 +44,10 @@ class VehicleImage extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'primary_label',
+            'primary_color',
+        ]);
     }
 
     /* ================================================================
@@ -71,7 +74,14 @@ class VehicleImage extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+    public function getPrimaryLabelAttribute(): string
+    {
+        return $this->is_primary ? 'Yes' : 'No';
+    }
+    public function getPrimaryColorAttribute(): string
+    {
+        return $this->is_primary ? 'badge-success' : 'badge-danger';
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

@@ -47,22 +47,7 @@ class VehicleModel extends BaseModel
         ]);
     }
 
-    public function getStatusLabelAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
-            default => 'Unknown',
-        };
-    }
-    public function getStatusColorAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',            
-            default => 'secondary',
-        };
-    }
+
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
@@ -86,8 +71,22 @@ class VehicleModel extends BaseModel
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
-
-    //
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',            
+            default => 'Unknown',
+        };
+    }
+    public function getStatusColorAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-warning',            
+            default => 'secondary',
+        };
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

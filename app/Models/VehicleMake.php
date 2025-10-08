@@ -23,7 +23,7 @@ class VehicleMake extends BaseModel
         'name',
         'status',
 
-         'created_by',
+        'created_by',
         'updated_by',
         'deleted_by',
     ];
@@ -41,7 +41,10 @@ class VehicleMake extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'status_label',
+            'status_color',
+        ]);
     }
 
     /* ================================================================
@@ -73,7 +76,14 @@ class VehicleMake extends BaseModel
      ================================================================ */
 
     //
-
+    public function getStatusLabelAttribute(): string
+    {
+        return $this->status == self::ACTIVE ? 'Active' : 'Inactive';
+    }
+    public function getStatusColorAttribute(): string
+    {
+        return $this->status == self::ACTIVE ? 'badge-success' : 'badge-warning';
+    }
     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */

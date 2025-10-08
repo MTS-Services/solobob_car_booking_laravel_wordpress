@@ -20,52 +20,7 @@ class Vehicle extends BaseModel
     public const TRANSMISSION_MANUAL = 1;
 
 
-    public const STATUS = [
-        self::STATUS_AVAILABLE => 'Abailable',
-        self::STATUS_RENTED => 'Rented',
-        self::STATUS_MAINTENANCE => 'Under Maintenance',
-        self::STATUS_INACTIVE => 'Inactive',
-    ];
 
-    public static function getTransmission(): array
-    {
-        return [
-            self::TRANSMISSION_AUTOMATIC => 'Automatic',
-            self::TRANSMISSION_MANUAL => 'Manual',
-        ];
-    }
-
-    public function getTransmissionLabelAttribute()
-    {
-        return isset($this->transmission_type) ? self::getTransmission()[$this->transmission_type] : 'Unknown';
-    }
-
-    public static function getStatus(): array
-    {
-        return [
-            self::STATUS_AVAILABLE => 'Abailable',
-            self::STATUS_INACTIVE => 'Inactive',
-            self::STATUS_RENTED => 'Rented',
-            self::STATUS_MAINTENANCE => 'Under Maintenance',
-        ];
-    }
-    public function getStatusLabelAttribute()
-    {
-        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
-    }
-
-    public function getStatusColorAttribute()
-    {
-        return match ((int) $this->status) {
-            self::STATUS_AVAILABLE => 'badge-success',
-            self::STATUS_RENTED => 'badge-warning',
-            self::STATUS_MAINTENANCE => 'badge-info',
-            self::STATUS_INACTIVE => 'badge-danger',
-            default => 'badge-secondary',
-        };
-    }
-
- 
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -94,7 +49,7 @@ class Vehicle extends BaseModel
         'delivery_available',
         'delivery_fee',
         'status',
-        
+
         'created_by',
         'updated_by',
         'deleted_by',
@@ -117,7 +72,10 @@ class Vehicle extends BaseModel
         $this->appends = array_merge(parent::getAppends(), [
             'status_label',
             'status_color',
-            'transmission_label',
+            'transmission_label',   
+            'transmission_color',
+            'instant_booking_label',
+            'instant_booking_color',
         ]);
     }
 
@@ -164,42 +122,42 @@ class Vehicle extends BaseModel
 
     // Scope Availalbe
 
-    public function scopeAvailable(Builder $query): Builder 
+    public function scopeAvailable(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_AVAILABLE);
     }
-    
+
     // Scope Rented
 
-    public function scopeRented(Builder $query): Builder 
+    public function scopeRented(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_RENTED);
     }
 
     // Scope Maintenance
 
-    public function scopeMaintenance(Builder $query): Builder 
+    public function scopeMaintenance(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_MAINTENANCE);
     }
 
     // Scope Inactive
 
-    public function scopeInactive(Builder $query): Builder 
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_INACTIVE);
     }
 
     // Scope Automatic
 
-    public function scopeAutomatice(Builder $query): Builder 
+    public function scopeAutomatice(Builder $query): Builder
     {
         return $query->where('transmission_type', self::TRANSMISSION_AUTOMATIC);
     }
 
     // Scope Manuall
 
-    public function scopeManual(Builder $query): Builder 
+    public function scopeManual(Builder $query): Builder
     {
         return $query->where('transmission_type', self::TRANSMISSION_MANUAL);
     }
@@ -211,7 +169,64 @@ class Vehicle extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+
+    public static function getTransmission(): array
+    {
+        return [
+            self::TRANSMISSION_AUTOMATIC => 'Automatic',
+            self::TRANSMISSION_MANUAL => 'Manual',
+        ];
+    }
+    public static function getTransmissionColor(): array
+    {
+        return [
+            self::TRANSMISSION_AUTOMATIC => 'badge-primary',
+            self::TRANSMISSION_MANUAL => 'badge-info',
+        ];
+    }
+
+    public function getTransmissionLabelAttribute()
+    {
+        return isset($this->transmission_type) ? self::getTransmission()[$this->transmission_type] : 'Unknown';
+    }
+    public function getTransmissionColorAttribute()
+    {
+        return isset($this->transmission_type) ? self::getTransmissionColor()[$this->transmission_type] : 'Unknown';
+    }
+ 
+    public static function getStatus(): array
+    {
+        return [
+            self::STATUS_AVAILABLE => 'Abailable',
+            self::STATUS_INACTIVE => 'Inactive',
+            self::STATUS_RENTED => 'Rented',
+            self::STATUS_MAINTENANCE => 'Under Maintenance',
+        ];
+    }
+    public function getStatusLabelAttribute()
+    {
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match ((int) $this->status) {
+            self::STATUS_AVAILABLE => 'badge-success',
+            self::STATUS_RENTED => 'badge-warning',
+            self::STATUS_MAINTENANCE => 'badge-info',
+            self::STATUS_INACTIVE => 'badge-danger',
+            default => 'badge-secondary',
+        };
+    }
+    
+    public function getInstantBookingLabelAttribute()
+    {
+        return $this->instant_booking ? 'Yes' : 'No';
+    }
+    public function getInstantBookingColorAttribute()
+    {
+        return $this->instant_booking ? 'badge-success' : 'badge-danger';
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

@@ -70,32 +70,6 @@ class Booking extends BaseModel
 
         ]);
     }
-    public function getBookingStatusLabelAttribute()
-    {
-        return match ($this->attributes['booking_status']) {
-            self::BOOKING_STATUS_PENDING => 'Pending',
-            self::BOOKING_STATUS_ACCEPTED => 'Accepted',
-            self::BOOKING_STATUS_DEPOSITED => 'Deposited',
-            self::BOOKING_STATUS_DELIVERED => 'Delivered',
-            self::BOOKING_STATUS_RETURNED => 'Returned',
-            self::BOOKING_STATUS_CANCELLED => 'Cancelled',
-            self::BOOKING_STATUS_REJECTED => 'Rejected',
-            default => 'Unknown',
-        };
-    }
-    public function getBookingStatusColorAttribute()
-    {
-        return match ($this->attributes['booking_status']) {
-            self::BOOKING_STATUS_PENDING => 'badge-secondary',
-            self::BOOKING_STATUS_ACCEPTED => 'badge-info',
-            self::BOOKING_STATUS_DEPOSITED => 'badge-info',
-            self::BOOKING_STATUS_DELIVERED => 'badge-success',
-            self::BOOKING_STATUS_RETURNED => 'badge-success',
-            self::BOOKING_STATUS_CANCELLED => 'badge-danger',
-            self::BOOKING_STATUS_REJECTED => 'badge-danger',
-            default => 'badge-secondary',
-        };
-    }
 
     /* ================================================================
      * *** RELATIONS ***
@@ -127,33 +101,6 @@ class Booking extends BaseModel
     {
         return $this->hasOne(BookingStatusTimeline::class, 'booking_id', 'id');
     }
-
-
-    /* ================================================================
-     * *** Booking Status ***
-     ================================================================ */
-    //
-    public static function getBookingStatus(): array
-    {
-        return [
-            self::BOOKING_STATUS_PENDING => 'Pending',
-            self::BOOKING_STATUS_ACCEPTED => 'Accepeted',
-            self::BOOKING_STATUS_DEPOSITED => 'Deposited',
-            self::BOOKING_STATUS_DELIVERED => 'Delevered',
-            self::BOOKING_STATUS_RETURNED => 'Returned',
-            self::BOOKING_STATUS_CANCELLED => 'Cancelled',
-            self::BOOKING_STATUS_REJECTED => 'Rejected',
-        ];
-    }
-
-    public function getStatusLabelAttribute(): string
-    {
-        return self::getBookingStatus()[$this->booking_status] ?? 'Undefined';
-    }
-
-
-
-
 
     /* ================================================================
      * *** SCOPES ***
@@ -201,7 +148,37 @@ class Booking extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+
+    public function getBookingStatusLabelAttribute()
+    {
+        return match ($this->attributes['booking_status']) {
+            self::BOOKING_STATUS_PENDING => 'Pending',
+            self::BOOKING_STATUS_ACCEPTED => 'Accepted',
+            self::BOOKING_STATUS_DEPOSITED => 'Deposited',
+            self::BOOKING_STATUS_DELIVERED => 'Delivered',
+            self::BOOKING_STATUS_RETURNED => 'Returned',
+            self::BOOKING_STATUS_CANCELLED => 'Cancelled',
+            self::BOOKING_STATUS_REJECTED => 'Rejected',
+            default => 'Unknown',
+        };
+    }
+    public function getBookingStatusColorAttribute()
+    {
+        return match ($this->attributes['booking_status']) {
+            self::BOOKING_STATUS_PENDING => 'badge-secondary',
+            self::BOOKING_STATUS_ACCEPTED => 'badge-info',
+            self::BOOKING_STATUS_DEPOSITED => 'badge-info',
+            self::BOOKING_STATUS_DELIVERED => 'badge-success',
+            self::BOOKING_STATUS_RETURNED => 'badge-warning',
+            self::BOOKING_STATUS_CANCELLED => 'badge-warning',
+            self::BOOKING_STATUS_REJECTED => 'badge-error',
+            default => 'badge-secondary',
+        };
+    }
+
+
+    // Format date time to human readable format
+
     public function humanReadableDateTime($row_date)
     {
         return Carbon::parse($row_date)->format('d M, Y h:i A');

@@ -16,12 +16,6 @@ class Addresse extends BaseModel
 
     public const IS_DEFAULT = true;
 
-    public const TYPES = [
-        self::PERSONAL => 'personal',
-        self::RESIDENTIAL => 'residential',
-        self::PARKING => 'parking',
-    ];
-
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
@@ -49,7 +43,12 @@ class Addresse extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'default_label',
+            'default_color',
+            'address_type_lable',
+            'address_type_color',
+        ]);
     }
 
     /* ================================================================
@@ -65,59 +64,77 @@ class Addresse extends BaseModel
      ================================================================ */
 
   
-
-
-    /**
-     * This scope for is_default
-     * 
-     */
     public function scopeIsdefault(Builder $query) : Builder 
     {
         return $query->where('is_default', self::IS_DEFAULT );
     }
 
-     /**
-     * This scope for USER
-     * 
-     */
     public function scopeSelf(Builder $query) : Builder 
     {
         return $query->where('user_id', user()->id);
     }
 
-     /**
-     * This scope for Adress Personal
-     * 
-     */
     public function scopePersonal(Builder $query) : Builder 
     {
         return $query->where('address_type', self::PERSONAL);
     }
 
-  /**
-     * This scope for Adress Residential
-     * 
-     */
     public function scopeResidential(Builder $query) : Builder 
     {
         return $query->where('address_type', self::RESIDENTIAL);
     }
 
-     /**
-     * This scope for Adress PARKING
-     * 
-     */
     public function scopeParking(Builder $query) : Builder 
     {
         return $query->where('address_type', self::PARKING);
     }
 
-
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+    public function getDefaultLabelAttribute():string
+    {
+        return $this->is_default ? 'Default' : 'Not Default';
+    }   
+
+    public function getDefaultColorAttribute():string
+    {
+        return $this->is_default ? 'badge-success' : 'badge-warning';
+    }   
+
+
+
+    public static function getAddressType(): array
+    {
+        return [
+            self::PERSONAL => 'personal',
+            self::RESIDENTIAL => 'residential',
+            self::PARKING => 'parking',
+        ];
+    }
+
+    public static function getAddressColor(): array
+    {
+        return [
+            self::PERSONAL => 'badge-primary',
+            self::RESIDENTIAL => 'badge-accent',
+            self::PARKING => 'badge-neutral',
+        ];
+    }
+
+    public function getAddressTypeLableAttribute(): string
+    {
+        return self::getAddressType()[$this->address_type] ?? "Unknown";
+    }
+
+    public function getAddressTypeColorAttribute(): string
+    {
+        return self::getAddressColor()[$this->address_type] ?? "badge-warning";
+    }
+
+
+
 
     /* ================================================================
      * *** UTILITY METHODS ***

@@ -19,8 +19,18 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
+
+    // Role Constant
     public const ROLE_ADMIN = true;
     public const ROLE_USER = false;
+
+    // Status Constand
+
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_SUSPENDED = 2;
+    public const STATUS_INACTIVE = 3;
+
+
 
     /* ================================================================
      * *** PROPERTIES ***
@@ -80,9 +90,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** STATUS ***
      ================================================================ */
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_SUSPENDED = 2;
-    public const STATUS_INACTIVE = 3;
+
 
     public static function getStatus(): array
     {
@@ -141,65 +149,33 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
-    
-    /**
-     * Scope a query to include only this logged in user
-     */
     public function scopeSelf(Builder $query):Builder
     {
 
         return $query->where('user_id', Auth::id());
 
     }
-
-
-    /**
-     * Scope a query to include only admin users (is_admin = true).
-     */
     public function scopeAdmin(Builder $query): Builder
     {
         return $query->where('is_admin', self::ROLE_ADMIN);
     }
-
-    /**
-     * Scope a query to include only basic/non-admin users (is_admin = false).
-     */
     public function scopeUser(Builder $query): Builder
     {
         return $query->where('is_admin', self::ROLE_USER);
     }
-
-    //   public const STATUS_ACTIVE = 1;
-    // public const STATUS_SUSPENDED = 2;
-    // public const STATUS_INACTIVE = 3;
-
-    /**
-     * Scope a query to include only Status active
-     */
-    
     public function scopeActive(Builder $query) : Builder
     {
         return $query->where('status', self::STATUS_ACTIVE);
     }
-     /**
-     * Scope a query to include only Status Suspneded
-     */
-    
     public function scopeSusepended(Builder $query) : Builder
     {
         return $query->where('status', self::STATUS_SUSPENDED);
-    }  /**
-     * Scope a query to include only Status Inactive
-     */
-    
+    }
     public function scopeInactive(Builder $query) : Builder
     {
         return $query->where('status', self::STATUS_INACTIVE);
     }
 
-
-
-    
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
@@ -207,7 +183,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Accessor for human-readable 'created_at' time (e.g., "3 days ago").
      */
-        public function getCreatedAtHumanAttribute(): string
+    public function getCreatedAtHumanAttribute(): string
     {
         return $this->created_at ? $this->created_at->diffForHumans() : 'Null';
     }
