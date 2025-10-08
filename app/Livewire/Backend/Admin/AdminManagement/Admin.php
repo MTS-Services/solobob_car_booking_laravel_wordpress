@@ -331,7 +331,8 @@ class Admin extends Component
     public function render()
     {
         // Main admins query
-        $admins = User::admins()
+
+        $admins = User::admin()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -344,6 +345,7 @@ class Admin extends Component
             ->orderBy('name', 'asc')
             ->paginate($this->perPage);
 
+        
         $columns = [
             // ['key' => 'id', 'label' => 'ID', 'width' => '5%'],
             // [
@@ -381,9 +383,9 @@ class Admin extends Component
                 'label' => 'Created',
                 'width' => '15%',
                 'format' => function ($admin) {
-                    return $admin->createdBy?->name ?? 'System' ;
+                    return $admin->createdBy?->name ?? 'System';
                 }
-            ]                   
+            ]
         ];
 
         $actions = [
@@ -394,21 +396,21 @@ class Admin extends Component
 
 
         // Trashed admins query - always return a paginator
-        $trashedAdmins = User::onlyTrashed()
-            ->where('is_admin', true)
-            ->when($this->trashSearch, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->trashSearch . '%')
-                        ->orWhere('email', 'like', '%' . $this->trashSearch . '%');
-                });
-            })
-            ->with(['deletedBy', 'createdBy'])
-            ->latest('deleted_at')
-            ->paginate(10, ['*'], 'trashedPage');
+        // $trashedAdmins = User::onlyTrashed()
+        //     ->where('is_admin', true)
+        //     ->when($this->trashSearch, function ($query) {
+        //         $query->where(function ($q) {
+        //             $q->where('name', 'like', '%' . $this->trashSearch . '%')
+        //                 ->orWhere('email', 'like', '%' . $this->trashSearch . '%');
+        //         });
+        //     })
+        //     ->with(['deletedBy', 'createdBy'])
+        //     ->latest('deleted_at')
+        //     ->paginate(10, ['*'], 'trashedPage');
 
         return view('livewire.backend.admin.admin-management.admin', [
             'admins' => $admins,
-            'trashedAdmins' => $trashedAdmins,
+            // 'trashedAdmins' => $trashedAdmins,
             'statuses' => User::getStatus(),
             'columns' => $columns,
             'actions' => $actions,

@@ -22,8 +22,8 @@ class VehicleModel extends BaseModel
         'name',
         'sort_order',
         'status',
-        
-         'created_by',
+
+        'created_by',
         'updated_by',
         'deleted_by',
     ];
@@ -78,7 +78,7 @@ class VehicleModel extends BaseModel
     {
         return match ($this->status) {
             self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
+            self::STATUS_INACTIVE => 'Inactive',
             default => 'Unknown',
         };
     }
@@ -86,8 +86,8 @@ class VehicleModel extends BaseModel
     {
         return match ($this->status) {
             self::STATUS_ACTIVE => 'badge-success',
-            self::STATUS_INACTIVE => 'badge-warning',            
-            default => 'secondary',
+            self::STATUS_INACTIVE => 'badge-warning',
+            default => 'badge-secondary',
         };
     }
 

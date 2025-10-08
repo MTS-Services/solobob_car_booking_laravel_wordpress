@@ -15,6 +15,11 @@ class Review extends BaseModel
     const STATUS_REMOVED   = 3;
 
     /* ================================================================
+     * *** ATTRIBUTES ***
+     ================================================================ */
+
+
+    /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
@@ -26,7 +31,14 @@ class Review extends BaseModel
         'title',
         'comment',
         'review_status',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
+
+
+
 
     public function __construct(array $attributes = [])
     {
@@ -37,42 +49,19 @@ class Review extends BaseModel
         ]);
     }
 
-    /* ================================================================
-     * *** ATTRIBUTES ***
-     ================================================================ */
-    public function getReviewStatusLabelAttribute()
-    {
-        return match ($this->review_status) {
-            self::STATUS_PENDING => 'Pending',
-            self::STATUS_PUBLISHED => 'Published',
-            self::STATUS_FLAGGED => 'Flagged',
-            self::STATUS_REMOVED => 'Removed',
-            default => 'Unknown',
-        };
-    }
-    public function getReviewStatusColorAttribute()
-    {
-        return match ($this->review_status) {
-            self::STATUS_PENDING => 'warning',
-            self::STATUS_PUBLISHED => 'success',
-            self::STATUS_FLAGGED => 'danger',
-            self::STATUS_REMOVED => 'danger',
-            default => 'warning',
-        };
-    }
-
+    
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
     // Relationships
     public function booking()
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(Booking::class, 'booking_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     /* ================================================================
      * *** SCOPES ***
@@ -89,7 +78,7 @@ class Review extends BaseModel
     {
         return $query->where('review_status', self::STATUS_FLAGGED);
     }
-     public function scopePublished($query)
+    public function scopePublished($query)
     {
         return $query->where('review_status', self::STATUS_PUBLISHED);
     }
@@ -102,7 +91,26 @@ class Review extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+    public function getReviewStatusLabelAttribute()
+    {
+        return match ($this->review_status) {
+            self::STATUS_PENDING => 'Pending',
+            self::STATUS_PUBLISHED => 'Published',
+            self::STATUS_FLAGGED => 'Flagged',
+            self::STATUS_REMOVED => 'Removed',
+            default => 'Unknown',
+        };
+    }
+    public function getReviewStatusColorAttribute()
+    {
+        return match ((int)$this->review_status) {
+            self::STATUS_PENDING => 'badge-warning',
+            self::STATUS_PUBLISHED => 'badge-success',
+            self::STATUS_FLAGGED => 'badge-danger',
+            self::STATUS_REMOVED => 'badge-danger',
+            default => 'badge-warning',
+        };
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

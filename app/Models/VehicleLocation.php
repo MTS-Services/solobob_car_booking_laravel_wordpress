@@ -50,7 +50,10 @@ class VehicleLocation extends BaseModel
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
-
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'pickup_location_id', 'id');
+    }
      
 
     /* ================================================================

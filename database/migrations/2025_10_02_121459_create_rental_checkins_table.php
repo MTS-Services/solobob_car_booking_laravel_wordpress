@@ -23,18 +23,17 @@ return new class extends Migration
 
 
             // Check-in details
-            $table->timestamp('checkin_datetime')->nullable();
-            $table->integer('mileage_start')->nullable();
-            $table->tinyInteger('fuel_level_start')->nullable();
-            $table->text('vehicle_condition_notes')->nullable();
-            $table->json('damage_photos')->nullable();
-            $table->string('checkin_signature_url', 500)->nullable();
-            $table->unsignedBigInteger('performed_by')->nullable();
+            $table->timestamp('checkin_datetime');
+            $table->integer('mileage_start');
+            $table->tinyInteger('fuel_level_start');
+            $table->text('vehicle_condition_notes');
+            $table->json('damage_photos');
+            $table->string('checkin_signature_url', 500);
+            $table->unsignedBigInteger('performed_by');
 
-            $table->foreign('booking_id')
-                ->references('id')->on('bookings')
-                ->onDelete('cascade')->onUpdate('cascade');
-                
+            $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('performed_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+
             // Audit & Soft Deletes
             $table->timestamps();
             $table->softDeletes();
