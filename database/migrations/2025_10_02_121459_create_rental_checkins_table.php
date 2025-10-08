@@ -32,7 +32,7 @@ return new class extends Migration
             $table->unsignedBigInteger('performed_by');
 
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('performed_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             // Audit & Soft Deletes
             $table->timestamps();
