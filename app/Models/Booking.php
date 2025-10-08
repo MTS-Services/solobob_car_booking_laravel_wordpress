@@ -104,28 +104,44 @@ class Booking extends BaseModel
     // Relations
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function pickupLocation()
     {
-        return $this->belongsTo(VehicleLocation::class, 'pickup_location_id');
+        return $this->belongsTo(VehicleLocation::class, 'pickup_location_id', 'id');
     }
 
 
     public function auditor()
     {
-        return $this->belongsTo(User::class, 'audit_by');
+        return $this->belongsTo(User::class, 'audit_by', 'id');
     }
 
     public function timeline()
     {
-        return $this->hasOne(BookingStatusTimeline::class, 'booking_id', 'id');
+        return $this->hasMany(BookingStatusTimeline::class, 'booking_id', 'id');
+    }
+    public function rentalCheckin()
+    {
+        return $this->hasMany(RentalCheckin::class, 'booking_id', 'id');
+    }
+    public function rentalCheckout()
+    {
+        return $this->hasMany(Rentalcheckout::class, 'booking_id', 'id');
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'booking_id', 'id');
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'booking_id', 'id');
     }
 
 
