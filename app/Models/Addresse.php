@@ -67,28 +67,28 @@ class Addresse extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
-  
-    public function scopeIsdefault(Builder $query) : Builder 
+
+    public function scopeIsdefault(Builder $query): Builder
     {
-        return $query->where('is_default', self::IS_DEFAULT );
+        return $query->where('is_default', self::IS_DEFAULT);
     }
 
-    public function scopeSelf(Builder $query) : Builder 
+    public function scopeSelf(Builder $query): Builder
     {
         return $query->where('user_id', user()->id);
     }
 
-    public function scopePersonal(Builder $query) : Builder 
+    public function scopePersonal(Builder $query): Builder
     {
         return $query->where('address_type', self::PERSONAL);
     }
 
-    public function scopeResidential(Builder $query) : Builder 
+    public function scopeResidential(Builder $query): Builder
     {
         return $query->where('address_type', self::RESIDENTIAL);
     }
 
-    public function scopeParking(Builder $query) : Builder 
+    public function scopeParking(Builder $query): Builder
     {
         return $query->where('address_type', self::PARKING);
     }
@@ -97,15 +97,15 @@ class Addresse extends BaseModel
      * *** ACCESSORS ***
      ================================================================ */
 
-    public function getDefaultLabelAttribute():string
+    public function getDefaultLabelAttribute(): string
     {
         return $this->is_default ? 'Default' : 'Not Default';
-    }   
+    }
 
-    public function getDefaultColorAttribute():string
+    public function getDefaultColorAttribute(): string
     {
         return $this->is_default ? 'badge-success' : 'badge-warning';
-    }   
+    }
 
 
 
