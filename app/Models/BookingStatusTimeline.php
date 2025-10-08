@@ -116,9 +116,6 @@ class BookingStatusTimeline extends BaseModel
     public function scopeReturned($query){
         return $query->where('booking_status', self::STATUS_RETURNED);
     }
-    // public function scopeReturned($query){
-    //     return $query->where('booking_status', self::STATUS_RETURNED);
-    // }
     public function scopeCancelled($query){
         return $query->where('booking_status', self::STATUS_CANCELLED);
     }

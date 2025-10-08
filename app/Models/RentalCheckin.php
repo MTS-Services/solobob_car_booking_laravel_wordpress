@@ -23,7 +23,10 @@ class RentalCheckin extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'status_label',
+            'status_color',
+        ]);
     }
 
     /* ================================================================

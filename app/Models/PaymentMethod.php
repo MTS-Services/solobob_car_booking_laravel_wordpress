@@ -17,36 +17,8 @@ class PaymentMethod extends BaseModel
     public const METHOD_TYPE_DEBIT_CARD  = 2;
     public const METHOD_TYPE_PAYPAL      = 3;
     public const METHOD_TYPE_BANK_ACCOUNT = 4;
-    /* ================================================================
-     * *** PROPERTIES ***
-     ================================================================ */
 
-    protected $fillable = [
-        'payment_id',
-        'user_id',
-        'billing_address_id',
-        'method_type',
-        'provider',
-        'last_four',
-        'card_brand',
-        'expiry_month',
-        'expiry_year',
-        'cardholder_name',
 
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ];
-
-    protected $hidden = [];
-
-    /**
-     * Define the attribute casts for the model.
-     */
-    protected function casts(): array
-    {
-        return [];
-    }
 
     public function __construct(array $attributes = [])
     {
@@ -78,6 +50,39 @@ class PaymentMethod extends BaseModel
             default => 'badge-info',
         };
     }
+    /* ================================================================
+     * *** PROPERTIES ***
+     ================================================================ */
+
+    protected $fillable = [
+        'sort_order',
+        'payment_id',
+        'user_id',
+        'billing_address_id',
+        'method_type',
+        'provider',
+        'last_four',
+        'card_brand',
+        'expiry_month',
+        'expiry_year',
+        'cardholder_name',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+    protected $hidden = [];
+
+    /**
+     * Define the attribute casts for the model.
+     */
+    protected function casts(): array
+    {
+        return [];
+    }
+
+
 
     /* ================================================================
      * *** RELATIONS ***
@@ -106,6 +111,20 @@ class PaymentMethod extends BaseModel
     {
         return $query->where('user_id', user()->id);
     }
+    public function scopeCretditCard($query){
+        return $query->where('method_type', self::METHOD_TYPE_CREDIT_CARD);
+    }
+    public function scopeDebitCard($query){
+        return $query->where('method_type', self::METHOD_TYPE_DEBIT_CARD);
+    }
+    public function scopePaypal($query){
+        return $query->where('method_type', self::METHOD_TYPE_PAYPAL);
+    }
+    public function scopeBankAccount($query){
+        return $query->where('method_type', self::METHOD_TYPE_BANK_ACCOUNT);
+    }
+    
+    // METHOD_TYPE_CREDIT_CARD
 
     /* ================================================================
      * *** ACCESSORS ***

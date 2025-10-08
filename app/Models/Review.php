@@ -14,19 +14,9 @@ class Review extends BaseModel
     const STATUS_FLAGGED   = 2;
     const STATUS_REMOVED   = 3;
 
-    /* ================================================================
-     * *** PROPERTIES ***
-     ================================================================ */
 
-    protected $fillable = [
-        'sort_order',
-        'booking_id',
-        'user_id',
-        'rating',
-        'title',
-        'comment',
-        'review_status',
-    ];
+
+
 
     public function __construct(array $attributes = [])
     {
@@ -53,13 +43,33 @@ class Review extends BaseModel
     public function getReviewStatusColorAttribute()
     {
         return match ($this->review_status) {
-            self::STATUS_PENDING => 'warning',
-            self::STATUS_PUBLISHED => 'success',
-            self::STATUS_FLAGGED => 'danger',
-            self::STATUS_REMOVED => 'danger',
-            default => 'warning',
+            self::STATUS_PENDING => 'badge-warning',
+            self::STATUS_PUBLISHED => 'badge-success',
+            self::STATUS_FLAGGED => 'badge-danger',
+            self::STATUS_REMOVED => 'badge-danger',
+            default => 'badge-warning',
         };
     }
+
+    /* ================================================================
+     * *** PROPERTIES ***
+     ================================================================ */
+
+    protected $fillable = [
+        'sort_order',
+        'booking_id',
+        'user_id',
+        'rating',
+        'title',
+        'comment',
+        'review_status',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+
 
     /* ================================================================
      * *** RELATIONS ***
@@ -89,7 +99,7 @@ class Review extends BaseModel
     {
         return $query->where('review_status', self::STATUS_FLAGGED);
     }
-     public function scopePublished($query)
+    public function scopePublished($query)
     {
         return $query->where('review_status', self::STATUS_PUBLISHED);
     }

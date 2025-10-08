@@ -23,32 +23,8 @@ class Payment extends BaseModel
     public const STATUS_REFUNDED = 2;
     public const STATUS_FAILED = 3;
 
-    /* ================================================================
-     * *** PROPERTIES ***
-     ================================================================ */
 
-    protected $fillable = [
-        'sort_order',
-        'booking_id',
-        'user_id',
-        'payment_method',
-        'type',
-        'status',
-        'amount',
-        'note',
-        'created_by',
-        'updated_by',
-        'deleted_by',
-    ];
-    protected $hidden = [];
 
-    /**
-     * Define the attribute casts for the model.
-     */
-    protected function casts(): array
-    {
-        return [];
-    }
 
     public function __construct(array $attributes = [])
     {
@@ -130,6 +106,38 @@ class Payment extends BaseModel
     }
 
 
+    
+    /* ================================================================
+     * *** PROPERTIES ***
+     ================================================================ */
+
+    protected $fillable = [
+        'sort_order',
+        'booking_id',
+        'user_id',
+        'payment_method',
+        'type',
+        'status',
+        'amount',
+        'note',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+    protected $hidden = [];
+
+    /**
+     * Define the attribute casts for the model.
+     */
+    protected function casts(): array
+    {
+        return [];
+    }
+
+    
+
+
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
@@ -153,6 +161,12 @@ class Payment extends BaseModel
      public function scopeSelf()
      {
          return $this->where('user_id', user()->id);
+     }
+     public function scopeStripe($query){
+        return $query->where('payment_method', self::METHOD_STRIPE);
+     }
+     public function scopePaypal($query){
+        return $query->where('payment_method', self::METHOD_PAYPAL);
      }
     public function scopeDeposit($query)
     {
