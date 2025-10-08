@@ -68,7 +68,7 @@
                             <p class="text-sm text-text-primary font-medium">Alex Johnson</p>
                             <p class="text-xs text-text-secondary">@alexjohnson</p>
                         </div>
-                        <a href="#"
+                        <a href="{{ route('admin.profile') }}"
                             class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-tl-xl rounded-tr-xl">
                             {{ __('Profile') }}</a>
                         {{-- <a href="#"
