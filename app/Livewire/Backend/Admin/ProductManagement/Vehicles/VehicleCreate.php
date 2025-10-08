@@ -182,7 +182,7 @@ class VehicleCreate extends Component
         return view('livewire.backend.admin.product-management.vehicles.vehicle-create', [
             'categories' => Category::active()->pluck('name', 'id'),
             'owners' => User::pluck('name', 'id'),
-            'statuses' => Vehicle::STATUS,
+            'statuses' => Vehicle::getStatus(),
             'transmissions' => Vehicle::getTransmission(),
         ]);
     }

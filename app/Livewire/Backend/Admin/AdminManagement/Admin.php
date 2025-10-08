@@ -389,22 +389,9 @@ class Admin extends Component
         ];
 
 
-        // Trashed admins query - always return a paginator
-        // $trashedAdmins = User::onlyTrashed()
-        //     ->where('is_admin', true)
-        //     ->when($this->trashSearch, function ($query) {
-        //         $query->where(function ($q) {
-        //             $q->where('name', 'like', '%' . $this->trashSearch . '%')
-        //                 ->orWhere('email', 'like', '%' . $this->trashSearch . '%');
-        //         });
-        //     })
-        //     ->with(['deletedBy', 'createdBy'])
-        //     ->latest('deleted_at')
-        //     ->paginate(10, ['*'], 'trashedPage');
 
         return view('livewire.backend.admin.admin-management.admin', [
             'admins' => $admins,
-            // 'trashedAdmins' => $trashedAdmins,
             'statuses' => User::getStatus(),
             'columns' => $columns,
             'actions' => $actions,

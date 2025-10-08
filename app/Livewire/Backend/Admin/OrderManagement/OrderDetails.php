@@ -31,7 +31,7 @@ class OrderDetails extends Component
         
        $isUpdated = $order->update(
         [
-            'booking_status'    => 1,
+            'booking_status'    => Booking::BOOKING_STATUS_ACCEPTED,
         ]
          );
 
