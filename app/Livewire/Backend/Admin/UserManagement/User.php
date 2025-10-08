@@ -54,6 +54,7 @@ class User extends Component
     public $existingAvatar = null;
 
     protected $queryString = ['search'];
+     public $perPage = 10;
 
     public function boot(FileUploadService $fileUploadService)
     {
@@ -264,7 +265,7 @@ class User extends Component
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
         $columns = [
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
             ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
