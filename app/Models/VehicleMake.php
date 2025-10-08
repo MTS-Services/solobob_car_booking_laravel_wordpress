@@ -23,6 +23,8 @@ class VehicleMake extends BaseModel
         'name',
         'status',
 
+
+
         'created_by',
         'updated_by',
         'deleted_by',

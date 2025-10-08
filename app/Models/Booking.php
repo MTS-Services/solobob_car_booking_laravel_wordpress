@@ -78,28 +78,44 @@ class Booking extends BaseModel
     // Relations
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function pickupLocation()
     {
-        return $this->belongsTo(VehicleLocation::class, 'pickup_location_id');
+        return $this->belongsTo(VehicleLocation::class, 'pickup_location_id', 'id');
     }
 
 
     public function auditor()
     {
-        return $this->belongsTo(User::class, 'audit_by');
+        return $this->belongsTo(User::class, 'audit_by', 'id');
     }
 
     public function timeline()
     {
-        return $this->hasOne(BookingStatusTimeline::class, 'booking_id', 'id');
+        return $this->hasMany(BookingStatusTimeline::class, 'booking_id', 'id');
+    }
+    public function rentalCheckin()
+    {
+        return $this->hasMany(RentalCheckin::class, 'booking_id', 'id');
+    }
+    public function rentalCheckout()
+    {
+        return $this->hasMany(Rentalcheckout::class, 'booking_id', 'id');
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'booking_id', 'id');
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'booking_id', 'id');
     }
 
     /* ================================================================
@@ -164,7 +180,7 @@ class Booking extends BaseModel
     }
     public function getBookingStatusColorAttribute()
     {
-        return match ($this->attributes['booking_status']) {
+        return match ((int)$this->booking_status) {
             self::BOOKING_STATUS_PENDING => 'badge-secondary',
             self::BOOKING_STATUS_ACCEPTED => 'badge-info',
             self::BOOKING_STATUS_DEPOSITED => 'badge-info',
@@ -177,7 +193,6 @@ class Booking extends BaseModel
     }
 
 
-    // Format date time to human readable format
 
     public function humanReadableDateTime($row_date)
     {
