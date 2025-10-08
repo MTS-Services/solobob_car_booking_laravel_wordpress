@@ -121,6 +121,10 @@ class Vehicle extends BaseModel
 
     //
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'vehicle_id','id');
+    }
     public function owner()
     {
         return $this->belongsTo(User::class);
