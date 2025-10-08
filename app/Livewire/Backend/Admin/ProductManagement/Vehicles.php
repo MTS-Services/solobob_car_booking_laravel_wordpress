@@ -425,7 +425,7 @@ class Vehicles extends Component
             })
             ->with(['category', 'owner', 'createdBy', 'updatedBy', 'deletedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         return view('livewire.backend.admin.product-management.vehicles', [
             'vehicles' => $vehicles,

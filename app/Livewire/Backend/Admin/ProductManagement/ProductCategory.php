@@ -34,7 +34,7 @@ class ProductCategory extends Component
     public $slug = '';
     public $status = Category::STATUS_ACTIVE;
 
-
+    public $perPage = 10;
 
 
 
@@ -184,7 +184,7 @@ class ProductCategory extends Component
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
         $columns = [
 
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
