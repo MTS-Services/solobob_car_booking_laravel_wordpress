@@ -193,7 +193,7 @@ class Admin extends Component
                 $this->fileUploadService->delete($admin->avatar, 'public');
             }
 
-            $admin->forceDelete();
+            $admin->delete();
 
             session()->flash('message', 'Admin permanently deleted!');
         }
