@@ -17,6 +17,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('sort_order')->default(0);
+            
             $table->string('name')->index();
             $table->string('email')->unique();
             $table->string('password');
@@ -31,12 +34,7 @@ return new class extends Migration
             $table->rememberToken();
 
 
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $this->addAdminAuditColumns($table);
             $table->timestamps();
             $table->softDeletes();
         });

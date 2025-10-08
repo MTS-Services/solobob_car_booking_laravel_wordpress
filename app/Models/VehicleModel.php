@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleModel extends BaseModel
 {
@@ -46,6 +47,30 @@ class VehicleModel extends BaseModel
         ]);
     }
 
+
+    /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
+
+    //
+
+    /* ================================================================
+     * *** SCOPES ***
+     ================================================================ */
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function scopeInactive(Builder $query):Builder
+    {
+        return $query->where('status', self::STATUS_INACTIVE);
+    }
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
     public function getStatusLabelAttribute()
     {
         return match ($this->status) {
@@ -62,31 +87,6 @@ class VehicleModel extends BaseModel
             default => 'badge-secondary',
         };
     }
-    /* ================================================================
-     * *** RELATIONS ***
-     ================================================================ */
-
-    //
-
-    /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-    public function scopeActive($query)
-    {
-        return $query->where('status', self::STATUS_ACTIVE);
-    }
-
-    public function scopeInactive($query)
-    {
-        return $query->where('status', self::STATUS_INACTIVE);
-    }
-
-    /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-    //
 
     /* ================================================================
      * *** UTILITY METHODS ***

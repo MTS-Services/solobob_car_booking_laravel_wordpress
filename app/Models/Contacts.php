@@ -30,7 +30,6 @@ class Contacts extends BaseModel
         'deleted_by',
     ];
 
-    protected $guarded = [];
     protected $hidden = [];
 
     /**

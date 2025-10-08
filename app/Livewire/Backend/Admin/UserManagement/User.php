@@ -255,7 +255,7 @@ class User extends Component
 
     public function render()
     {
-        $users = ModelsUser::Users()
+        $users = ModelsUser::user()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')

@@ -11,6 +11,8 @@ class Category extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
 
     /* ================================================================
@@ -43,14 +45,27 @@ class Category extends BaseModel
         ]);
     }
 
+ 
     /* ================================================================
-     * *** Status ***
+     * *** SCOPES ***
      ================================================================ */
 
     //
+    public function scopeActive(Builder $query): Builder
+    {
+      return  $query->where('status', self::STATUS_ACTIVE);
+    }
 
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_INACTIVE = 0;
+    public function scopeInactive(Builder $query): Builder
+    {
+      return  $query->where('status', self::STATUS_INACTIVE);
+    }
+
+    
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
 
 
     public static function getStatus(): array
@@ -59,51 +74,23 @@ class Category extends BaseModel
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
         ];
+    } 
+    public static function getColors(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-error',
+        ];
     }
     public function getStatusLabelAttribute(): string
     {
         return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
 
-    // public function getStatusLabelAttribute(): string
-    // {
-    //     return self::getStatus()[$this->status] ?? 'Unknown';
-    // }
-
-
-    public function getIsCategoryLabelAttribute(): string
-    {
-        return $this->is_admin ? 'Administrator' : 'User';
-    }
     public function getStatusColorAttribute(): string
     {
-        return match ((int) $this->status) {
-            self::STATUS_ACTIVE => 'badge-success',
-            self::STATUS_INACTIVE => 'badge-warning',
-            default => 'badge-secondary',
-        };
+        return isset($this->status) ? self::getColors()[$this->status] : 'badge-secondary';
     }
-    /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-    //
-    public function scopeActive(Builder $query): void
-    {
-        $query->where('status', self::STATUS_ACTIVE);
-    }
-
-    public function scopeInactive(Builder $query): void
-    {
-        $query->where('status', self::STATUS_INACTIVE);
-    }
-
-    /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-    //
-
     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
