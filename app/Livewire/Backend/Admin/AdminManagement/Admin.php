@@ -340,18 +340,6 @@ class Admin extends Component
 
         
         $columns = [
-            // ['key' => 'id', 'label' => 'ID', 'width' => '5%'],
-            // [
-            //     'key' => 'avatar',
-            //     'label' => 'Avatar',
-            //     'width' => '8%',
-            //     'format' => function ($admin) {
-            //         if ($admin->avatar) {
-            //             return '<img src="' . Storage::url($admin->avatar) . '" class="w-10 h-10 rounded-full" alt="' . $admin->name . '">';
-            //         }
-            //         return '<div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">' . strtoupper(substr($admin->name, 0, 1)) . '</div>';
-            //     }
-            // ],
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
             ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
             [
@@ -387,8 +375,6 @@ class Admin extends Component
             ['key' => 'id', 'label' => 'Delete', 'method' => 'openForceDeleteModal'],
             
         ];
-
-
 
         return view('livewire.backend.admin.admin-management.admin', [
             'admins' => $admins,
