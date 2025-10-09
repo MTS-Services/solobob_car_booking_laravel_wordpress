@@ -4,13 +4,12 @@
          <!-- Header -->
          <div class="text-center mb-10">
              <div class="flex justify-center mb-3">
-                 <div class="bg-orange-500 p-3 rounded-full">
+                 <div class="bg-[#bb8106] p-3 rounded-full">
                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="white" class="size-6 text-white">
                          <path stroke-linecap="round" stroke-linejoin="round"
                              d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                      </svg>
-
 
                  </div>
              </div>
@@ -20,7 +19,7 @@
          </div>
 
          <!-- Payment Options -->
-         <div class="w-full max-w-7xl space-y-6">
+         <div class="w-full max-w-6xl space-y-6">
 
              <!-- PayPal -->
              <label
@@ -182,7 +181,7 @@
          <!-- Button -->
          <div class="mt-10">
              <button
-                 class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-xl shadow-md transition">
+                 class="bg-[#bb8106] hover:bg-[#dcb65a] text-white font-semibold px-8 py-3 rounded-xl shadow-md transition">
                  Continue to Payment →
              </button>
          </div>
