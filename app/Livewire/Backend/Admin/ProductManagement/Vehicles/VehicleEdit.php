@@ -5,6 +5,7 @@ namespace App\Livewire\Backend\Admin\ProductManagement\Vehicles;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\VehicleImage;
 use App\Services\FileUpload\FileUploadService;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -18,13 +19,6 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
         'page_slug' => 'vehicle-edit'
     ]
 )]
-// class VehicleEdit extends Component
-// {
-//     public function render()
-//     {
-//         return view('livewire.backend.admin.product-management.vehicles.vehicle-edit');
-//     }
-// }
 class VehicleEdit extends Component
 {
     use WithFileUploads;
@@ -54,8 +48,9 @@ class VehicleEdit extends Component
     public $delivery_available = false;
     public $delivery_fee = '';
     public $status = Vehicle::STATUS_AVAILABLE;
-    public $avatar;
-    public $existingAvatar = null;
+    public array $images = [];
+    public $existingImages = [];
+    public $imagesToDelete = []; // Track images marked for deletion
 
     public function boot(FileUploadService $fileUploadService)
     {
@@ -87,13 +82,31 @@ class VehicleEdit extends Component
         $this->delivery_available = $vehicle->delivery_available;
         $this->delivery_fee = $vehicle->delivery_fee;
         $this->status = $vehicle->status ?? Vehicle::STATUS_AVAILABLE;
-        $this->existingAvatar = $vehicle->avatar;
+        
+        // Load existing images
+        $this->existingImages = $vehicle->images()->get()->toArray();
     }
 
-    public function removeAvatar()
+    public function markImageForDeletion($imageId)
     {
-        $this->avatar = null;
-        $this->existingAvatar = null;
+        // Just mark the image for deletion, don't actually delete it yet
+        if (!in_array($imageId, $this->imagesToDelete)) {
+            $this->imagesToDelete[] = $imageId;
+        }
+        
+        // Remove from existingImages array for UI purposes
+        $this->existingImages = array_filter($this->existingImages, function($image) use ($imageId) {
+            return $image['id'] != $imageId;
+        });
+        
+        // Re-index array
+        $this->existingImages = array_values($this->existingImages);
+    }
+
+    public function removeNewImage($index)
+    {
+        unset($this->images[$index]);
+        $this->images = array_values($this->images);
     }
 
     public function save()
@@ -118,7 +131,8 @@ class VehicleEdit extends Component
             'delivery_available' => 'nullable|boolean',
             'delivery_fee' => 'nullable|numeric|min:0',
             'status' => 'required|in:' . implode(',', [Vehicle::STATUS_AVAILABLE, Vehicle::STATUS_RENTED, Vehicle::STATUS_MAINTENANCE, Vehicle::STATUS_INACTIVE]),
-            'avatar' => 'nullable|image|max:2048',
+            'images.*' => 'nullable|image|max:10240',
+            'images' => 'nullable|array',
         ]);
 
         $vehicle = Vehicle::findOrFail($this->vehicleId);
@@ -146,22 +160,42 @@ class VehicleEdit extends Component
             'updated_by' => user()->id,
         ];
 
-        if ($this->avatar) {
-            $updateData['avatar'] = $this->fileUploadService->updateImage(
-                file: $this->avatar,
-                oldPath: $vehicle->avatar,
-                directory: 'vehicles/avatars',
-                width: 800,
-                height: 600,
-                disk: 'public',
-                maintainAspectRatio: true
-            );
-        } elseif ($this->existingAvatar === null && $vehicle->avatar) {
-            $this->fileUploadService->delete($vehicle->avatar, 'public');
-            $updateData['avatar'] = null;
+        $vehicle->update($updateData);
+
+        // NOW delete the marked images (only on form submission)
+        if (!empty($this->imagesToDelete)) {
+            foreach ($this->imagesToDelete as $imageId) {
+                $image = VehicleImage::find($imageId);
+                if ($image && $image->vehicle_id == $this->vehicleId) {
+                    // Delete file from storage
+                    $this->fileUploadService->delete($image->image, 'public');
+                    // Delete database record
+                    $image->delete();
+                }
+            }
         }
 
-        $vehicle->update($updateData);
+        // Handle new image uploads
+        if (!empty($this->images)) {
+            $existingImagesCount = $vehicle->images()->count();
+            
+            foreach ($this->images as $index => $image) {
+                $path = $this->fileUploadService->uploadImage(
+                    file: $image,
+                    directory: 'vehicles/images',
+                    width: 800,
+                    height: 600,
+                    disk: 'public',
+                    maintainAspectRatio: true
+                );
+
+                VehicleImage::create([
+                    'vehicle_id' => $vehicle->id,
+                    'image' => $path,
+                    'is_primary' => ($existingImagesCount === 0 && $index === 0),
+                ]);
+            }
+        }
 
         session()->flash('message', 'Vehicle updated successfully.');
         return $this->redirect(route('admin.pm.vehicle-list'), navigate: true);
@@ -169,10 +203,11 @@ class VehicleEdit extends Component
 
     public function render()
     {
-        return view('livewire.backend.admin.product-management.vehicles.vehicle-edit',[
-            'categories' => Category::where('status', Category::STATUS_ACTIVE)->pluck('name', 'id'),
+        return view('livewire.backend.admin.product-management.vehicles.vehicle-edit', [
+            'categories' => Category::active()->pluck('name', 'id'),
             'owners' => User::pluck('name', 'id'),
-            'statuses' => Vehicle::STATUS,
+            'statuses' => Vehicle::getStatus(),
+            'transmissions' => Vehicle::getTransmission(),
         ]);
     }
 }

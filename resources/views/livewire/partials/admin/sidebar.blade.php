@@ -30,8 +30,8 @@
         <nav class="p-2 space-y-2">
             <x-backend.navlink type="single" icon="layout-dashboard" name="Dashboard" :route="route('admin.dashboard')"
                 active="admin-dashboard" :page_slug="$active" />
-            <x-backend.navlink type="single" icon="chart-pie" name="Analytics" active="analytics" :page_slug="$active" />
-            <x-backend.navlink type="single" icon="inbox" name="Inbox" active="inbox" :page_slug="$active" />
+            {{-- <x-backend.navlink type="single" icon="chart-pie" name="Analytics" active="analytics" :page_slug="$active" />
+            <x-backend.navlink type="single" icon="inbox" name="Inbox" active="inbox" :page_slug="$active" /> --}}
 
             <div class="pt-4 pb-2">
                 <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase"
@@ -121,11 +121,16 @@
                         'active' => 'vehicle-list',
                     ],
                 ]" />
-            <x-backend.navlink type="single" icon="currency-dollar" name="Deposit Management" :route="route('admin.deposits')"
-                active="deposit-management" :page_slug="$active" />
+            <x-backend.navlink type="dropdown" icon="currency-dollar" name="Deposit Management" 
+                 :page_slug="$active" :items="[ [
+                        'name' => 'Deposits',
+                        'route' => route('admin.deposits'),
+                        'icon' => 'user',
+                        'active' => 'deposit-management',
+                    ]]" />
                 {{-- order management --}}
 
-             <x-backend.navlink type="dropdown" icon="user-group" name="Order Management" :page_slug="$active"
+             <x-backend.navlink type="dropdown" icon="user-group" name="Booking Management" :page_slug="$active"
                 :items="[
                     [
                         'name' => 'Orders',
@@ -143,7 +148,7 @@
                 <p class="text-center text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase"
                     x-show="desktop && !sidebar_expanded">...</p>
             </div>
-            <x-backend.navlink type="dropdown" icon="wrench-screwdriver" name="Application Settings" :page_slug="$active"
+            {{-- <x-backend.navlink type="dropdown" icon="wrench-screwdriver" name="Application Settings" :page_slug="$active"
                 :items="[
                     [
                         'name' => 'General Settings',
@@ -199,11 +204,11 @@
                         'icon' => 'database',
                         'active' => 'settings-database',
                     ],
-                ]" />
+                ]" /> --}}
 
             <div class="space-y-2">
-                <flux:separator class="bg-accent!" />
-                <x-backend.navlink type="single" icon="user" name="Profile" active="profile" :page_slug="$active" />
+                {{-- <flux:separator class="bg-accent!" /> --}}
+                <x-backend.navlink type="single" icon="user" name="Profile" active="admin-profile" :page_slug="$active" :route="route('admin.profile')" />
                 <button wire:click="logout" class="w-full text-left">
                     <x-backend.navlink type="single" icon="power" name="Logout" />
                 </button>

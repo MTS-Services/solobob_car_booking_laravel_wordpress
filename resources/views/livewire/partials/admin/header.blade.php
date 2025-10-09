@@ -26,20 +26,20 @@
             <div class="flex items-center gap-3">
                 <!-- Search -->
                 {{-- <x-admin.search-form placeholder="Search here..." /> --}}
-                <flux:input type="search" placeholder="Search here..."
+                {{-- <flux:input type="search" placeholder="Search here..."
                     class="w-32 sm:w-48 lg:w-64 !px-3 !py-2 !rounded-xl !bg-bg-black/10 dark:!bg-bg-white/10 !border-0 focus:!ring-2 focus:!ring-white/20 focus:!outline-none !shadow-none transition-all duration-200"
-                    icon="magnifying-glass" />
+                    icon="magnifying-glass" /> --}}
 
 
 
                 <!-- Notifications -->
-                <button @click="toggleNotifications()"
+                {{-- <button @click="toggleNotifications()"
                     class="relative p-2 rounded-xl hover:bg-bg-black/10 dark:hover:bg-bg-white/10 transition-colors">
                     <flux:icon name="bell" class="w-5 h-5 text-zinc-500" />
                     <div x-show="notifications.length > 0"
                         class="absolute top-1 right-1 w-2 h-2 bg-red-400 rounded-full notification-badge">
                     </div>
-                </button>
+                </button> --}}
 
                 <!-- Profile -->
                 <div class="relative" x-data="{ open: false }">
@@ -68,11 +68,11 @@
                             <p class="text-sm text-text-primary font-medium">Alex Johnson</p>
                             <p class="text-xs text-text-secondary">@alexjohnson</p>
                         </div>
-                        <a href="#"
+                        <a href="{{ route('admin.profile') }}"
                             class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-tl-xl rounded-tr-xl">
                             {{ __('Profile') }}</a>
-                        <a href="#"
-                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a>
+                        {{-- <a href="#"
+                            class="block px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors">Settings</a> --}}
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"

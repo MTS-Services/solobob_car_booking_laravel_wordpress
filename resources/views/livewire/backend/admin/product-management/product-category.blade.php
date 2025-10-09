@@ -19,10 +19,10 @@
                 <div class="flex items-center justify-between">
                     <h2 class="text-xl font-bold text-accent">{{ __('Product Category List') }}</h2>
                     <div class="flex items-center gap-2">
-                        <x-button href="#" icon="trash-2" type='secondary' permission="product-category-trash"
+                        {{-- <x-button href="#" icon="trash-2" type='secondary' permission="product-category-trash"
                             class="text-white">
                             {{ __('Trash') }}
-                        </x-button>
+                        </x-button> --}}
                         <button wire:click="openCreateModal"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -80,27 +80,19 @@
                             {{-- Information Grid --}}
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                    <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
+                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Category Name</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->name }}</p>
+                                </div>
+                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Category Slug</p>
+                                    <p class="text-zinc-200 font-medium">{{ $detailsAdmin->slug }}</p>
                                 </div>
 
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Status</p>
-                                    @php
-                                        $statusColors = [
-                                            \App\Models\User::STATUS_ACTIVE =>
-                                                'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                            \App\Models\User::STATUS_SUSPENDED =>
-                                                'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                            \App\Models\User::STATUS_INACTIVE =>
-                                                'bg-red-500/20 text-red-400 border-red-500/30',
-                                        ];
-                                        $colorClass =
-                                            $statusColors[$detailsAdmin->status] ??
-                                            'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                    @endphp
+                                   
                                     <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border badge badge-soft  {{ $detailsAdmin->status_color }}">
                                         {{ $detailsAdmin->status_label }}
                                     </span>
                                 </div>

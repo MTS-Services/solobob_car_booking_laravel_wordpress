@@ -27,8 +27,7 @@
 
 
     <div class="max-w-7xl bg-white mx-auto px-4 py-4 sm:px-6 lg:px-8 xl:py-14">
-        <div class="grid grid-cols-1 xxs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-
+        <div class="grid grid-cols-1 xxs:grid-cols-2 md:grid-cols-3  gap-6 md:gap-8">
             <!-- Loop through the dynamic products data -->
             @forelse ($products as $vehicle)
                 <div
@@ -41,11 +40,12 @@
                                 <flux:icon name="photo" class="w-4 h-4 text-white" />
                             </span>
                             <span class="text-gray-200 font-medium">
-                                {{ $vehicle->id }}
+                                {{ $loop->iteration }}
                             </span>
+
                         </div>
 
-                        <div class="h-48">
+                        <div class="h-64">
                             <!-- Dynamic Image Source -->
                             <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
                                 @if (isset($vehicle?->images) && $vehicle?->images?->count() > 0)
@@ -62,35 +62,32 @@
                         <!-- Dynamic Category Tag -->
                         <span
                             class="absolute bottom-2 left-2 bg-accent text-white text-xs xxs:text-sm font-semibold px-3 py-1.5 rounded-md shadow-lg tracking-wider">
-                            {{ $vehicle->category?->name ?? 'Uncategorized' }}
+                            {{ Str::limit($vehicle->category?->name ?? 'Uncategorized', 16, '...') }}
                         </span>
 
-                        <div class="absolute bottom-2 right-4 text-zinc-500 p-1">
-                            <flux:icon name="eye" class="w-5 h-5" />
-                        </div>
                     </div>
 
                     <div class="p-4">
                         <div class="grow">
                             <div class="flex justify-between items-center mb-2">
-                                <div>
+                                <a href="{{ route('product-details', ['slug' => $vehicle->slug]) }}" wire:navigate>
                                     <!-- Dynamic Vehicle Title -->
                                     <p
                                         class="text-xs xs:text-sm md:text-base font-normal text-gray-700 uppercase leading-snug">
-                                        {{ $vehicle->title }}
+                                        {{Str::limit($vehicle->title ?? 'Car Title', 20, '...') }}
                                     </p>
-                                </div>
+                                </a>
                                 <div class="text-right text-gray-900 font-bold text-lg md:text-xl flex-shrink-0 ml-2">
                                     <!-- Dynamic Daily Rate -->
                                     ${{ number_format($vehicle->weekly_rate, 2) }}
-                                    <span class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Day</span>
+                                    <span class="text-xs sm:text-sm font-medium text-gray-500 ml-1">/Week</span>
                                 </div>
                             </div>
 
                             <!-- Dynamic Owner Location -->
                             <div class="flex items-center text-xs sm:text-sm text-gray-500">
                                 <flux:icon name="map-pin" class="text-zinc-500 mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-                                <span>{{ $vehicle->owner?->city ?? 'Location Not Set' }}</span>
+                                <span>{{ Str::limit($vehicle->owner?->city ?? 'Location Not Set', 22, '...') }}</span>
                             </div>
                         </div>
 
@@ -125,7 +122,8 @@
                                 Book
                             </a>
 
-                            <button @click="modalOpen = true; document.body.classList.add('overflow-hidden')"
+                            <button @click="modalOpen = true; document.body.style.overflow = 'hidden'"
+                                wire:click="selectVehicle('{{ $vehicle->title }}', '{{ $vehicle->year }}')"
                                 class="flex-1 flex items-center justify-center bg-gray-800 text-white py-2 px-2 text-sm rounded-lg font-semibold shadow-md hover:bg-gray-700 transition duration-150 transform hover:scale-[1.01]">
                                 Get In touch
                             </button>
@@ -216,8 +214,9 @@
                 </button>
             </div>
         @endif
+
         {{-- Contact Modal --}}
-        <div x-show="modalOpen" x-cloak @click="modalOpen = false"
+        <div x-show="modalOpen" x-cloak @click="modalOpen = false; document.body.style.overflow = ''"
             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 bg-opacity-50"
             style="display: none;">
             <div @click.stop x-transition:enter="transition ease-out duration-300"
@@ -226,9 +225,9 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 transform scale-100"
                 x-transition:leave-end="opacity-0 transform scale-90"
-                class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
                 <div class="relative">
-                    <button @click="modalOpen = false" type="button"
+                    <button @click="modalOpen = false; document.body.style.overflow = ''" type="button"
                         class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-light leading-none z-10">
                         &times;
                     </button>
@@ -236,54 +235,70 @@
 
                 <div class="p-6 md:p-8">
                     <h2 class="text-xl md:text-2xl font-semibold mb-6 text-gray-800 uppercase">
-                        {{ $vehicle->year }} {{ $vehicle->title }}
+                        {{ $selectedVehicleYear }} | {{ $selectedVehicleTitle }}
                     </h2>
+                    <div class="w-full bg-transparent hidden lg:flex items-start justify-end z-1">
+                        <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
+                            <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH
+                            </h2>
 
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="w-full">
-                            <img src="{{ storage_url($vehicle->avatar) }}" alt="{{ $vehicle->title }}"
-                                class="w-full h-64 md:h-80 object-cover rounded-lg">
-                        </div>
-
-                        <div class="space-y-4">
-                            <form wire:submit.prevent="submitContact" method="POST">
-                                @csrf
-                                <div class="mb-4">
-                                    <input type="text" name="name" placeholder="Your Name"
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+                            <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
+                                @if (session()->has('submit_message'))
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        <p class="text-primary"> {{ session('submit_message') }} </p>
+                                    </div>
+                                @endif
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <input type="text" placeholder="First Name" wire:model="form.first_name"
+                                            class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
+                                        @if ($errors->has('form.first_name'))
+                                            <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                                {{ $errors->first('form.first_name') }}</small>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <input type="text" placeholder="Last Name" wire:model="form.last_name"
+                                            class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                        @if ($errors->has('form.last_name'))
+                                            <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                                {{ $errors->first('form.last_name') }}</small>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <div class="mb-4">
-                                    <input type="tel" name="phone" placeholder="Phone Number"
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <input type="email" placeholder="Email" wire:model="form.email"
+                                            class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
+                                        @if ($errors->has('form.email'))
+                                            <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                                {{ $errors->first('form.last_name') }}</small>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <input type="tel" placeholder="Phone Number" wire:model="form.phone"
+                                            class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
+                                        @if ($errors->has('form.phone'))
+                                            <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                                {{ $errors->first('form.phone') }}</small>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                <div class="mb-4">
-                                    <input type="email" name="email" placeholder="Email Address"
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+                                <div>
+                                    <textarea placeholder="Message" rows="4" wire:model="form.message"
+                                        class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
+                                    @if ($errors->has('form.message'))
+                                        <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                            {{ $errors->first('form.message') }}</small>
+                                    @endif
                                 </div>
-
-                                <div class="mb-4">
-                                    <textarea name="message" placeholder="Message *" rows="4"
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"></textarea>
-                                </div>
-
-                                <div class="flex items-start space-x-2 mb-4">
-                                    <input type="checkbox" name="sms_alerts" id="sms-alerts"
-                                        class="mt-1 w-4 h-4 text-cyan-500 border-gray-300 rounded focus:ring-cyan-500">
-                                    <label for="sms-alerts" class="text-sm text-gray-700 leading-tight">
-                                        Yes, I'd like to receive SMS alerts for booking confirmations and updates.
-                                    </label>
-                                </div>
-
-                                <p class="text-xs text-gray-500 italic mb-6">
-                                    Message and data rates may apply. Reply STOP to unsubscribe.
-                                </p>
-
                                 <button type="submit"
-                                    class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors">
-                                    Get in touch
+                                    class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
+                                    SUBMIT
                                 </button>
+
                             </form>
                         </div>
                     </div>

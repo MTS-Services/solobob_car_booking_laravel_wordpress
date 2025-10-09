@@ -21,7 +21,7 @@
                 </h2>
                 <div class="flex items-center gap-2">
 
-                    <a href="{{ route('admin.pm.vehicle-trash') }}" wire:navigate
+                    {{-- <a href="{{ route('admin.pm.vehicle-trash') }}" wire:navigate
                         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-600 hover:bg-zinc-700 text-zinc-100 rounded-lg transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
@@ -30,7 +30,7 @@
                             </path>
                         </svg>
                         {{ __('Trash') }}
-                    </a>
+                    </a> --}}
                     <div class="flex items-center gap-2">
                         <a href="{{ route('admin.pm.vehicle-create') }}" wire:navigate
                             class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
@@ -43,7 +43,7 @@
         </div>
         {{-- Table Section --}}
        <x-backend.table :columns="$columns" :data="$vehicles" :actions="$actions" search-property="search"
-            per-page-property="perPage" empty-message="No admins found." />
+            per-page-property="perPage" empty-message="No Vehicle found." />
     </section>
 
     {{-- Delete Confirmation Modal --}}

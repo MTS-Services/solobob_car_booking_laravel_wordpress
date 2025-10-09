@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
     [
         'title' => 'livewire.backend.admin.order-management.order-details',
         'breadcrumb' => 'livewire.backend.admin.order-management.order-details',
-        'page_slug' => 'livewire.backend.admin.order-management.order-details'
+        'page_slug' => 'deposit-management'
     ]
 )]
 
@@ -31,7 +31,7 @@ class OrderDetails extends Component
         
        $isUpdated = $order->update(
         [
-            'booking_status'    => 1,
+            'booking_status'    => Booking::BOOKING_STATUS_ACCEPTED,
         ]
          );
 

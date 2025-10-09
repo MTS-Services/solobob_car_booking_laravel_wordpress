@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class Vehicle extends BaseModel
 {
@@ -18,74 +19,15 @@ class Vehicle extends BaseModel
     public const TRANSMISSION_AUTOMATIC = 0;
     public const TRANSMISSION_MANUAL = 1;
 
-    // public const APPROVAL_PENDING = 0;
-    // public const APPROVAL_APPROVED = 1;
-    // public const APPROVAL_REJECTED = 2;
 
-    public const STATUS = [
-        self::STATUS_AVAILABLE => 'Active',
-        self::STATUS_RENTED => 'Rented',
-        self::STATUS_MAINTENANCE => 'Under Maintenance',
-        self::STATUS_INACTIVE => 'Inactive',
-    ];
 
-    // public const APPROVAL_STATUS = [
-    //     self::APPROVAL_PENDING => 'Pending',
-    //     self::APPROVAL_APPROVED => 'Approved',
-    //     self::APPROVAL_REJECTED => 'Rejected',
-    // ];
-    public static function getStatus(): array
-    {
-        return [
-            self::STATUS_AVAILABLE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',
-            self::STATUS_RENTED => 'Rented',
-            self::STATUS_MAINTENANCE => 'Under Maintenance',
-        ];
-    }
-    // public static function getApprovalStatus(): array
-    // {
-    //     return [
-    //         self::APPROVAL_PENDING => 'Active',
-    //         self::APPROVAL_APPROVED => 'Inactive',
-    //     ];
-    // }
-    public function getStatusLabelAttribute()
-    {
-        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
-    }
-
-    // public function getApprovalStatusLabelAttribute()
-    // {
-    //     return self::APPROVAL_STATUS[$this->approval_status] ?? 'Unknown';
-    // }
-
-    public function getStatusColorAttribute()
-    {
-        return match ((int) $this->status) {
-            self::STATUS_AVAILABLE => 'badge-success',
-            self::STATUS_RENTED => 'badge-warning',
-            self::STATUS_MAINTENANCE => 'badge-info',
-            self::STATUS_INACTIVE => 'badge-danger',
-            default => 'badge-secondary',
-        };
-    }
-
-    // public function getApprovalStatusColorAttribute()
-    // {
-    //     return match ($this->approval_status) {
-    //         self::APPROVAL_PENDING => 'warning',
-    //         self::APPROVAL_APPROVED => 'success',
-    //         self::APPROVAL_REJECTED => 'danger',
-    //         default => 'secondary',
-    //     };
-    // }
 
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'owner_id',
         'category_id',
         'title',
@@ -96,14 +38,18 @@ class Vehicle extends BaseModel
         'seating_capacity',
         'mileage',
         'description',
-        'daily_rate',
         'weekly_rate',
+        'monthly_rate',
+        'security_deposit_weekly',
+        'security_deposit_monthly',
+
         'transmission_type',
+
         'instant_booking',
         'delivery_available',
         'delivery_fee',
         'status',
-        'approval_status',
+
         'created_by',
         'updated_by',
         'deleted_by',
@@ -126,6 +72,10 @@ class Vehicle extends BaseModel
         $this->appends = array_merge(parent::getAppends(), [
             'status_label',
             'status_color',
+            'transmission_label',   
+            'transmission_color',
+            'instant_booking_label',
+            'instant_booking_color',
         ]);
     }
 
@@ -134,7 +84,10 @@ class Vehicle extends BaseModel
      ================================================================ */
 
     //
-
+    public function vehicleRelation()
+    {
+        return $this->hasMany(VehicleRelation::class, 'vehicle_id', 'id');
+    }
     public function owner()
     {
         return $this->belongsTo(User::class);
@@ -179,13 +132,114 @@ class Vehicle extends BaseModel
      * *** SCOPES ***
      ================================================================ */
 
+
+    // Scope Availalbe
+
+    public function scopeAvailable(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_AVAILABLE);
+    }
+
+    // Scope Rented
+
+    public function scopeRented(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_RENTED);
+    }
+
+    // Scope Maintenance
+
+    public function scopeMaintenance(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_MAINTENANCE);
+    }
+
+    // Scope Inactive
+
+    public function scopeInactive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_INACTIVE);
+    }
+
+    // Scope Automatic
+
+    public function scopeAutomatice(Builder $query): Builder
+    {
+        return $query->where('transmission_type', self::TRANSMISSION_AUTOMATIC);
+    }
+
+    // Scope Manuall
+
+    public function scopeManual(Builder $query): Builder
+    {
+        return $query->where('transmission_type', self::TRANSMISSION_MANUAL);
+    }
+
+
     //
 
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
 
-    //
+
+    public static function getTransmission(): array
+    {
+        return [
+            self::TRANSMISSION_AUTOMATIC => 'Automatic',
+            self::TRANSMISSION_MANUAL => 'Manual',
+        ];
+    }
+    public static function getTransmissionColor(): array
+    {
+        return [
+            self::TRANSMISSION_AUTOMATIC => 'badge-primary',
+            self::TRANSMISSION_MANUAL => 'badge-info',
+        ];
+    }
+
+    public function getTransmissionLabelAttribute()
+    {
+        return isset($this->transmission_type) ? self::getTransmission()[$this->transmission_type] : 'Unknown';
+    }
+    public function getTransmissionColorAttribute()
+    {
+        return isset($this->transmission_type) ? self::getTransmissionColor()[$this->transmission_type] : 'Unknown';
+    }
+ 
+    public static function getStatus(): array
+    {
+        return [
+            self::STATUS_AVAILABLE => 'Abailable',
+            self::STATUS_INACTIVE => 'Inactive',
+            self::STATUS_RENTED => 'Rented',
+            self::STATUS_MAINTENANCE => 'Under Maintenance',
+        ];
+    }
+    public function getStatusLabelAttribute()
+    {
+        return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match ((int) $this->status) {
+            self::STATUS_AVAILABLE => 'badge-success',
+            self::STATUS_RENTED => 'badge-warning',
+            self::STATUS_MAINTENANCE => 'badge-info',
+            self::STATUS_INACTIVE => 'badge-danger',
+            default => 'badge-secondary',
+        };
+    }
+    
+    public function getInstantBookingLabelAttribute()
+    {
+        return $this->instant_booking ? 'Yes' : 'No';
+    }
+    public function getInstantBookingColorAttribute()
+    {
+        return $this->instant_booking ? 'badge-success' : 'badge-danger';
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

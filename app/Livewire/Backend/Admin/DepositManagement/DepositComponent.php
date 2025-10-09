@@ -25,6 +25,7 @@ class DepositComponent extends Component
             ->with(['booking', 'user',])
             ->latest()
             ->paginate(10);
+            
         $columns = [
              ['key' => 'booking_id', 'label' => 'Booking Referece', 'width' => '20%', 'format' =>function($deposits){
                 return $deposits->booking->booking_reference ;

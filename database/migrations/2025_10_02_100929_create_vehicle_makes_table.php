@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Traits\AuditColumnsTrait;
+use App\Models\VehicleMake;
 
 return new class extends Migration
 {
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sort_order')->default(0);
             $table->string('name');
-            
+           $table->tinyInteger('status')->default(VehicleMake::ACTIVE)->index();
             $table->timestamps();
             $table->softDeletes();
             $this->addAdminAuditColumns($table);

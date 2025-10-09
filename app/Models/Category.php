@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class Category extends BaseModel
 {
@@ -10,6 +11,8 @@ class Category extends BaseModel
      * *** MODEL CONSTANTS ***
      ================================================================ */
 
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 0;
 
 
     /* ================================================================
@@ -36,17 +39,47 @@ class Category extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->appends = array_merge(parent::getAppends(), []);
+        $this->appends = array_merge(parent::getAppends(), [
+            'status_label',
+            'status_color',
+        ]);
     }
 
+ 
     /* ================================================================
-     * *** Status ***
+     * *** Relations ***
+     ================================================================ */
+ 
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
+    public function featuresVehicle()
+    {
+        return $this->hasMany(VehicleFeature::class, 'feature_category', 'id');
+    }
+    /* ================================================================
+     * *** SCOPES ***
      ================================================================ */
 
     //
+    public function scopeActive(Builder $query): Builder
+    {
+      return  $query->where('status', self::STATUS_ACTIVE);
+    }
 
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_INACTIVE = 0;
+    public function scopeInactive(Builder $query): Builder
+    {
+      return  $query->where('status', self::STATUS_INACTIVE);
+    }
+
+    
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
 
 
     public static function getStatus(): array
@@ -55,43 +88,23 @@ class Category extends BaseModel
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
         ];
+    } 
+    public static function getColors(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-error',
+        ];
     }
     public function getStatusLabelAttribute(): string
     {
         return isset($this->status) ? self::getStatus()[$this->status] : 'Unknown';
     }
 
-    // public function getStatusLabelAttribute(): string
-    // {
-    //     return self::getStatus()[$this->status] ?? 'Unknown';
-    // }
-
-
-    public function getIsCategoryLabelAttribute(): string
-    {
-        return $this->is_admin ? 'Administrator' : 'User';
-    }
     public function getStatusColorAttribute(): string
     {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',
-            default => 'secondary',
-        };
+        return isset($this->status) ? self::getColors()[$this->status] : 'badge-secondary';
     }
-    /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-    //
-
-
-    /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-    //
-
     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */

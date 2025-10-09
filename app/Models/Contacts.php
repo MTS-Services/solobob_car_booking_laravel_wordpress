@@ -18,6 +18,7 @@ class Contacts extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'first_name',
         'last_name',
         'email',
@@ -29,7 +30,6 @@ class Contacts extends BaseModel
         'deleted_by',
     ];
 
-    protected $guarded = [];
     protected $hidden = [];
 
     /**
