@@ -16,7 +16,7 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
     [
         'title' => 'vehicle-create',
         'breadcrumb' => 'vehicle-create',
-        'page_slug' => 'vehicle-create'
+        'page_slug' => 'vehicle-list'
     ]
 )]
 class VehicleCreate extends Component

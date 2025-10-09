@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
     [
         'title' => 'vehicle-details',
         'breadcrumb' => 'vehicle-details',
-        'page_slug' => 'vehicle-details'
+        'page_slug' => 'vehicle-list'
     ]
 )]
 class VehicleDetails extends Component

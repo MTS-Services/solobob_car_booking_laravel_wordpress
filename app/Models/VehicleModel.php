@@ -74,21 +74,21 @@ class VehicleModel extends BaseModel
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
-    public function getStatusLabelAttribute()
-    {
-        return match ($this->status) {
+
+     public static function getStatuses(): array
+     {
+        return [
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
-            default => 'Unknown',
-        };
+        ];
+     }
+    public function getStatusLabelAttribute()
+    {
+        return $this->status ? 'Active' : 'Inactive';
     }
     public function getStatusColorAttribute()
     {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'badge-success',
-            self::STATUS_INACTIVE => 'badge-warning',
-            default => 'badge-secondary',
-        };
+        return $this->status ? 'badge-success' : 'badge-warning';
     }
 
     /* ================================================================

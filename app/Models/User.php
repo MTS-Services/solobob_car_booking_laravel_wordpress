@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public const STATUS_SUSPENDED = 2;
     public const STATUS_INACTIVE = 3;
 
-
+    
 
     /* ================================================================
      * *** PROPERTIES ***

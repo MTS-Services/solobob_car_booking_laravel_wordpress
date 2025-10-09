@@ -123,7 +123,7 @@ class User extends Component
         $this->existingAvatar = null;
     }
 
-    public function openDeleteModal($id)
+    public function openForceDeleteModal($id)
     {
         $this->userId = $id;
         $this->showDeleteModal = true;
@@ -247,7 +247,7 @@ class User extends Component
         }
 
         // Update deleted_by before soft deleting
-        $user->update(['deleted_by' => user()->id]);
+        // $user->update(['deleted_by' => user()->id]);
         $user->delete();
 
         session()->flash('message', 'User deleted successfully.');

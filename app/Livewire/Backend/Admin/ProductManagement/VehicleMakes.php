@@ -153,18 +153,13 @@ class VehicleMakes extends Component
     {
         $vehicleMake = VehicleMake::findOrFail($this->adminId);
 
-        // Prevent deleting yourself
-        if ($vehicleMake->id === user()->id) {
-            session()->flash('error', 'You cannot delete your own account.');
-            $this->closeDeleteModal();
-            return;
-        }
+        
 
         // Update deleted_by before soft deleting
-        $vehicleMake->update(['deleted_by' => user()->id]);
+     //   $vehicleMake->update(['deleted_by' => user()->id]);
         $vehicleMake->delete(); // This will soft delete due to SoftDeletes trait
 
-        session()->flash('message', 'Admin deleted successfully.');
+        session()->flash('message', 'Vehicle deleted successfully.');
         $this->closeDeleteModal();
     }
 
@@ -173,8 +168,8 @@ class VehicleMakes extends Component
         $vehicleMake = VehicleMake::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('slug', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%' . $this->search . '%');
+                       
                 });
             })
             ->with(['createdBy', 'updatedBy'])

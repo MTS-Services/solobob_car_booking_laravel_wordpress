@@ -16,7 +16,7 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
     [
         'title' => 'vehicle-edit',
         'breadcrumb' => 'vehicle-edit',
-        'page_slug' => 'vehicle-edit'
+        'page_slug' => 'vehicle-list'
     ]
 )]
 class VehicleEdit extends Component

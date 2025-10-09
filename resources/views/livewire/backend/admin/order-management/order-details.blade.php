@@ -71,8 +71,8 @@
                                         'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
                                 @endphp
                                 <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
-                                    {{ $detailsOrder->getStatusLabelAttribute() }}
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{  $detailsOrder->booking_status_color  }}">
+                                    {{ $detailsOrder->booking_status_label }}
                                 </span>
                             </div>
                             

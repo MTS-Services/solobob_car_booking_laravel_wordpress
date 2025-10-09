@@ -27,7 +27,7 @@ use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleCreate;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleDetails;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleEdit;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleList;
-use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleTrash;
+
 
 
 Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin')->group(function () {
@@ -38,7 +38,7 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
 
     Route::group(['as' => 'om.', 'prefix' => 'order-management'], function () {
         Route::get('/index', OrderComponent::class)->name('index');
-        Route::get('/details/{id}', OrderDetails::class)->name('details');
+        Route::get('/order/details/{id}', OrderDetails::class)->name('details');
     });
 
 

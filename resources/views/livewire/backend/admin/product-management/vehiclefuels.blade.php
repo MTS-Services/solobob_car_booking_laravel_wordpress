@@ -19,10 +19,7 @@
                 <div class="flex items-center justify-between">
                     <h2 class="text-xl font-bold text-accent">{{ __('Vehicle Fuels List') }}</h2>
                     <div class="flex items-center gap-2">
-                        {{-- <x-button href="#" icon="trash-2" type='secondary' permission="product-category-trash"
-                            class="text-white">
-                            {{ __('Trash') }}
-                        </x-button> --}}
+                      
                         <button wire:click="openCreateModal"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -78,12 +75,7 @@
 
                             {{-- Information Grid --}}
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                    <p class="text-zinc-200 font-medium">#{{ $detailsVehicleFuel->id }}</p>
-                                </div>
-
-
+                              
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
                                     <p class="text-zinc-200 font-medium">{{ $detailsVehicleFuel->created_at_formatted }}
@@ -237,8 +229,8 @@
                         {{-- Body --}}
                         <div class="px-6 py-4">
                             <p class="text-zinc-300">Are you sure you want to delete this Vehicle fuel? This action
-                                will soft
-                                delete the record.</p>
+                                will 
+                                delete the record foreever. won't recover again</p>
                         </div>
 
                         {{-- Footer --}}

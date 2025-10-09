@@ -156,18 +156,12 @@ class VehicleModels extends Component
     {
         $vehicleModel = VehicleModel::findOrFail($this->adminId);
 
-        // Prevent deleting yourself
-        if ($vehicleModel->id === user()->id) {
-            session()->flash('error', 'You cannot delete your own account.');
-            $this->closeDeleteModal();
-            return;
-        }
 
         // Update deleted_by before soft deleting
-        $vehicleModel->update(['deleted_by' => user()->id]);
+      //  $vehicleModel->update(['deleted_by' => user()->id]);
         $vehicleModel->delete(); // This will soft delete due to SoftDeletes trait
 
-        session()->flash('message', 'Admin deleted successfully.');
+        session()->flash('message', 'Vehicle Model deleted successfully.');
         $this->closeDeleteModal();
     }
 
@@ -224,6 +218,7 @@ class VehicleModels extends Component
             [
                 'vehicleModels' => $vehicleModel,
                 'columns' => $columns,
+                'statuses' => VehicleModel::getStatuses(),
                 'actions' => $actions
 
             ]

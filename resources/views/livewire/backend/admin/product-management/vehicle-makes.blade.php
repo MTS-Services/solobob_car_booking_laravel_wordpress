@@ -79,11 +79,7 @@
 
                         {{-- Information Grid --}}
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
-                            </div>
-
+                            
                           
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
@@ -224,8 +220,8 @@
 
                     {{-- Body --}}
                     <div class="px-6 py-4">
-                        <p class="text-zinc-300">Are you sure you want to delete this Vehicle? This action will soft
-                            delete the record.</p>
+                        <p class="text-zinc-300">Are you sure you want to delete this Vehicle? This action will 
+                            delete the record forever and won't recover again.</p>
                     </div>
 
                     {{-- Footer --}}

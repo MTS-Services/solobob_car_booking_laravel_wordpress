@@ -19,10 +19,7 @@
                 <div class="flex items-center justify-between">
                     <h2 class="text-xl font-bold text-accent">{{ __('Vehicle Models List') }}</h2>
                     <div class="flex items-center gap-2">
-                        <x-button href="#" icon="trash-2" type='secondary' permission="product-category-trash"
-                            class="text-white">
-                            {{ __('Trash') }}
-                        </x-button>
+                      
                         <button wire:click="openCreateModal"
                             class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -79,11 +76,7 @@
 
                             {{-- Information Grid --}}
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                    <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                    <p class="text-zinc-200 font-medium">#{{ $detailsVehicleModel->id }}</p>
-                                </div>
-
+                               
 
                                 <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Created At</p>
@@ -202,9 +195,9 @@
                                     <label class="block text-sm font-medium text-zinc-300 mb-2">Status *</label>
                                     <select wire:model="status"
                                         class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent">
-                                        {{-- @foreach ($statuses as $key => $label)
+                                        @foreach ($statuses as $key => $label)
                                             <option value="{{ $key }}">{{ $label }}</option>
-                                        @endforeach --}}
+                                        @endforeach
                                     </select>
                                     @error('status')
                                         <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
@@ -251,8 +244,8 @@
                         {{-- Body --}}
                         <div class="px-6 py-4">
                             <p class="text-zinc-300">Are you sure you want to delete this vehicle model? This action
-                                will soft
-                                delete the record.</p>
+                                will 
+                                delete the record forever won't recover again.</p>
                         </div>
 
                         {{-- Footer --}}

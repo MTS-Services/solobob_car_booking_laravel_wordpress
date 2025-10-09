@@ -270,8 +270,8 @@
                         {{-- Body --}}
                         <div class="px-6 py-4">
                             <p class="text-zinc-300">Are you sure you want to delete this category? This action will
-                                soft
-                                delete the record.</p>
+                                
+                                delete the record forever and not recover again.</p>
                         </div>
 
                         {{-- Footer --}}

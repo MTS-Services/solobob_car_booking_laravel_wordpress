@@ -158,18 +158,12 @@ class ProductCategory extends Component
     {
         $category = Category::findOrFail($this->adminId);
 
-        // Prevent deleting yourself
-        if ($category->id === user()->id) {
-            session()->flash('error', 'You cannot delete your own account.');
-            $this->closeDeleteModal();
-            return;
-        }
 
         // Update deleted_by before soft deleting
-        $category->update(['deleted_by' => user()->id]);
+       // $category->update(['deleted_by' => user()->id]);
         $category->delete(); // This will soft delete due to SoftDeletes trait
 
-        session()->flash('message', 'Admin deleted successfully.');
+        session()->flash('message', 'Category deleted successfully.');
         $this->closeDeleteModal();
     }
 
