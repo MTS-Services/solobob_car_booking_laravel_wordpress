@@ -77,6 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public $appends = [
         'status_label',
         'status_color',
+        'modified_image',
 
         'created_at_human',
         'updated_at_human',
@@ -184,11 +185,10 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
-    public function scopeSelf(Builder $query):Builder
+    public function scopeSelf(Builder $query): Builder
     {
 
         return $query->where('user_id', Auth::id());
-
     }
     public function scopeAdmin(Builder $query): Builder
     {
@@ -198,17 +198,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $query->where('is_admin', self::ROLE_USER);
     }
-    public function scopeActive(Builder $query) : Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_ACTIVE);
     }
-    public function scopeSusepended(Builder $query) : Builder
+    public function scopeSusepended(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_SUSPENDED);
     }
-    public function scopeInactive(Builder $query) : Builder
+    public function scopeInactive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_INACTIVE);
+    }
+
+    public function getModifiedImageAttribute()
+    {
+        return storage_url($this->avatar);
     }
 
     /* ================================================================

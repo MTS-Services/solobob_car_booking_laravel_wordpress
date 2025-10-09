@@ -208,7 +208,7 @@
 
             <div class="space-y-2">
                 {{-- <flux:separator class="bg-accent!" /> --}}
-                <x-backend.navlink type="single" icon="user" name="Profile" active="profile" :page_slug="$active" />
+                <x-backend.navlink type="single" icon="user" name="Profile" active="admin-profile" :page_slug="$active" :route="route('admin.profile')" />
                 <button wire:click="logout" class="w-full text-left">
                     <x-backend.navlink type="single" icon="power" name="Logout" />
                 </button>
