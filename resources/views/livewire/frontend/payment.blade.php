@@ -1,6 +1,6 @@
  <div>
 
-     <div class="bg-gradient-to-b from-[#fff8f3] to-[#fff1e6] min-h-screen  flex flex-col items-center justify-center">
+     <div class="bg-[#F3F4F6] min-h-screen  flex flex-col items-center justify-center">
          <!-- Header -->
          <div class="text-center mb-10">
              <div class="flex justify-center mb-3">
