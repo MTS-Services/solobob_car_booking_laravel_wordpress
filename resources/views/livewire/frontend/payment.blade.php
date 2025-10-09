@@ -25,7 +25,7 @@
              <!-- PayPal -->
              <label
                  class="block bg-white shadow-sm rounded-2xl p-6 border border-gray-200 cursor-pointer 
-           hover:border-orange-400  transition duration-500 ease-in-out text-white   transform hover:-translate-y-1 hover:scale-110">
+           hover:border-orange-400  transition duration-500 ease-in-out text-white   transform hover:-translate-y-1 hover:scale-2.5">
                  <div class="flex items-center">
 
                      <input type="radio" name="payments" value="paypal" wire:model="paymentGateway"
@@ -129,7 +129,7 @@
              </label> --}}
              <label
                  class="block bg-white shadow-sm rounded-2xl p-6 border border-gray-200 cursor-pointer 
-           hover:border-orange-400  transition duration-500 ease-in-out text-white   transform hover:-translate-y-1 hover:scale-110">
+           hover:border-orange-400  transition duration-500 ease-in-out text-white   transform hover:-translate-y-1 hover:scale-2.5">
                  <div class="flex items-center ">
                      <input type="radio" name="payments" value="paypal" wire:model="paymentGateway"
                          class="radio bg-white border-zinc-300 checked:bg-white checked:text-zinc-600 checked:border-zinc-600 checked:before:bg-zinc-600" />
