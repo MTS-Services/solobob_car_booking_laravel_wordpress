@@ -48,7 +48,6 @@ class Profile extends Component
     {
         $this->profile = User::findOrFail(user()->id);
         $this->profile->load('addresses');
-        // dd($this->profile);
         $this->name = $this->profile->name;
         $this->email = $this->profile->email;
         $this->number = $this->profile->number;
@@ -81,12 +80,18 @@ class Profile extends Component
      */
     public function adminUpdate()
     {
-
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $this->profile->id,
             'newImage' => 'nullable|image|max:2048', // 2MB max
+            'is_default' => 'nullable|boolean',
+            'address' => 'nullable|string',
+            'city' => 'nullable|string',
+            'state' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'number' => 'nullable|string',
         ]);
+
         try {
             DB::transaction(function () {
                 // Validate the input
@@ -97,8 +102,7 @@ class Profile extends Component
                     'date_of_birth' => $this->date_of_birth,
                     'updated_at' => now(),
                     'updated_by' => user()->id,
-                ]; {
-                }
+                ];
                 // Handle avatar upload
                 if ($this->newImage) {
                     // Delete old image if exists
@@ -116,9 +120,11 @@ class Profile extends Component
                         maintainAspectRatio: true
                     );
                 }
+
                 // Update the user
                 $this->profile->update($data);
                 Addresse::updateOrCreate(
+
                     ['user_id' => $this->profile->id],
                     [
                         'address' => $this->address,
