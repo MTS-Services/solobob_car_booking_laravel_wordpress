@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleModel extends BaseModel
 {
@@ -19,7 +20,12 @@ class VehicleModel extends BaseModel
 
     protected $fillable = [
         'name',
-        'slug',
+        'sort_order',
+        'status',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $hidden = [];
@@ -41,38 +47,26 @@ class VehicleModel extends BaseModel
         ]);
     }
 
-    public function getStatusLabelAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_INACTIVE => 'Inactive',            
-            default => 'Unknown',
-        };
-    }
-    public function getStatusColorAttribute()
-    {
-        return match ($this->status) {
-            self::STATUS_ACTIVE => 'success',
-            self::STATUS_INACTIVE => 'warning',            
-            default => 'secondary',
-        };
-    }
+
     /* ================================================================
      * *** RELATIONS ***
      ================================================================ */
 
-    //
+    public function vehicleRelation()
+    {
+        return $this->hasMany(VehicleRelation::class, 'model_id', 'id');
+    }
 
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
 
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_ACTIVE);
     }
 
-    public function scopeInactive($query)
+    public function scopeInactive(Builder $query):Builder
     {
         return $query->where('status', self::STATUS_INACTIVE);
     }
@@ -80,8 +74,22 @@ class VehicleModel extends BaseModel
     /* ================================================================
      * *** ACCESSORS ***
      ================================================================ */
-
-    //
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_INACTIVE => 'Inactive',
+            default => 'Unknown',
+        };
+    }
+    public function getStatusColorAttribute()
+    {
+        return match ($this->status) {
+            self::STATUS_ACTIVE => 'badge-success',
+            self::STATUS_INACTIVE => 'badge-warning',
+            default => 'badge-secondary',
+        };
+    }
 
     /* ================================================================
      * *** UTILITY METHODS ***

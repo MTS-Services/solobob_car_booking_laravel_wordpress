@@ -23,6 +23,7 @@ class Payment extends BaseModel
     public const STATUS_REFUNDED = 2;
     public const STATUS_FAILED = 3;
 
+
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
@@ -50,6 +51,10 @@ class Payment extends BaseModel
         return [];
     }
 
+
+
+
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -64,6 +69,72 @@ class Payment extends BaseModel
         ]);
     }
 
+
+    /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+    public function paymentMethod(): HasMany
+    {
+        return $this->hasMany(PaymentMethod::class, 'payment_id', 'id');
+    }
+
+    /* ================================================================
+     * *** SCOPES ***
+     ================================================================ */
+    public function scopeSelf()
+    {
+        return $this->where('user_id', user()->id);
+    }
+    public function scopeStripe($query)
+    {
+        return $query->where('payment_method', self::METHOD_STRIPE);
+    }
+    public function scopePaypal($query)
+    {
+        return $query->where('payment_method', self::METHOD_PAYPAL);
+    }
+    public function scopeDeposit($query)
+    {
+        return $query->where('type', self::TYPE_DEPOSIT);
+    }
+    public function scopeFinal($query)
+    {
+        return $query->where('type', self::TYPE_FINAL);
+    }
+    public function scopeAdditional($query)
+    {
+        return $query->where('type', self::TYPE_ADDITIONAL);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where('status', self::STATUS_PAID);
+    }
+    // please define all scopes
+    public function scopePending($query)
+    {
+        return $query->where('status', self::STATUS_PENDING);
+    }
+    public function scopeRefunded($query)
+    {
+        return $query->where('status', self::STATUS_REFUNDED);
+    }
+
+
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
+
     public function getPaymentMethodLabelAttribute(): string
     {
         return match ($this->payment_method) {
@@ -74,7 +145,7 @@ class Payment extends BaseModel
     }
     public function getPaymentMethodColorAttribute(): string
     {
-        return match ($this->payment_method) {
+        return match ((int)$this->payment_method) {
             self::METHOD_STRIPE => 'badge-info',
             self::METHOD_PAYPAL => 'badge-success',
             default => 'badge-secondary',
@@ -104,7 +175,7 @@ class Payment extends BaseModel
 
     public function getTypeColorAttribute(): string
     {
-        return match ($this->type) {
+        return match ((int)$this->type) {
             self::TYPE_DEPOSIT => 'badge-info',
             self::TYPE_FINAL => 'badge-success',
             self::TYPE_ADDITIONAL => 'badge-warning',
@@ -114,80 +185,19 @@ class Payment extends BaseModel
 
     public function getStatusColorAttribute()
     {
-        return match ($this->status) {
+        return match ((int)$this->status) {
             self::STATUS_PENDING => 'badge-secondary',
             self::STATUS_PAID => 'badge-success',
             self::STATUS_REFUNDED => 'badge-info',
             self::STATUS_FAILED => 'badge-warning',
             default => 'badge-secondary',
         };
-
     }
 
     public function getAmountFormattedAttribute(): string
     {
         return number_format($this->amount, 2);
     }
-
-
-    /* ================================================================
-     * *** RELATIONS ***
-     ================================================================ */
-    public function booking()
-    {
-        return $this->belongsTo(Booking::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-    public function paymentMethod() :HasMany
-    {
-        return $this->hasMany(PaymentMethod::class, 'payment_id', 'id');
-    }
-
-    /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-     public function scopeSelf()
-     {
-         return $this->where('user_id', user()->id);
-     }
-    public function scopeDeposit($query)
-    {
-        return $query->where('type', self::TYPE_DEPOSIT);
-    }
-    public function scopeFinal($query)
-    {
-        return $query->where('type', self::TYPE_FINAL);
-    }
-    public function scopeAdditional($query)
-    {
-        return $query->where('type', self::TYPE_ADDITIONAL);
-    }
-
-    public function scopePaid($query)
-    {
-        return $query->where('status', self::STATUS_PAID);
-    }
-    // please define all scopes
-    public function scopePending($query)
-    {
-        return $query->where('status', self::STATUS_PENDING);
-    }
-    public function scopeRefunded($query)
-    {
-        return $query->where('status', self::STATUS_REFUNDED);
-    }
-    
-
-
-    /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-    //
 
     /* ================================================================
      * *** UTILITY METHODS ***

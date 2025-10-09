@@ -19,14 +19,14 @@ class DatabaseSeeder extends Seeder
             VehicleFuelSeeder::class,
             VehicleFeatureSeeder::class,
             VehicleImageSeeder::class,
+            VehicleSeeder::class,
             VehicleRelationSeeder::class,
             VehicleLocationSeeder::class,
-            VehicleSeeder::class,
             BookingSeeder::class,
             BookingStatusTimelineSeeder::class,
             RentalCheckinsSeeder::class,
 
-            PaymentSeeder::class,
+            // PaymentSeeder::class,
         ]);
     }
 }

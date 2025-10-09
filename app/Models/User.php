@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable; // Import for Scopes
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -18,13 +19,24 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** MODEL CONSTANTS ***
      ================================================================ */
+
+    // Role Constant
     public const ROLE_ADMIN = true;
     public const ROLE_USER = false;
+
+    // Status Constand
+
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_SUSPENDED = 2;
+    public const STATUS_INACTIVE = 3;
+
+
 
     /* ================================================================
      * *** PROPERTIES ***
      ================================================================ */
     protected $fillable = [
+        'sort_order',
         'name',
         'email',
         'password',
@@ -65,6 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public $appends = [
         'status_label',
         'status_color',
+        'modified_image',
 
         'created_at_human',
         'updated_at_human',
@@ -78,9 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /* ================================================================
      * *** STATUS ***
      ================================================================ */
-    public const STATUS_ACTIVE = 1;
-    public const STATUS_SUSPENDED = 2;
-    public const STATUS_INACTIVE = 3;
+
 
     public static function getStatus(): array
     {
@@ -114,11 +125,46 @@ class User extends Authenticatable implements MustVerifyEmail
      * *** RELATIONS ***
      ================================================================ */
 
+    public function rentalCheckinPerformedBy()
+    {
+        return $this->hasMany(RentalCheckin::class, 'performed_by', 'id');
+    }
+    public function rentalCheckoutPerformedBy()
+    {
+        return $this->hasMany(Rentalcheckout::class, 'performed_by', 'id');
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'id');
+    }
+    public function paymentMethoad()
+    {
+        return $this->hasMany(PaymentMethod::class, 'user_id', 'id');
+    }
+    public function review()
+    {
+        return $this->hasMany(Review::class, 'user_id', 'id');
+    }
+
     public function addresses()
     {
         return $this->hasMany(Addresse::class, 'user_id', 'id');
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'user_id', 'id');
+    }
+
+    public function userDocuments()
+    {
+        return $this->hasMany(UserDocuments::class, 'user_id', 'id');
+    }
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'owner_id', 'id');
+    }
+    
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by')->select('id', 'name');
@@ -134,24 +180,40 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
     }
 
+
+
     /* ================================================================
      * *** SCOPES ***
      ================================================================ */
-
-    /**
-     * Scope a query to include only admin users (is_admin = true).
-     */
-    public function scopeAdmins(Builder $query): void
+    public function scopeSelf(Builder $query): Builder
     {
-        $query->where('is_admin', self::ROLE_ADMIN);
+
+        return $query->where('user_id', Auth::id());
+    }
+    public function scopeAdmin(Builder $query): Builder
+    {
+        return $query->where('is_admin', self::ROLE_ADMIN);
+    }
+    public function scopeUser(Builder $query): Builder
+    {
+        return $query->where('is_admin', self::ROLE_USER);
+    }
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+    public function scopeSusepended(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_SUSPENDED);
+    }
+    public function scopeInactive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_INACTIVE);
     }
 
-    /**
-     * Scope a query to include only basic/non-admin users (is_admin = false).
-     */
-    public function scopeUsers(Builder $query): void
+    public function getModifiedImageAttribute()
     {
-        $query->where('is_admin', self::ROLE_USER);
+        return storage_url($this->avatar);
     }
 
     /* ================================================================
@@ -161,7 +223,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Accessor for human-readable 'created_at' time (e.g., "3 days ago").
      */
-        public function getCreatedAtHumanAttribute(): string
+    public function getCreatedAtHumanAttribute(): string
     {
         return $this->created_at ? $this->created_at->diffForHumans() : 'Null';
     }
@@ -213,7 +275,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 

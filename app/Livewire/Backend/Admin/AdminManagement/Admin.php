@@ -182,25 +182,18 @@ class Admin extends Component
         $this->showForceDeleteModal = false;
     }
 
-    public function restore($id)
-    {
-        $admin = User::onlyTrashed()->findOrFail($id);
-        $admin->restore();
-
-        session()->flash('message', 'Admin restored successfully!');
-    }
 
     public function forceDelete()
     {
         if ($this->forceDeleteId) {
-            $admin = User::onlyTrashed()->findOrFail($this->forceDeleteId);
+            $admin = User::findOrFail($this->forceDeleteId);
 
             // Delete avatar if exists
             if ($admin->avatar) {
                 $this->fileUploadService->delete($admin->avatar, 'public');
             }
 
-            $admin->forceDelete();
+            $admin->delete();
 
             session()->flash('message', 'Admin permanently deleted!');
         }
@@ -331,7 +324,8 @@ class Admin extends Component
     public function render()
     {
         // Main admins query
-        $admins = User::admins()
+
+        $admins = User::admin()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -344,19 +338,8 @@ class Admin extends Component
             ->orderBy('name', 'asc')
             ->paginate($this->perPage);
 
+        
         $columns = [
-            // ['key' => 'id', 'label' => 'ID', 'width' => '5%'],
-            // [
-            //     'key' => 'avatar',
-            //     'label' => 'Avatar',
-            //     'width' => '8%',
-            //     'format' => function ($admin) {
-            //         if ($admin->avatar) {
-            //             return '<img src="' . Storage::url($admin->avatar) . '" class="w-10 h-10 rounded-full" alt="' . $admin->name . '">';
-            //         }
-            //         return '<div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">' . strtoupper(substr($admin->name, 0, 1)) . '</div>';
-            //     }
-            // ],
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
             ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
             [
@@ -381,34 +364,20 @@ class Admin extends Component
                 'label' => 'Created',
                 'width' => '15%',
                 'format' => function ($admin) {
-                    return $admin->createdBy?->name ?? 'System' ;
+                    return $admin->createdBy?->name ?? 'System';
                 }
-            ]                   
+            ]
         ];
 
         $actions = [
             ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
             ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
-            ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
+            ['key' => 'id', 'label' => 'Delete', 'method' => 'openForceDeleteModal'],
+            
         ];
-
-
-        // Trashed admins query - always return a paginator
-        $trashedAdmins = User::onlyTrashed()
-            ->where('is_admin', true)
-            ->when($this->trashSearch, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->trashSearch . '%')
-                        ->orWhere('email', 'like', '%' . $this->trashSearch . '%');
-                });
-            })
-            ->with(['deletedBy', 'createdBy'])
-            ->latest('deleted_at')
-            ->paginate(10, ['*'], 'trashedPage');
 
         return view('livewire.backend.admin.admin-management.admin', [
             'admins' => $admins,
-            'trashedAdmins' => $trashedAdmins,
             'statuses' => User::getStatus(),
             'columns' => $columns,
             'actions' => $actions,
