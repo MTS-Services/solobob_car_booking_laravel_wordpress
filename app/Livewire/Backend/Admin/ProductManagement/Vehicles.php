@@ -431,7 +431,7 @@ class Vehicles extends Component
             'vehicles' => $vehicles,
             'categories' => Category::where('status', Category::STATUS_ACTIVE)->pluck('name', 'id'),
             'owners' => User::pluck('name', 'id'),
-            'statuses' => Vehicle::STATUS,
+            'statuses' => Vehicle::getStatus(),
         ]);
     }
 }

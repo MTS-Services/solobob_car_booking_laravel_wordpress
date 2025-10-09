@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Backend\User;
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -28,8 +28,9 @@ class Security extends Component
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = Auth::user();
+        $user = User::findOrFail(user()->id);
 
+        
         $user->update([
             'password' => Hash::make($this->password),
         ]);

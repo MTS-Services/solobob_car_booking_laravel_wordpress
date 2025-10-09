@@ -18,12 +18,7 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
                 <div class="flex items-center gap-2">
-                    <button wire:click="openTrashModal" permission="product-category-trash"
-                        class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
-                        {{-- Add the flux:icon component for the trash icon --}}
-                        <flux:icon name="trash-2" class="w-4 h-4" />
-                        {{ __('Trash') }}
-                    </button>
+                  
                     <button wire:click="openCreateModal"
                         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -44,165 +39,7 @@
 
     </section>
 
-    {{-- Trash Modal --}}
-    @if ($showTrashModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeTrashModal">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity"
-                    wire:click="closeTrashModal"></div>
-
-                <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-6xl w-full border border-zinc-800">
-                    <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Trash') }}</h3>
-                        <button wire:click="closeTrashModal" class="text-white hover:text-zinc-300 transition-colors">
-                            <flux:icon name="x-mark" class="w-6 h-6 stroke-white" />
-                        </button>
-                    </div>
-
-                    <div class="px-6 py-6">
-                        {{-- Trash Search --}}
-                        <div class="mb-4 w-[20%]">
-                            <div class="relative">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500"
-                                    viewBox="0 0 24 24" fill="none" stroke="gray" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                                <input wire:model.live.debounce.300ms="trashSearch" type="text"
-                                    placeholder="Search in trash..."
-                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-8 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600">
-                                @if ($trashSearch)
-                                    <button type="button" wire:click="$set('trashSearch', '')"
-                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-
-                        {{-- Trash Table --}}
-                        <div class="overflow-x-auto rounded-lg border border-zinc-800">
-                            <table class="w-full">
-                                <thead class="bg-zinc-800/50 border-b border-zinc-700">
-                                    <tr>
-                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
-                                            Name</th>
-                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
-                                            Email</th>
-                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
-                                            Deleted At</th>
-                                        <th class="px-6 text-zinc-300 py-3 text-left text-xs font-semibold uppercase">
-                                            Deleted By</th>
-                                        <th class="px-6 text-zinc-300 py-3 text-right text-xs font-semibold uppercase">
-                                            Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-zinc-700/50">
-                                    @forelse ($trashedAdmins as $trashedAdmin)
-                                        <tr class="bg-zinc-800/30 hover:bg-zinc-800/50 transition-colors">
-                                            <td class="px-6 py-4">
-                                                <div class="flex items-center gap-3">
-                                                    @if ($trashedAdmin->avatar)
-                                                        <img src="{{ Storage::url($trashedAdmin->avatar) }}"
-                                                            alt="{{ $trashedAdmin->name }}"
-                                                            class="w-10 h-10 rounded-full object-cover border-2 border-zinc-700">
-                                                    @else
-                                                        <div
-                                                            class="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-zinc-100 font-semibold">
-                                                            {{ $trashedAdmin->initials() }}
-                                                        </div>
-                                                    @endif
-                                                    <span
-                                                        class="text-zinc-200 font-medium">{{ $trashedAdmin->name }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 text-zinc-300">{{ $trashedAdmin->email }}</td>
-                                            <td class="px-6 py-4">
-                                                <div class="flex flex-col">
-                                                    <span
-                                                        class="text-zinc-300 text-sm">{{ $trashedAdmin->deleted_at_formatted }}</span>
-                                                    <span
-                                                        class="text-zinc-500 text-xs">{{ $trashedAdmin->deleted_at_human }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 text-zinc-300">
-                                                {{ $trashedAdmin->deletedBy?->name ?? 'System' }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <div class="flex items-center justify-end gap-2">
-                                                    <button wire:click="restore({{ $trashedAdmin->id }})"
-                                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 rounded-lg transition-colors">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2">
-                                                            <polyline points="23 4 23 10 17 10"></polyline>
-                                                            <polyline points="1 20 1 14 7 14"></polyline>
-                                                            <path
-                                                                d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
-                                                            </path>
-                                                        </svg>
-                                                        Restore
-                                                    </button>
-                                                    <button wire:click="openForceDeleteModal({{ $trashedAdmin->id }})"
-                                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2">
-                                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                                            <path
-                                                                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                            </path>
-                                                            <line x1="10" y1="11" x2="10"
-                                                                y2="17"></line>
-                                                            <line x1="14" y1="11" x2="14"
-                                                                y2="17"></line>
-                                                        </svg>
-                                                        Delete Forever
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="px-6 py-12 text-center">
-                                                <div class="flex flex-col items-center justify-center gap-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="w-12 h-12 text-zinc-600" viewBox="0 0 24 24"
-                                                        fill="none" stroke="currentColor" stroke-width="2">
-                                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                                        <path
-                                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                                        </path>
-                                                    </svg>
-                                                    <p class="text-zinc-500 text-lg">Trash is empty</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {{-- Trash Pagination --}}
-                        @if ($trashedAdmins->hasPages())
-                            <div class="mt-4">
-                                {{ $trashedAdmins->links() }}
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
+   
     {{-- Force Delete Confirmation Modal --}}
     @if ($showForceDeleteModal)
         <div class="fixed inset-0 z-[60] overflow-y-auto" wire:keydown.escape="closeForceDeleteModal">
@@ -307,29 +144,22 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
-                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">User ID</p>
-                                <p class="text-zinc-200 font-medium">#{{ $detailsAdmin->id }}</p>
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Number</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsAdmin->number }}</p>
                             </div>
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Status</p>
-                                @php
-                                    $statusColors = [
-                                        \App\Models\User::STATUS_ACTIVE =>
-                                            'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-                                        \App\Models\User::STATUS_SUSPENDED =>
-                                            'bg-amber-500/20 text-amber-400 border-amber-500/30',
-                                        \App\Models\User::STATUS_INACTIVE =>
-                                            'bg-red-500/20 text-red-400 border-red-500/30',
-                                    ];
-                                    $colorClass =
-                                        $statusColors[$detailsAdmin->status] ??
-                                        'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-                                @endphp
+                               
                                 <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $colorClass }}">
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border  {{ $detailsAdmin->status_color  }}">
                                     {{ $detailsAdmin->status_label }}
                                 </span>
+                            </div>
+
+                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Date Of Birth</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsAdmin->date_of_birth }}</p>
                             </div>
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
@@ -579,36 +409,5 @@
         </div>
     @endif
 
-    {{-- Delete Confirmation Modal --}}
-    @if ($showDeleteModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDeleteModal">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity"
-                    wire:click="closeDeleteModal"></div>
-
-                <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-md w-full border border-zinc-800">
-                    <div class="px-6 py-4 border-b border-zinc-800">
-                        <h3 class="text-lg font-semibold text-zinc-100">{{ __('Confirm Delete') }}</h3>
-                    </div>
-
-                    <div class="px-6 py-4">
-                        <p class="text-zinc-300">Are you sure you want to delete this admin? This action will soft
-                            delete the record.</p>
-                    </div>
-
-                    <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
-                        <button wire:click="closeDeleteModal"
-                            class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
-                            Cancel
-                        </button>
-                        <button wire:click="delete"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors duration-200">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    
 </div>

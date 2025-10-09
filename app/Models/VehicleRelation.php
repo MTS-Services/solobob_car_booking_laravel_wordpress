@@ -18,11 +18,12 @@ class VehicleRelation extends BaseModel
      ================================================================ */
 
     protected $fillable = [
+        'sort_order',
         'vehicle_id',
         'feature_id',
         'make_id',
         'model_id',
-        'transmission_id',
+        
         'created_by',
         'updated_by',
         'deleted_by',

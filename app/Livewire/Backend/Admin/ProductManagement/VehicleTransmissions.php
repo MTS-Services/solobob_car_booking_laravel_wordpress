@@ -63,7 +63,7 @@ class VehicleTransmissions extends Component
 
     public function openDetailsModal($id)
     {
-        $this->detailsVehicleTransmission = VehicleTransmission::withTrashed()
+        $this->detailsVehicleTransmission = VehicleTransmissions::withTrashed()
             ->with(['createdBy', 'updatedBy', 'deletedBy'])
             ->findOrFail($id);
         $this->showDetailsModal = true;
@@ -78,7 +78,7 @@ class VehicleTransmissions extends Component
     public function openEditModal($id)
     {
         $this->resetFields();
-        $admin = VehicleTransmission::findOrFail($id);
+        $admin = VehicleTransmissions::findOrFail($id);
 
         $this->adminId = $admin->id;
         $this->name = $admin->name;
@@ -120,7 +120,7 @@ class VehicleTransmissions extends Component
         $this->validate($rules);
 
         if ($this->editMode) {
-            $vehicleTransmission = VehicleTransmission::findOrFail($this->adminId);
+            $vehicleTransmission = VehicleTransmissions::findOrFail($this->adminId);
             
             $updateData = [
                 'name' => $this->name,

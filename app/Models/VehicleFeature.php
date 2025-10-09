@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleFeature extends BaseModel
 {
@@ -15,31 +16,6 @@ class VehicleFeature extends BaseModel
     public const FEATURE_CATEGORY_ENTERTAINMENT = 3;
     public const FEATURE_CATEGORY_OTHER         = 4;
 
-    /* ================================================================
-     * *** PROPERTIES ***
-     ================================================================ */
-
-    protected $fillable = [
-       'name',
-       'slug',
-       'icon',
-       'feature_category',
-    ];
-
-    protected $hidden = [
-        
-    ];
-
-    /**
-     * Define the attribute casts for the model.
-     */
-    protected function casts(): array
-    {
-        return [
-            
-        ];
-    }
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -48,6 +24,76 @@ class VehicleFeature extends BaseModel
             'feture_category_color',
         ]);
     }
+
+    /* ================================================================
+     * *** PROPERTIES ***
+     ================================================================ */
+
+    protected $fillable = [
+        'sort_order',
+        'name',
+        'slug',
+        'icon',
+        'feature_category',
+
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+    protected $hidden = [];
+
+    /**
+     * Define the attribute casts for the model.
+     */
+    protected function casts(): array
+    {
+        return [];
+    }
+
+
+
+    /* ================================================================
+     * *** RELATIONS ***
+     ================================================================ */
+
+    //
+    public function category(){
+        return $this->belongsTo(Category::class, 'feature_category', 'id');
+    }
+    public function vehicleRelation()
+    {
+        return $this->hasMany(VehicleRelation::class, 'feature_id', 'id');
+    }
+    /* ================================================================
+     * *** SCOPES ***
+     ================================================================ */
+
+    public function scopeCategorySafety(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_SAFETY);
+    }
+
+    public function scopeCategoryComfort(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_COMFORT);
+    }
+
+    public function scopeCategoryEntertainment(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_ENTERTAINMENT);
+    }
+
+    public function scopeCategoryOther(Builder $query): Builder
+    {
+        return $query->where('feature_category', self::FEATURE_CATEGORY_OTHER);
+    }
+
+
+    /* ================================================================
+     * *** ACCESSORS ***
+     ================================================================ */
+
     public function getFetureCategoryLabelAttribute()
     {
         return match ($this->feature_category) {
@@ -69,24 +115,8 @@ class VehicleFeature extends BaseModel
         };
     }
 
-     /* ================================================================
-     * *** RELATIONS ***
-     ================================================================ */
-
-    //
 
     /* ================================================================
-     * *** SCOPES ***
-     ================================================================ */
-
-      /* ================================================================
-     * *** ACCESSORS ***
-     ================================================================ */
-
-     //
-
-     /* ================================================================
      * *** UTILITY METHODS ***
      ================================================================ */
-
 }

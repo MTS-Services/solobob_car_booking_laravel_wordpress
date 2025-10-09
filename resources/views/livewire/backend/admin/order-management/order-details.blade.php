@@ -84,7 +84,7 @@
                             
                             <div class="bg-white rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Vehicle </p>
-                                <p class="text-zinc-500 font-medium">{{ $detailsOrder->vehicle->title }}</p>
+                                <p class="text-zinc-500 font-medium">{{ $detailsOrder->vehicle ?->title }}</p>
                             </div>
 
                             <div class="bg-white rounded-lg p-4 border border-zinc-700">

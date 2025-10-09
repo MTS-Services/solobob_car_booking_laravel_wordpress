@@ -18,6 +18,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            
             $table->unsignedBigInteger('sort_order')->default(0);
             $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->string('name', 100)->unique();
