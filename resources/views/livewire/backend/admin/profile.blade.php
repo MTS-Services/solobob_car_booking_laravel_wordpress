@@ -105,9 +105,38 @@
                         </div>
                     </div>
 
+                    {{-- Phone Number --}}
+                    <div class="flex items-start space-x-2">
+                        <span class="text-gray-500"><flux:icon name="phone" class="w-5 h-5 text-gray-500" /></span>
+                        <div class="flex-1">
+                            <p class="text-gray-500 mb-1">Phone Number</p>
+                            <input type="tel" wire:model.defer="number"
+                                class="border border-gray-300 rounded-md shadow-sm w-full text-base font-medium p-2 focus:ring-2 focus:ring-black focus:border-transparent"
+                                placeholder="Enter your Phone">
+                            @error('number')
+                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+
+                    {{-- Date of Birth --}}
+                    <div class="flex items-start space-x-2">
+                        <span class="text-gray-500"><flux:icon name="calendar" class="w-5 h-5 text-gray-500" /></span>
+                        <div class="flex-1">
+                            <p class="text-gray-500 mb-1">Date of Birth</p>
+                            <input type="date" wire:model.defer="date_of_birth"
+                                class="border border-gray-300 rounded-md shadow-sm w-full text-base font-medium p-2 focus:ring-2 focus:ring-black focus:border-transparent"
+                                placeholder="Enter your Phone">
+                            @error('date_of_birth')
+                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
                     {{-- Address --}}
                     <div class="flex items-start space-x-2">
-                        <span class="text-gray-500">📧</span>
+                        <span class="text-gray-500"><flux:icon name="map-pin" class="w-5 h-5 text-gray-500" /></span>
                         <div class="flex-1">
                             <p class="text-gray-500 mb-1">Address</p>
                             <input type="address" wire:model.defer="address"
@@ -121,7 +150,7 @@
 
                     {{-- City --}}
                     <div class="flex items-start space-x-2">
-                        <span class="text-gray-500">📧</span>
+                        <span class="text-gray-500"><flux:icon name="home" class="w-5 h-5 text-gray-500" /></span>
                         <div class="flex-1">
                             <p class="text-gray-500 mb-1">City</p>
                             <input type="city" wire:model.defer="city"
@@ -135,7 +164,7 @@
 
                     {{-- state --}}
                     <div class="flex items-start space-x-2">
-                        <span class="text-gray-500">📧</span>
+                        <span class="text-gray-500"><flux:icon name="map" class="w-5 h-5 text-gray-500" /></span>
                         <div class="flex-1">
                             <p class="text-gray-500 mb-1">State</p>
                             <input type="state" wire:model.defer="state"
@@ -164,7 +193,8 @@
 
                 {{-- Save Button --}}
                 <div class="mt-6 pt-4 border-t border-gray-200">
-                    <button type="submit" class="px-6 py-2 rounded-md dis abled:opacity-50 disabled:cursor-not-allowed "
+                    <button type="submit"
+                        class="px-6 py-2 rounded-md dis abled:opacity-50 disabled:cursor-not-allowed "
                         wire:loading.attr="disabled" wire:target="adminUpdate">
                         <span
                             class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 rounded-lg transition-colors duration-200">

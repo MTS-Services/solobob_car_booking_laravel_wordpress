@@ -28,6 +28,8 @@ class Profile extends Component
     public $newImage;
     public $name;
     public $email;
+    public $number;
+    public $date_of_birth;
     public $address;
     public $city;
     public $state;
@@ -49,6 +51,8 @@ class Profile extends Component
         // dd($this->profile);
         $this->name = $this->profile->name;
         $this->email = $this->profile->email;
+        $this->number = $this->profile->number;
+        $this->date_of_birth = $this->profile->date_of_birth;
         $this->address = $this->profile?->addresses?->first()?->address ?? '';
         $this->city = $this->profile?->addresses?->first()?->city ?? '';
         $this->state = $this->profile?->addresses?->first()?->state ?? '';
@@ -89,6 +93,10 @@ class Profile extends Component
                 $data = [
                     'name' => $this->name,
                     'email' => $this->email,
+                    'number' => $this->number,
+                    'date_of_birth' => $this->date_of_birth,
+                    'updated_at' => now(),
+                    'updated_by' => user()->id,
                 ]; {
                 }
                 // Handle avatar upload
@@ -118,6 +126,8 @@ class Profile extends Component
                         'state' => $this->state,
                         'postal_code' => $this->postal_code,
                         'is_default' => $this->is_default,
+                        'updated_at' => now(),
+                        'updated_by' => user()->id,
                     ]
                 );
             });
