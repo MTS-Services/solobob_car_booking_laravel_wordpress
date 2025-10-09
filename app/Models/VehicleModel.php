@@ -52,7 +52,10 @@ class VehicleModel extends BaseModel
      * *** RELATIONS ***
      ================================================================ */
 
-    //
+    public function vehicleRelation()
+    {
+        return $this->hasMany(VehicleRelation::class, 'model_id', 'id');
+    }
 
     /* ================================================================
      * *** SCOPES ***

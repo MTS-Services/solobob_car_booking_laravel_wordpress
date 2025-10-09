@@ -47,6 +47,20 @@ class Category extends BaseModel
 
  
     /* ================================================================
+     * *** Relations ***
+     ================================================================ */
+ 
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
+    public function featuresVehicle()
+    {
+        return $this->hasMany(VehicleFeature::class, 'feature_category', 'id');
+    }
+    /* ================================================================
      * *** SCOPES ***
      ================================================================ */
 

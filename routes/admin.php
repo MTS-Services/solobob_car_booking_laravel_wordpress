@@ -28,13 +28,11 @@ use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleDetails;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleEdit;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleList;
 use App\Livewire\Backend\Admin\ProductManagement\Vehicles\VehicleTrash;
-use App\Livewire\Backend\Admin\UserManagement\UserTrash;
 
 
 Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/users', User::class)->name('users');
-    Route::get('/users/trash', UserTrash::class)->name('users.trash');
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/admins', Admin::class)->name('admins');
 
@@ -67,7 +65,6 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
         Route::get('/vehicle-create', VehicleCreate::class)->name('vehicle-create');
         Route::get('/vehicle-edit/{id}', VehicleEdit::class)->name('vehicle-edit');
         Route::get('/vehicle-details/{id}', VehicleDetails::class)->name('vehicle-details');
-        Route::get('/vehicle-trash', VehicleTrash::class)->name('vehicle-trash');
     });
 });
 
