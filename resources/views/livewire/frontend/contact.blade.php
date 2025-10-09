@@ -46,14 +46,15 @@
 
             <div class="w-full flex items-center justify-center bg-black/40 rounded-xl shadow-2xl p-6">
                 <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
-                    @if (session()->has('submit_message'))
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <p class="text-primary"> {{ session('submit_message') }} </p>
+               
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
+                     @if (session()->has('submit_message'))
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 py-3">
+                            <p class="text-zinc-500 font-bold"> {{ session('submit_message') }} </p>
                         </div>
                     @endif
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
                     <div class="grid grid-cols-2 gap-4">
-
+                  
                         <div>
                             <input type="text" placeholder="First Name" wire:model="form.first_name"
                                 class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
@@ -78,7 +79,7 @@
                                 class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
                             @if ($errors->has('form.email'))
                                 <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
-                                    {{ $errors->first('form.last_name') }}</small>
+                                    {{ $errors->first('form.email') }}</small>
                             @endif
                         </div>
                         <div>

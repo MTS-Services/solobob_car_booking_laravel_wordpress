@@ -372,8 +372,8 @@
                      </div>
 
                      <div class="px-6 py-4">
-                         <p class="text-zinc-300">Are you sure you want to delete this user? This action will soft
-                             delete the record.</p>
+                         <p class="text-zinc-300">Are you sure you want to delete this user? This action will 
+                             delete the record and won't recover again.</p>
                      </div>
 
                      <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">

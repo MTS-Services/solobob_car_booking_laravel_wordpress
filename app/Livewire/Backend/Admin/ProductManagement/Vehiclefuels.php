@@ -155,18 +155,13 @@ class Vehiclefuels extends Component
     {
         $vehiclefule = VehicleFuel::findOrFail($this->adminId);
 
-        // Prevent deleting yourself
-        if ($vehiclefule->id === user()->id) {
-            session()->flash('error', 'You cannot delete your own account.');
-            $this->closeDeleteModal();
-            return;
-        }
+ 
 
         // Update deleted_by before soft deleting
-        $vehiclefule->update(['deleted_by' => user()->id]);
+        //$vehiclefule->update(['deleted_by' => user()->id]);
         $vehiclefule->delete(); // This will soft delete due to SoftDeletes trait
 
-        session()->flash('message', 'Admin deleted successfully.');
+        session()->flash('message', 'Vehicle Fuel deleted successfully.');
         $this->closeDeleteModal();
     }
     
@@ -175,8 +170,8 @@ class Vehiclefuels extends Component
          $vehiclefuel = VehicleFuel::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('slug', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%' . $this->search . '%');
+                       
                 });
             })
             ->with(['createdBy', 'updatedBy'])

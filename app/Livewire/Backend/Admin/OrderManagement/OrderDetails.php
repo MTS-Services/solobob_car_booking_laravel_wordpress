@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
     [
         'title' => 'livewire.backend.admin.order-management.order-details',
         'breadcrumb' => 'livewire.backend.admin.order-management.order-details',
-        'page_slug' => 'deposit-management'
+        'page_slug' => 'order-management'
     ]
 )]
 

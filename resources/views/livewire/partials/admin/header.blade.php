@@ -51,8 +51,9 @@
 
                     <button @click="open = !open" class="avatar">
                         <div class="w-8 rounded-xl">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format"
+                            <img src="{{ user()->modified_image }}"
                                 alt="" class="object-cover w-full h-full">
+                                
                         </div>
                     </button>
 
@@ -65,8 +66,8 @@
                         :class="open ? '!block' : '!hidden'">
 
                         <div class="px-4 py-2 border-b border-white/10">
-                            <p class="text-sm text-text-primary font-medium">Alex Johnson</p>
-                            <p class="text-xs text-text-secondary">@alexjohnson</p>
+                            <p class="text-sm text-text-primary font-medium">{{ user()->name }}</p>
+                            <p class="text-xs text-text-secondary">{{ user()->email }}</p>
                         </div>
                         <a href="{{ route('admin.profile') }}"
                             class="w-full text-left px-4 py-2 text-text-primary hover:bg-bg-white/10 transition-colors rounded-tl-xl rounded-tr-xl">

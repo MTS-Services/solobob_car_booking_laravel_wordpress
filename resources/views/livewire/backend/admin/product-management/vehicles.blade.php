@@ -723,8 +723,8 @@
                     </div>
 
                     <div class="px-6 py-6">
-                        <p class="text-zinc-300">Are you sure you want to delete this vehicle? This action can be
-                            undone from the trash.</p>
+                        <p class="text-zinc-300">Are you sure you want to delete this vehicle? This action cann't be
+                            undone.</p>
                     </div>
 
                     <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
