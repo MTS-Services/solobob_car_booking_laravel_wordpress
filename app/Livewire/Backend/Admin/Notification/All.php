@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Backend\Notification\Admin;
+namespace App\Livewire\Backend\Admin\Notification;
 
 use Livewire\Component;
 
