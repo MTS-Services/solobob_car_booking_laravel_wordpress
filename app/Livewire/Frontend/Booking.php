@@ -98,8 +98,12 @@ class Booking extends Component
     /**
      * Validate date range selection
      */
+    /**
+     * Validate date range selection
+     */
     public function validateDateRange()
     {
+        // dd($this->pickupDate, $this->returnDate);
         if (empty($this->pickupDate) || empty($this->returnDate)) {
             $this->addError('dateRange', 'Please select both pickup and return dates.');
             return false;
@@ -107,8 +111,12 @@ class Booking extends Component
 
         $pickup = Carbon::parse($this->pickupDate);
         $return = Carbon::parse($this->returnDate);
-        $days = $pickup->diffInDays($return) + 1; // Include both start and end dates
+
+        $days = $pickup->diffInDays($return) + 1;
         $requiredDays = $this->getRequiredDays();
+
+        // Log for debugging
+        Log::info("Date validation: pickup={$this->pickupDate}, return={$this->returnDate}, days={$days}, required={$requiredDays}");
 
         if ($days !== $requiredDays) {
             $rangeName = $this->rentalRange === 'weekly' ? 'Weekly' : 'Monthly';
@@ -128,7 +136,6 @@ class Booking extends Component
 
         return true;
     }
-
     /**
      * Updated when rental range changes
      */
