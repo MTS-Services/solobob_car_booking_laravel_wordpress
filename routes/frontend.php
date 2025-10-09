@@ -4,7 +4,7 @@ use App\Livewire\Frontend\Booking;
 use App\Livewire\Frontend\Buttons;
 use App\Livewire\Frontend\Contact;
 use App\Livewire\Frontend\Home;
-use App\Livewire\Frontend\payment;
+use App\Livewire\Frontend\Payment;
 use App\Livewire\Frontend\Product;
 use App\Livewire\Frontend\ProductDetails;
 use App\Livewire\Frontend\sign_agreement;
