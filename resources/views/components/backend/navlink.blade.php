@@ -210,20 +210,20 @@
                         const triggerRect = $el.previousElementSibling.getBoundingClientRect();
                         const viewportHeight = window.innerHeight;
                         const dropdownHeight = 400; // approximate max height
-
+                
                         // Position to the right of the trigger
                         $el.style.left = (triggerRect.right + 8) + 'px';
-
+                
                         // Position vertically - center with trigger, but ensure it stays in viewport
                         let topPosition = triggerRect.top + (triggerRect.height / 2) - (dropdownHeight / 2);
-
+                
                         // Adjust if dropdown would go off screen
                         if (topPosition < 20) {
                             topPosition = 20;
                         } else if (topPosition + dropdownHeight > viewportHeight - 20) {
                             topPosition = viewportHeight - dropdownHeight - 20;
                         }
-
+                
                         $el.style.top = topPosition + 'px';
                     }
                 })"
@@ -348,15 +348,14 @@
                                     <div class="transition-transform duration-200" :class="subOpen ? 'rotate-180' : ''">
                                         <flux:icon name="chevron-down" class="w-4 h-4 text-text-primary" />
                                     </div>
-                                    {{-- @if (
-                                        (function () use ($item, $page_slug) {
-                                            foreach ($item['subitems'] as $subitem) {
-                                                if (isset($subitem['active']) && $page_slug == $subitem['active']) {
-                                                    return true;
-                                                }
-                                            }
-                                            return false;
-                                        })())
+                                    {{-- @if ((function () use ($item, $page_slug) {
+        foreach ($item['subitems'] as $subitem) {
+            if (isset($subitem['active']) && $page_slug == $subitem['active']) {
+                return true;
+            }
+        }
+        return false;
+    })())
                                         <div
                                             class="w-2 h-2 bg-violet-400 dark:bg-violet-300 rounded-full animate-pulse ml-2">
                                         </div>
@@ -511,8 +510,15 @@
                                             })() }}" />
                                     @endif
                                 </div>
-                                <span class="font-medium text-sm flex-1 text-left {{ (function () use ($item, $page_slug) {
-                                    foreach ($item['subitems'] as $subitem) { if (isset($subitem['active']) && $page_slug == $subitem['active']) { return 'text-accent-content'; } } return 'text-text-secondary'; })() }}">{{ __($item['name']) }}</span>
+                                <span
+                                    class="font-medium text-sm flex-1 text-left {{ (function () use ($item, $page_slug) {
+                                        foreach ($item['subitems'] as $subitem) {
+                                            if (isset($subitem['active']) && $page_slug == $subitem['active']) {
+                                                return 'text-accent-content';
+                                            }
+                                        }
+                                        return 'text-text-secondary';
+                                    })() }}">{{ __($item['name']) }}</span>
                                 <div class="transition-transform duration-200" :class="subOpen ? 'rotate-180' : ''">
                                     <flux:icon name="chevron-down" class="w-3 h-3 text-text-primary flex-shrink-0" />
                                 </div>
