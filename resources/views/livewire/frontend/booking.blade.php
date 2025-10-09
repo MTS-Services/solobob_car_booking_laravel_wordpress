@@ -311,7 +311,7 @@
                                     }
 
                                     .flatpickr-days {
-                                        
+
                                         width: 100% !important;
                                     }
 
@@ -325,7 +325,7 @@
                                     }
 
                                     .flatpickr-day {
-                                        
+
                                         flex: 0 0 14.28% !important;
                                         max-width: 14.28% !important;
                                         height: 42px !important;
@@ -340,7 +340,7 @@
                                         color: #991b1b !important;
                                         cursor: not-allowed !important;
                                         border-color: #fecaca !important;
-                                          margin-top: 2px !important;
+                                        margin-top: 2px !important;
                                     }
 
                                     /* Selected range styling */
@@ -393,7 +393,6 @@
                                             errorMessage: '',
 
                                             init() {
-                                                // Initialize display values from Livewire
                                                 this.pickupDateDisplay = this.formatDisplayDate(@this.pickupDate);
                                                 this.returnDateDisplay = this.formatDisplayDate(@this.returnDate);
 
@@ -401,12 +400,11 @@
                                                     this.initializeCalendar();
                                                 });
 
-                                                // Listen for rental range changes
                                                 Livewire.on('rental-range-changed', () => {
-                                                    console.log('Rental range changed');
                                                     this.destroyCalendar();
                                                     this.pickupDateDisplay = '';
                                                     this.returnDateDisplay = '';
+                                                    this.errorMessage = '';
                                                     @this.pickupDate = '';
                                                     @this.returnDate = '';
                                                     setTimeout(() => {
@@ -426,31 +424,15 @@
 
                                             initializeCalendar() {
                                                 const calendarElement = document.getElementById('inline-date-calendar');
+                                                if (!calendarElement) return;
 
-                                                if (!calendarElement) {
-                                                    console.error('Calendar element not found');
-                                                    return;
-                                                }
-
-                                                // Get data from Livewire component
                                                 const disabledDates = @json($disabledDates ?? []);
                                                 const requiredDays = {{ $requiredDays ?? 7 }};
-
-                                                // Get current dates from Livewire
                                                 const currentPickupDate = @this.pickupDate || '';
                                                 const currentReturnDate = @this.returnDate || '';
 
-                                                console.log('Initializing calendar with:', {
-                                                    disabledDates,
-                                                    requiredDays,
-                                                    currentPickupDate,
-                                                    currentReturnDate
-                                                });
-
-                                                // Destroy existing instance if any
                                                 this.destroyCalendar();
 
-                                                // Set default dates if they exist
                                                 let defaultDates = [];
                                                 if (currentPickupDate && currentReturnDate) {
                                                     defaultDates = [currentPickupDate, currentReturnDate];
@@ -467,64 +449,54 @@
                                                     defaultDate: defaultDates,
 
                                                     onReady: (selectedDates, dateStr, instance) => {
-                                                        console.log('Calendar ready! Selected dates:', selectedDates);
                                                         const calendar = instance.calendarContainer;
                                                         if (calendar) {
                                                             calendar.style.width = '100%';
                                                             calendar.style.display = 'block';
                                                         }
-
-                                                        // Set dates if they exist
                                                         if (defaultDates.length > 0) {
                                                             instance.setDate(defaultDates, false);
                                                         }
                                                     },
 
                                                     onChange: (selectedDates, dateStr, instance) => {
-                                                        console.log('Dates selected:', selectedDates);
-
-                                                        // Set flag to prevent re-initialization
                                                         this.isUpdatingFromCalendar = true;
+
+                                                        // Clear error when starting new selection
+                                                        this.errorMessage = '';
 
                                                         if (selectedDates.length === 2) {
                                                             const start = selectedDates[0];
                                                             const end = selectedDates[1];
 
-                                                            // Calculate days correctly - inclusive of both start and end dates
-                                                            // This matches the PHP calculation: diffInDays() + 1
+                                                            // Calculate days - set to midnight for accurate calculation
+                                                            const startDate = new Date(start.getFullYear(), start.getMonth(), start
+                                                                .getDate());
+                                                            const endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
                                                             const MS_PER_DAY = 1000 * 60 * 60 * 24;
-                                                            const diffTime = end.getTime() - start.getTime();
+                                                            const diffTime = endDate.getTime() - startDate.getTime();
                                                             const diffDays = Math.round(diffTime / MS_PER_DAY) + 1;
 
-                                                            console.log('Date Calculation:', {
-                                                                start: start.toISOString().split('T')[0],
-                                                                end: end.toISOString().split('T')[0],
-                                                                diffTime: diffTime,
-                                                                diffDays: diffDays,
-                                                                requiredDays: requiredDays
-                                                            });
-
-                                                            // Validate exact days requirement
+                                                            // ONLY show error if days don't match required days
                                                             if (diffDays !== requiredDays) {
-                                                                const rentalType = requiredDays === 7 ? 'weekly' : 'monthly';
+                                                                const rentalType = requiredDays === 7 ? 'Weekly' : 'Monthly';
                                                                 this.errorMessage =
-                                                                    `${rentalType.charAt(0).toUpperCase() + rentalType.slice(1)} rentals must be exactly ${requiredDays} days. You selected ${diffDays} days.`;
+                                                                    `${rentalType} rentals must be exactly ${requiredDays} days. You selected ${diffDays} ${diffDays === 1 ? 'day' : 'days'}.`;
                                                                 instance.clear();
-
                                                                 this.pickupDateDisplay = '';
                                                                 this.returnDateDisplay = '';
                                                                 @this.pickupDate = '';
                                                                 @this.returnDate = '';
-
                                                                 this.isUpdatingFromCalendar = false;
                                                                 return;
                                                             }
 
                                                             // Check if any date in range is disabled
                                                             let hasDisabledDate = false;
-                                                            let currentDate = new Date(start);
+                                                            let currentDate = new Date(startDate);
 
-                                                            while (currentDate <= end) {
+                                                            while (currentDate <= endDate) {
                                                                 const year = currentDate.getFullYear();
                                                                 const month = String(currentDate.getMonth() + 1).padStart(2, '0');
                                                                 const day = String(currentDate.getDate()).padStart(2, '0');
@@ -541,20 +513,17 @@
                                                                 this.errorMessage =
                                                                     'Selected dates include unavailable dates. Please choose different dates.';
                                                                 instance.clear();
-
                                                                 this.pickupDateDisplay = '';
                                                                 this.returnDateDisplay = '';
                                                                 @this.pickupDate = '';
                                                                 @this.returnDate = '';
-
                                                                 this.isUpdatingFromCalendar = false;
                                                                 return;
                                                             }
 
-                                                            // Clear error message
+                                                            // Valid selection - clear error and update dates
                                                             this.errorMessage = '';
 
-                                                            // Format dates for storage (Y-m-d)
                                                             const formatStorageDate = (date) => {
                                                                 const y = date.getFullYear();
                                                                 const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -562,7 +531,6 @@
                                                                 return `${y}-${m}-${d}`;
                                                             };
 
-                                                            // Format dates for display (d/m/Y)
                                                             const formatDisplayDate = (date) => {
                                                                 const d = String(date.getDate()).padStart(2, '0');
                                                                 const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -570,16 +538,10 @@
                                                                 return `${d}/${m}/${y}`;
                                                             };
 
-                                                            const pickupStorage = formatStorageDate(start);
-                                                            const returnStorage = formatStorageDate(end);
-
-                                                            // Update display values
                                                             this.pickupDateDisplay = formatDisplayDate(start);
                                                             this.returnDateDisplay = formatDisplayDate(end);
-
-                                                            // Update Livewire properties with storage format
-                                                            @this.pickupDate = pickupStorage;
-                                                            @this.returnDate = returnStorage;
+                                                            @this.pickupDate = formatStorageDate(start);
+                                                            @this.returnDate = formatStorageDate(end);
 
                                                             setTimeout(() => {
                                                                 this.isUpdatingFromCalendar = false;
@@ -604,7 +566,6 @@
 
                                                             this.pickupDateDisplay = formatDisplayDate(date);
                                                             this.returnDateDisplay = '';
-
                                                             @this.pickupDate = formatStorageDate(date);
                                                             @this.returnDate = '';
 
@@ -624,13 +585,10 @@
                                                         }
                                                     }
                                                 });
-
-                                                console.log('Calendar instance created:', this.calendarInstance);
                                             },
 
                                             destroyCalendar() {
                                                 if (this.calendarInstance) {
-                                                    console.log('Destroying calendar instance');
                                                     this.calendarInstance.destroy();
                                                     this.calendarInstance = null;
                                                 }
@@ -645,422 +603,316 @@
                             <div>
                                 <h2 class="text-xl font-semibold mb-6">Verification Documents</h2>
 
-                                <form @submit.prevent="currentStep = 3">
+                                <form wire:submit.prevent="saveVerificationData">
                                     <!-- File Upload Sections -->
                                     <div x-data="{
-                                        verificationData: { license: null, licensePreview: null, selfie: null, selfiePreview: null, addressProof: null, addressProofPreview: null },
-                                        // Function to handle file selection and generate a preview URL
-                                        handleFileChange(event, fileKey, previewKey) {
+                                        handleFileChange(event, wirePropertyName) {
                                             const file = event.target.files[0];
-                                            this.verificationData[fileKey] = file;
                                             if (file) {
-                                                this.verificationData[previewKey] = URL.createObjectURL(file);
-                                            } else {
-                                                this.verificationData[previewKey] = null;
+                                                @this.upload(wirePropertyName, file);
                                             }
-                                        },
-                                        // Function to clear a file and its preview
-                                        clearFile(fileKey, previewKey) {
-                                            this.verificationData[fileKey] = null;
-                                            this.verificationData[previewKey] = null;
-                                            // Optional: Reset the file input value so the same file can be selected again
-                                            this.$refs[fileKey].value = '';
                                         }
                                     }">
 
+                                        <!-- License Upload -->
                                         <div class="mb-6">
+                                            <label class="block text-sm font-medium mb-2">Driver's License</label>
                                             <div
                                                 class="border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-zinc-500 transition cursor-pointer relative p-6">
+                                                <input type="file" wire:model="license"
+                                                    class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*">
 
-                                                <input type="file" x-ref="license"
-                                                    class="absolute inset-0 opacity-0 cursor-pointer"
-                                                    @change="handleFileChange($event, 'license', 'licensePreview')">
-
-                                                <div x-show="!verificationData.licensePreview">
-                                                    <p class="text-gray-600 text-sm">Drag & drop your **License(s)** here, or
-                                                        Click to Select</p>
+                                                <div wire:loading.remove wire:target="license">
+                                                    @if ($license)
+                                                        <div class="relative group">
+                                                            <img src="{{ $license->temporaryUrl() }}" alt="License Preview"
+                                                                class="w-full h-auto max-h-48 object-contain rounded-md">
+                                                            <button type="button" wire:click="$set('license', null)"
+                                                                class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <p class="text-gray-600 text-sm">Drag & drop your License here, or
+                                                            Click to Select</p>
+                                                    @endif
                                                 </div>
 
-                                                <div x-show="verificationData.licensePreview" class="relative group">
-                                                    <img :src="verificationData.licensePreview" alt="License Preview"
-                                                        class="w-full h-auto max-h-48 object-contain rounded-md">
-
-                                                    <button @click.prevent.stop="clearFile('license', 'licensePreview')"
-                                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-
-                                                    <p class="text-green-600 text-xs mt-2"
-                                                        x-text="verificationData.license ? verificationData.license.name : ''">
-                                                    </p>
+                                                <div wire:loading wire:target="license" class="text-zinc-500">
+                                                    <svg class="animate-spin h-8 w-8 mx-auto"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                            stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="text-sm mt-2">Uploading...</p>
                                                 </div>
                                             </div>
+                                            @error('license')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        <script>
-                                            function verificationComponent() {
-                                                return {
-                                                    verificationData: {
-                                                        selfie: null,
-                                                        selfiePreview: null
-                                                    },
 
-                                                    openCamera() {
-                                                        this.$refs.selfie.click();
-                                                    },
-
-                                                    handleFileChange(event, fileKey, previewKey) {
-                                                        const file = event.target.files[0];
-                                                        if (file) {
-                                                            this.verificationData[fileKey] = file;
-
-                                                            // --- USE FileReader for better mobile support ---
-                                                            const reader = new FileReader();
-                                                            reader.onload = (e) => {
-                                                                this.verificationData[previewKey] = e.target.result;
-                                                            };
-                                                            reader.readAsDataURL(file);
-                                                        }
-                                                    },
-
-                                                    clearFile(fileKey, previewKey) {
-                                                        this.verificationData[fileKey] = null;
-                                                        this.verificationData[previewKey] = null;
-                                                        this.$refs[fileKey].value = '';
-                                                    }
-                                                }
-                                            }
-                                        </script>
-
-                                        <div class="mb-6" x-data="verificationComponent()">
+                                        <!-- Selfie Upload -->
+                                        <div class="mb-6">
+                                            <label class="block text-sm font-medium mb-2">Selfie with License</label>
                                             <div
                                                 class="border-2 border-dashed rounded-lg text-center transition cursor-pointer relative p-6 h-36 flex items-center justify-center border-gray-300 hover:border-zinc-500">
+                                                <input type="file" wire:model="selfie"
+                                                    class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*"
+                                                    capture="user">
 
-                                                <input type="file" x-ref="selfie" class="hidden"
-                                                    @change="handleFileChange($event, 'selfie', 'selfiePreview')"
-                                                    accept="image/*" capture="user">
-
-                                                <!-- Show placeholder before upload -->
-                                                <div x-show="!verificationData.selfiePreview"
-                                                    class="h-full w-full flex items-center justify-center"
-                                                    @click="openCamera()">
-                                                    <div class="text-gray-600">
-                                                        <i class="fas fa-camera text-2xl text-zinc-500 mb-2"></i>
-                                                        <p class="text-sm">Click to <b>Open Camera</b> and take your Selfie</p>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Show preview after capture -->
-                                                <div x-show="verificationData.selfiePreview"
-                                                    class="relative group h-full w-full flex flex-col items-center justify-center">
-
-                                                    <img :src="verificationData.selfiePreview" alt="Selfie Preview"
-                                                        class="w-full h-full object-contain rounded-md">
-
-                                                    <button @click.prevent.stop="clearFile('selfie', 'selfiePreview')"
-                                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition z-20 pointer-events-auto">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-                                                    <p class="text-green-600 text-xs mt-2"
-                                                        x-text="verificationData.selfie ? verificationData.selfie.name : ''">
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                            <div x-data="{ isModalOpen: false }">
-                                                <p class="text-xs text-gray-500 mt-2">
-                                                    Click
-                                                    <a href="#" @click.prevent="isModalOpen = true"
-                                                        class="text-zinc-500 underline">
-                                                        here
-                                                    </a>
-                                                    to know the **Approved Form of Selfie with License**.
-                                                </p>
-
-                                                <div x-show="isModalOpen" x-transition:enter="ease-out duration-300"
-                                                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                                    x-transition:leave="ease-in duration-200"
-                                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                                    class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
-                                                    role="dialog" aria-modal="true">
-
-                                                    <div @click="isModalOpen = false"
-                                                        class="fixed inset-0 bg-gray-500/50 bg-opacity-75 transition-opacity">
-                                                    </div>
-
-                                                    <div
-                                                        class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                                        <div x-show="isModalOpen" x-transition:enter="ease-out duration-300"
-                                                            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                                            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                                            x-transition:leave="ease-in duration-200"
-                                                            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                                            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                                            class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-
-                                                            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                                                <div
-                                                                    class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                                                    <button type="button" @click="isModalOpen = false"
-                                                                        class="inline-flex w-full justify-right rounded-md bg-zinc-500 px-3 py-2 text-sm font-semibold text-white  hover:bg-[#a07406] sm:ml-3 sm:w-auto">
-                                                                        X
-                                                                    </button>
-                                                                </div>
-                                                                <div class="sm:flex sm:items-start flex-col">
-
-                                                                    <h3 class="text-lg font-semibold leading-6 text-gray-900 mb-4"
-                                                                        id="modal-title">
-                                                                        Valid form of License with selfie
-                                                                    </h3>
-
-                                                                    <div class="w-full text-center mb-4">
-                                                                        <img src="{{ asset('assets/images/banner_car.png') }}"
-                                                                            alt="Example of valid selfie with license"
-                                                                            class="max-w-full h-auto mx-auto" />
-                                                                    </div>
-
-                                                                    <div class="text-sm text-gray-700 w-full space-y-3">
-                                                                        <p><strong>Use Your Smartphone:</strong> Open your
-                                                                            camera app on your smartphone and switch to the
-                                                                            front-facing camera to prepare for the selfie.</p>
-
-                                                                        <p><strong>Position Your License:</strong> Hold your
-                                                                            license at an angle that clearly displays all
-                                                                            important information while ensuring it doesn't
-                                                                            obscure your face. Adjust the distance so that both
-                                                                            your face and the license are in focus.</p>
-
-                                                                        <p><strong>Center Your Face:</strong> Frame your face in
-                                                                            the center of the shot. Position your license close
-                                                                            to your face, ensuring it's visible but not
-                                                                            obstructing your facial features.</p>
-
-                                                                        <p><strong>Capture Multiple Shots:</strong> Take several
-                                                                            photos in quick succession to give yourself a
-                                                                            variety of angles and expressions to choose from.
-                                                                            Experiment with slight adjustments in positioning
-                                                                            for better results.</p>
-
-                                                                        <p><strong>Review and Select:</strong> After capturing
-                                                                            your selfie, go through the images and select the
-                                                                            one that best represents your desired look. Consider
-                                                                            clarity, expression, and the visibility of your
-                                                                            license when making your choice.</p>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-
-
+                                                <div wire:loading.remove wire:target="selfie"
+                                                    class="w-full h-full flex items-center justify-center">
+                                                    @if ($selfie)
+                                                        <div
+                                                            class="relative group h-full w-full flex flex-col items-center justify-center">
+                                                            <img src="{{ $selfie->temporaryUrl() }}" alt="Selfie Preview"
+                                                                class="w-full h-full object-contain rounded-md">
+                                                            <button type="button" wire:click="$set('selfie', null)"
+                                                                class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition z-20">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        <div class="text-gray-600">
+                                                            <i class="fas fa-camera text-2xl text-zinc-500 mb-2"></i>
+                                                            <p class="text-sm">Click to <b>Open Camera</b> and take your Selfie
+                                                            </p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <div wire:loading wire:target="selfie" class="text-zinc-500">
+                                                    <svg class="animate-spin h-8 w-8 mx-auto"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                            stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="text-sm mt-2">Uploading...</p>
                                                 </div>
                                             </div>
+                                            @error('selfie')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
-
+                                        <!-- Address Proof Upload -->
                                         <div class="mb-6">
+                                            <label class="block text-sm font-medium mb-2">Address Proof</label>
                                             <div
                                                 class="border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-zinc-500 transition cursor-pointer relative p-6">
-
-                                                <input type="file" x-ref="addressProof"
+                                                <input type="file" wire:model="addressProof"
                                                     class="absolute inset-0 opacity-0 cursor-pointer"
-                                                    @change="handleFileChange($event, 'addressProof', 'addressProofPreview')">
+                                                    accept="image/*,application/pdf">
 
-                                                <div x-show="!verificationData.addressProofPreview">
-                                                    <p class="text-gray-600 text-sm">Drag & drop your **Address proof** here,
-                                                        or Click to Select</p>
-                                                </div>
-
-                                                <div x-show="verificationData.addressProofPreview" class="relative group">
-                                                    <img :src="verificationData.addressProofPreview"
-                                                        alt="Address Proof Preview"
-                                                        class="w-full h-auto max-h-48 object-contain rounded-md">
-
-                                                    <button
-                                                        @click.prevent.stop="clearFile('addressProof', 'addressProofPreview')"
-                                                        class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-
-                                                    <p class="text-green-600 text-xs mt-2"
-                                                        x-text="verificationData.addressProof ? verificationData.addressProof.name : ''">
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div x-data="{ isAddressModalOpen: false }">
-                                                <p class="text-xs text-gray-500 mt-2">
-                                                    Click
-                                                    <a href="#" @click.prevent="isAddressModalOpen = true"
-                                                        class="text-zinc-500 underline">
-                                                        here
-                                                    </a>
-                                                    to know approved form of Address proof
-                                                </p>
-
-                                                <div x-show="isAddressModalOpen" x-transition:enter="ease-out duration-300"
-                                                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                                                    x-transition:leave="ease-in duration-200"
-                                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                                    class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
-                                                    role="dialog" aria-modal="true">
-
-                                                    <div @click="isAddressModalOpen = false"
-                                                        class="fixed inset-0 bg-black/50 bg-opacity-70 transition-opacity">
-                                                    </div>
-
-                                                    <div
-                                                        class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                                                        <div x-show="isAddressModalOpen"
-                                                            x-transition:enter="ease-out duration-300"
-                                                            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                                            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                                                            x-transition:leave="ease-in duration-200"
-                                                            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                                                            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                                            class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-
-                                                            <div class="bg-white p-6 relative">
-
-                                                                <button type="button" @click="isAddressModalOpen = false"
-                                                                    class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                                                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                                                        stroke-width="1.5" stroke="currentColor"
-                                                                        aria-hidden="true">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                                            d="M6 18L18 6M6 6l12 12" />
-                                                                    </svg>
-                                                                </button>
-
-                                                                <h3 class="text-xl font-normal text-gray-900 mb-4 pt-1"
-                                                                    id="modal-title">
-                                                                    Valid form of Address proof
-                                                                </h3>
-
-                                                                <div class="text-sm text-gray-700 space-y-4">
-                                                                    <p>To complete your booking, you must upload a recent proof
-                                                                        of address so we can verify your residential
-                                                                        information.</p>
-
-                                                                    <p class="font-medium text-black">Accepted documents
-                                                                        include:</p>
-
-                                                                    <ul class="list-disc ml-5 space-y-2">
-                                                                        <li>
-                                                                            Utility bill (electricity, gas, water) — **dated
-                                                                            within the last 60 days**
-                                                                        </li>
-                                                                        <li>
-                                                                            Bank statement or credit card statement — **dated
-                                                                            within the last 60 days**
-                                                                        </li>
-                                                                        <li>
-                                                                            Government-issued document (e.g., IRS/DMV letter,
-                                                                            tax notice)
-                                                                        </li>
-                                                                        <li>
-                                                                            Internet/cable bill or phone bill — **dated within
-                                                                            the last 60 days**
-                                                                        </li>
-                                                                    </ul>
+                                                <div wire:loading.remove wire:target="addressProof">
+                                                    @if ($addressProof)
+                                                        <div class="relative group">
+                                                            @if (str_contains($addressProof->getMimeType(), 'pdf'))
+                                                                <div class="text-center">
+                                                                    <i class="fas fa-file-pdf text-4xl text-red-500 mb-2"></i>
+                                                                    <p class="text-sm">
+                                                                        {{ $addressProof->getClientOriginalName() }}</p>
                                                                 </div>
-
-                                                            </div>
+                                                            @else
+                                                                <img src="{{ $addressProof->temporaryUrl() }}"
+                                                                    alt="Address Proof Preview"
+                                                                    class="w-full h-auto max-h-48 object-contain rounded-md">
+                                                            @endif
+                                                            <button type="button" wire:click="$set('addressProof', null)"
+                                                                class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                </svg>
+                                                            </button>
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        <p class="text-gray-600 text-sm">Drag & drop your Address Proof here,
+                                                            or Click to Select</p>
+                                                    @endif
+                                                </div>
+
+                                                <div wire:loading wire:target="addressProof" class="text-zinc-500">
+                                                    <svg class="animate-spin h-8 w-8 mx-auto"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                            stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="text-sm mt-2">Uploading...</p>
                                                 </div>
                                             </div>
+                                            @error('addressProof')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                     </div>
 
                                     <!-- Billing Information -->
                                     <h3 class="font-semibold mb-4">Billing Information</h3>
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                        <input x-model="verificationData.firstName" type="text" placeholder="Jhone"
-                                            required class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
-                                        <input x-model="verificationData.lastName" type="text" placeholder="Doe" required
-                                            class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                        <div>
+                                            <input wire:model="firstName" type="text" placeholder="First Name" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('firstName')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input wire:model="lastName" type="text" placeholder="Last Name" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('lastName')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                        <input x-model="verificationData.email" type="email" placeholder="info@mail.com"
-                                            required class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
-                                        <input x-model="verificationData.dob" type="text" placeholder="01/01/2017"
-                                            required class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                        <div>
+                                            <input wire:model="email" type="email" placeholder="Email" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('email')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input wire:model="dob" type="date" placeholder="Date of Birth" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('dob')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Residential Address -->
                                     <h3 class="font-semibold mb-4 mt-6">Residential Address</h3>
-                                    <input x-model="verificationData.address" type="text" placeholder="Address" required
-                                        class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 bg-gray-50">
+                                    <div class="mb-4">
+                                        <input wire:model="address" type="text" placeholder="Street Address" required
+                                            class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                        @error('address')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                                        <input x-model="verificationData.city" type="text" placeholder="City" required
-                                            class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
-                                        <input x-model="verificationData.state" type="text" placeholder="State" required
-                                            class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
-                                        <input x-model="verificationData.zip" type="text" placeholder="Zip" required
-                                            class="border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                        <div>
+                                            <input wire:model="city" type="text" placeholder="City" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('city')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input wire:model="state" type="text" placeholder="State" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('state')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input wire:model="zip" type="text" placeholder="Zip Code" required
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50">
+                                            @error('zip')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
 
                                     <!-- Car Parking Location -->
                                     <h3 class="font-semibold mb-4 mt-6">Car Parking Location</h3>
                                     <label class="flex items-center mb-4 cursor-pointer">
-                                        <input x-model="verificationData.sameAsResidential" type="checkbox"
+                                        <input wire:model.live="sameAsResidential" type="checkbox"
                                             class="w-4 h-4 text-zinc-500 rounded">
                                         <span class="ml-2 text-sm text-gray-600">Same as Residential Address</span>
                                     </label>
-                                    <input x-model="verificationData.parkingAddress" type="text" placeholder="Address"
-                                        :disabled="verificationData.sameAsResidential"
-                                        class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 disabled:bg-gray-100 bg-gray-50">
+                                    <div class="mb-4">
+                                        <input wire:model="parkingAddress" type="text" placeholder="Parking Address"
+                                            :disabled="$wire.sameAsResidential"
+                                            class="w-full border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
+                                        @error('parkingAddress')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                                        <input x-model="verificationData.parkingCity" type="text" placeholder="City"
-                                            :disabled="verificationData.sameAsResidential"
-                                            class="border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
-                                        <input x-model="verificationData.parkingState" type="text" placeholder="State"
-                                            :disabled="verificationData.sameAsResidential"
-                                            class="border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
-                                        <input x-model="verificationData.parkingZip" type="text" placeholder="Zip"
-                                            :disabled="verificationData.sameAsResidential"
-                                            class="border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
+                                        <div>
+                                            <input wire:model="parkingCity" type="text" placeholder="City"
+                                                :disabled="$wire.sameAsResidential"
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
+                                            @error('parkingCity')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input wire:model="parkingState" type="text" placeholder="State"
+                                                :disabled="$wire.sameAsResidential"
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
+                                            @error('parkingState')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <input wire:model="parkingZip" type="text" placeholder="Zip"
+                                                :disabled="$wire.sameAsResidential"
+                                                class="w-full border border-gray-300 rounded-lg px-4 py-2 disabled:bg-gray-100 bg-gray-50">
+                                            @error('parkingZip')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
 
-                                    <!-- Terms & Conditions Checkbox -->
+                                    <!-- Terms & Conditions -->
                                     <div class="mb-6">
                                         <label class="flex items-start mb-3 cursor-pointer">
-                                            <input x-model="verificationData.termsAccepted" type="checkbox" required
-                                                class="w-4 h-4 text-zinc-500 rounded mt-1" @click="openAgreementModal()">
+                                            <input wire:model="termsAccepted" type="checkbox" required
+                                                class="w-4 h-4 text-zinc-500 rounded mt-1">
                                             <span class="ml-2 text-sm text-gray-700">
                                                 I have Read and Accept Terms & Conditions <span class="text-red-500">*</span>
                                             </span>
                                         </label>
+                                        @error('termsAccepted')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <!-- SMS Alerts -->
                                     <label class="flex items-start mb-6 cursor-pointer">
-                                        <input x-model="verificationData.smsAlerts" type="checkbox"
+                                        <input wire:model="smsAlerts" type="checkbox"
                                             class="w-4 h-4 text-zinc-500 rounded mt-1">
-                                        <span class="ml-2 text-sm text-gray-600">Yes, I'd like to receive SMS alerts from
-                                            Fairental for booking confirmations, payment updates, support messages, and
-                                            important reminders. <span class="italic">Message and data rates may apply. Reply
-                                                STOP to unsubscribe.</span></span>
+                                        <span class="ml-2 text-sm text-gray-600">
+                                            Yes, I'd like to receive SMS alerts from Fairental for booking confirmations,
+                                            payment updates, support messages, and important reminders.
+                                            <span class="italic">Message and data rates may apply. Reply STOP to
+                                                unsubscribe.</span>
+                                        </span>
                                     </label>
 
                                     <div class="flex gap-4 flex-col sm:flex-row">
-                                        <button type="submit"
-                                            class="flex-1 bg-zinc-500 text-white py-3 rounded-lg hover:bg-zinc-500 transition font-medium">
-                                            Confirm & Proceed
+                                        <button type="submit" wire:loading.attr="disabled"
+                                            class="flex-1 bg-zinc-500 text-white py-3 rounded-lg hover:bg-zinc-600 transition font-medium disabled:opacity-50">
+                                            <span wire:loading.remove wire:target="saveVerificationData">Confirm &
+                                                Proceed</span>
+                                            <span wire:loading wire:target="saveVerificationData">Processing...</span>
                                         </button>
-                                        <button type="button" x-on:click="currentStep--"
+                                        <button type="button" wire:click="previousStep"
                                             class="flex-1 bg-gray-800 text-white py-3 rounded-lg hover:bg-gray-700 transition font-medium">
                                             Back to Booking Review
                                         </button>

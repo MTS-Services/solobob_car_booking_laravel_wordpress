@@ -18,7 +18,7 @@ export default defineConfig({
     //     port: 3333,
     //     strictPort: true,
     //     hmr: {
-    //         host: '192.168.100.30',
+    //         host: '192.168.100.16',
     //     }
 
     // },
