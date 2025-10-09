@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Traits\AuditColumnsTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Http\Traits\AuditColumnsTrait;
 
 return new class extends Migration
 {
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone')->nullable();
             $table->string('email');
-            $table->text('message');            
+            $table->text('message');
             $table->timestamps();
             $table->softDeletes();
             $this->addAdminAuditColumns($table);

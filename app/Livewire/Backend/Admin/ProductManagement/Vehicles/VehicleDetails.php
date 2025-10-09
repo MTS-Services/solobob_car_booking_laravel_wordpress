@@ -3,15 +3,15 @@
 namespace App\Livewire\Backend\Admin\ProductManagement\Vehicles;
 
 use App\Models\Vehicle;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout(
     'app',
     [
         'title' => 'vehicle-details',
         'breadcrumb' => 'vehicle-details',
-        'page_slug' => 'vehicle-list'
+        'page_slug' => 'vehicle-list',
     ]
 )]
 class VehicleDetails extends Component
