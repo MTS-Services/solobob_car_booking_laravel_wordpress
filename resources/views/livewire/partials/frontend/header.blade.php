@@ -29,6 +29,11 @@
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         CONTACT
                     </a>
+
+                    <a href="{{ route('sign_agreement') }}" wire:navigate
+                        class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                        SIGN AGREEMENT
+                    </a>
                     {{-- <a href="#"
                         class="text-gray-900 hover:text-zinc-500 hover:-translate-y-1 transition-all duration-300 ease-in-out">
                         SIGN AGREEMENT
@@ -103,7 +108,7 @@
                 <a href="#"
                     class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Sign
                     Agreement</a>
-                
+
                 <!-- If user is authenticated -->
                 <a href="/profile"
                     class="block text-sm py-2 px-4 text-gray-900 hover:text-zinc-500 transition-all duration-300 ease-in-out uppercase">Profile</a>

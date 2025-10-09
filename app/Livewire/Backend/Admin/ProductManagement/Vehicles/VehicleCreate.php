@@ -7,8 +7,8 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleImage;
 use App\Services\FileUpload\FileUploadService;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 #[Layout(
@@ -16,7 +16,7 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
     [
         'title' => 'vehicle-create',
         'breadcrumb' => 'vehicle-create',
-        'page_slug' => 'vehicle-create'
+        'page_slug' => 'vehicle-list',
     ]
 )]
 class VehicleCreate extends Component
@@ -27,25 +27,45 @@ class VehicleCreate extends Component
 
     // Form fields
     public $owner_id;
+
     public $category_id;
+
     public $sort_order = 0;
+
     public $title = '';
+
     public $slug = '';
+
     public $year = '';
+
     public $color = '';
+
     public $license_plate = '';
+
     public $seating_capacity = '';
+
     public $mileage = '';
+
     public $description = '';
+
     public $daily_rate = '';
+
     public $weekly_rate = '';
+
     public $monthly_rate = '';
+
     public $security_deposit = '';
+
     public $transmission_type = Vehicle::TRANSMISSION_AUTOMATIC;
+
     public $instant_booking = false;
+
     public $delivery_available = false;
+
     public $delivery_fee = '';
+
     public $status = Vehicle::STATUS_AVAILABLE;
+
     public array $images = [];
     public $newImage; // Single or multiple image upload
 
@@ -121,7 +141,7 @@ class VehicleCreate extends Component
             'sort_order' => 'nullable|integer|min:0',
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:vehicles,slug',
-            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'year' => 'required|integer|min:1900|max:'.(date('Y') + 1),
             'color' => 'required|string|max:255',
             'license_plate' => 'required|string|max:255|unique:vehicles,license_plate',
             'seating_capacity' => 'required|integer|min:1',
@@ -130,15 +150,15 @@ class VehicleCreate extends Component
             'weekly_rate' => 'nullable|numeric|min:0',
             'monthly_rate' => 'nullable|numeric|min:0',
             'security_deposit' => 'nullable|numeric|min:0',
-            'transmission_type' => 'required|in:' . Vehicle::TRANSMISSION_AUTOMATIC . ',' . Vehicle::TRANSMISSION_MANUAL,
+            'transmission_type' => 'required|in:'.Vehicle::TRANSMISSION_AUTOMATIC.','.Vehicle::TRANSMISSION_MANUAL,
             'instant_booking' => 'nullable|boolean',
             'delivery_available' => 'nullable|boolean',
             'delivery_fee' => 'nullable|numeric|min:0',
-            'status' => 'required|in:' . implode(',', [
+            'status' => 'required|in:'.implode(',', [
                 Vehicle::STATUS_AVAILABLE,
                 Vehicle::STATUS_RENTED,
                 Vehicle::STATUS_MAINTENANCE,
-                Vehicle::STATUS_INACTIVE
+                Vehicle::STATUS_INACTIVE,
             ]),
             'images.*' => 'nullable|image',
             'images' => 'nullable|array|min:1',
@@ -153,7 +173,7 @@ class VehicleCreate extends Component
         $vehicle = Vehicle::create($validated);
 
         // Handle multiple image uploads
-        if (!empty($this->images)) {
+        if (! empty($this->images)) {
             foreach ($this->images as $index => $image) {
                 $path = $this->fileUploadService->uploadImage(
                     file: $image,
@@ -174,6 +194,7 @@ class VehicleCreate extends Component
         }
 
         session()->flash('message', 'Vehicle created with images successfully.');
+
         return $this->redirectRoute('admin.pm.vehicle-list');
     }
 

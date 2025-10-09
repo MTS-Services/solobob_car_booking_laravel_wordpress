@@ -3,21 +3,23 @@
 namespace App\Livewire\Backend\Admin\ProductManagement\Vehicles;
 
 use App\Models\Vehicle;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('app', [
     'title' => 'vehicle-list',
     'breadcrumb' => 'vehicle-list',
-    'page_slug' => 'vehicle-list'
+    'page_slug' => 'vehicle-list',
 ])]
 class VehicleList extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $showDeleteModal = false;
+
     public $vehicleIdToDelete = null;
 
     protected $queryString = ['search'];
@@ -54,8 +56,8 @@ class VehicleList extends Component
         $vehicles = Vehicle::query()
             ->when($this->search, function ($q) {
                 $q->where(function ($sq) {
-                    $sq->where('title', 'like', '%' . $this->search . '%')
-                        ->orWhere('license_plate', 'like', '%' . $this->search . '%');
+                    $sq->where('title', 'like', '%'.$this->search.'%')
+                        ->orWhere('license_plate', 'like', '%'.$this->search.'%');
                 });
             })
             ->with(['category', 'owner'])
@@ -64,25 +66,25 @@ class VehicleList extends Component
         $columns = [
             ['key' => 'title', 'label' => 'Title', 'width' => '20%'],
             ['key' => 'license_plate', 'label' => 'License Plate', 'width' => '15%'],
-            ['key' => 'owner', 'label' => 'Owner', 'width' => '15%', 'format' => fn($v) => $v->owner?->name ?? 'N/A'],
-            ['key' => 'category', 'label' => 'Category', 'width' => '15%', 'format' => fn($v) => $v->category?->name ?? 'N/A'],
+            ['key' => 'owner', 'label' => 'Owner', 'width' => '15%', 'format' => fn ($v) => $v->owner?->name ?? 'N/A'],
+            ['key' => 'category', 'label' => 'Category', 'width' => '15%', 'format' => fn ($v) => $v->category?->name ?? 'N/A'],
             [
                 'key' => 'status',
                 'label' => 'Status',
                 'width' => '10%',
-                'format' => fn($v) => '<span class="badge badge-soft ' . $v->status_color . '">' . ucfirst($v->status_label) . '</span>',
+                'format' => fn ($v) => '<span class="badge badge-soft '.$v->status_color.'">'.ucfirst($v->status_label).'</span>',
             ],
             [
                 'key' => 'created_at',
                 'label' => 'Created At',
                 'width' => '15%',
-                'format' => fn($v) => $v->created_at_formatted,
+                'format' => fn ($v) => $v->created_at_formatted,
             ],
             [
                 'key' => 'created_by',
                 'label' => 'Created By',
                 'width' => '15%',
-                'format' => fn($v) => $v->createdBy?->name ?? 'System',
+                'format' => fn ($v) => $v->createdBy?->name ?? 'System',
             ],
         ];
 
@@ -95,7 +97,7 @@ class VehicleList extends Component
         return view('livewire.backend.admin.product-management.vehicles.vehicle-list', [
             'vehicles' => $vehicles,
             'columns' => $columns,
-            'actions' => $actions
+            'actions' => $actions,
         ]);
     }
 }
