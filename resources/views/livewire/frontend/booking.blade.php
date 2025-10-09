@@ -154,7 +154,8 @@
                                 <div class="p-4 border-b">
                                     <div class="flex justify-between items-center">
                                         <h2 class="text-xl font-semibold text-gray-800">
-                                            {{ Str::limit($vehicle?->title, 15) ?? 'Unknown' }}</h2>
+                                            {{ Str::limit($vehicle?->title, 15) ?? 'Unknown' }}
+                                        </h2>
                                         <button @click="contactModalOpen = false"
                                             class="text-gray-500 hover:text-gray-700 transition">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor"
@@ -230,19 +231,19 @@
                                 <div class="flex items-center justify-between gap-5">
                                     <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
                                         <span class="label">Pickup Date</span>
-                                        <x-input type="text" id="pickup-date" wire:model="pickupDate" readonly
+                                        <x-input type="text" id="pickup-date" wire:model.live="pickupDate" readonly
                                             placeholder="Select pickup date" />
                                     </label>
                                     <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
                                         <span class="label">Pickup Time</span>
-                                        <x-input type="time" wire:model="pickupTime" />
+                                        <x-input type="time" wire:model.live="pickupTime" />
                                     </label>
                                 </div>
 
                                 <div class="flex items-center justify-between gap-5">
                                     <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
                                         <span class="label">Return Date</span>
-                                        <x-input type="text" id="return-date" wire:model="returnDate" readonly
+                                        <x-input type="text" id="return-date" wire:model.live="returnDate" readonly
                                             placeholder="Select return date" />
                                     </label>
                                     <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
@@ -304,7 +305,6 @@
                                         max-width: 100% !important;
                                         display: flex !important;
                                         flex-wrap: wrap !important;
-                                        =
                                     }
 
                                     .flatpickr-day {
@@ -386,7 +386,7 @@
 
                                             // Get data from Livewire component
                                             const disabledDates = @json($disabledDates ?? []);
-                                            const requiredDays = {{ $requiredDays ?? 7 }};
+                                            const requiredDays = {{$requiredDays ?? 7}};
 
                                             let calendarInstance = null;
 
@@ -415,7 +415,7 @@
                                                     dateFormat: "Y-m-d",
                                                     minDate: "today",
                                                     showMonths: 1,
-                                                    // disable: disabledDates,
+                                                    disable: disabledDates.map(date => date),
 
                                                     onReady: function(selectedDates, dateStr, instance) {
                                                         console.log('Calendar ready!');
@@ -501,6 +501,8 @@
 
                                                             if (pickupInput) pickupInput.value = pickupFormatted.display;
                                                             if (returnInput) returnInput.value = returnFormatted.display;
+
+                                             
 
                                                             // Livewire.find('{{ $_instance->getId() }}').set('pickupDate',
                                                             //     pickupFormatted.value);
@@ -1131,210 +1133,210 @@
 
                     <div class="mb-6 items-center flex justify-center">
                         <img src="{{ asset('assets/images/logo.png') }}" alt="2025 Nissan Sentra S"
-                            class="w-50 h-20 object-contain rounded-lg shadow-md">
-                    </div>
+        class="w-50 h-20 object-contain rounded-lg shadow-md">
+    </div>
 
-                    <div class="mb-8 space-y-4">
-                        <div class="">
-                            <h2 class="text-lg font-semibold mb-2">Terms and Conditions</h2>
-                        </div>
+    <div class="mb-8 space-y-4">
+        <div class="">
+            <h2 class="text-lg font-semibold mb-2">Terms and Conditions</h2>
+        </div>
 
-                        <div class=" space-y-2">
-                            <h3 class="text-md font-semibold mb-2">Rental Information</h3>
-                            <p class="text-sm">• <span class="font-medium">Start:</span> 10-02-2025 12:30 PM</p>
-                            <p class="text-sm">• <span class="font-medium">End:</span> 11-01-2025 12:30 PM</p>
-                            <p class="text-sm">• <span class="font-medium">Booking Price:</span> $99 / Day</p>
-                            <p class="text-sm">• <span class="font-medium">Rental Payment Plan:</span> Daily</p>
-                            <p class="text-sm">• <span class="font-medium">Security Deposit:</span> $200.00</p>
-                            <p class="text-sm">• <span class="font-medium">Included Distance:</span> Unlimited miles
-                            </p>
-                            <p class="text-sm">• <span class="font-medium">Pickup Location:</span> 4425 W Airport Fwy
-                                Irving TX 75062</p>
-                            <p class="text-sm">• <span class="font-medium">Protection Plan:</span> Default</p>
-                        </div>
+        <div class=" space-y-2">
+            <h3 class="text-md font-semibold mb-2">Rental Information</h3>
+            <p class="text-sm">• <span class="font-medium">Start:</span> 10-02-2025 12:30 PM</p>
+            <p class="text-sm">• <span class="font-medium">End:</span> 11-01-2025 12:30 PM</p>
+            <p class="text-sm">• <span class="font-medium">Booking Price:</span> $99 / Day</p>
+            <p class="text-sm">• <span class="font-medium">Rental Payment Plan:</span> Daily</p>
+            <p class="text-sm">• <span class="font-medium">Security Deposit:</span> $200.00</p>
+            <p class="text-sm">• <span class="font-medium">Included Distance:</span> Unlimited miles
+            </p>
+            <p class="text-sm">• <span class="font-medium">Pickup Location:</span> 4425 W Airport Fwy
+                Irving TX 75062</p>
+            <p class="text-sm">• <span class="font-medium">Protection Plan:</span> Default</p>
+        </div>
 
-                        <div class=" space-y-1">
-                            <h3 class="text-md font-semibold mb-2">Vehicle & Pickup Details</h3>
-                            <p class="text-sm">• <span class="font-medium">Plate Number:</span> WBW9358</p>
-                            <p class="text-sm">• <span class="font-medium">Make:</span> Nissan</p>
-                            <p class="text-sm">• <span class="font-medium">Model:</span> Sentra</p>
-                            <p class="text-sm">• <span class="font-medium">VIN:</span> 3N1AB8BV8SY263953</p>
-                            <p class="text-sm">• <span class="font-medium">Year:</span> 2025</p>
-                            <p class="text-sm">• <span class="font-medium">Color:</span> Black</p>
-                            <p class="text-sm">• <span class="font-medium">Current Mileage:</span> N/A</p>
-                            <p class="text-sm">• <span class="font-medium">Fuel Type:</span> Gas</p>
-                        </div>
-
-
-                        <div class=" ">
-                            <h3 class="text-md font-semibold mb-2">Driver Details</h3>
-                            <p class="text-sm">• <span class="font-medium">Driver Full Name:</span> Jhone Doe</p>
-                        </div>
+        <div class=" space-y-1">
+            <h3 class="text-md font-semibold mb-2">Vehicle & Pickup Details</h3>
+            <p class="text-sm">• <span class="font-medium">Plate Number:</span> WBW9358</p>
+            <p class="text-sm">• <span class="font-medium">Make:</span> Nissan</p>
+            <p class="text-sm">• <span class="font-medium">Model:</span> Sentra</p>
+            <p class="text-sm">• <span class="font-medium">VIN:</span> 3N1AB8BV8SY263953</p>
+            <p class="text-sm">• <span class="font-medium">Year:</span> 2025</p>
+            <p class="text-sm">• <span class="font-medium">Color:</span> Black</p>
+            <p class="text-sm">• <span class="font-medium">Current Mileage:</span> N/A</p>
+            <p class="text-sm">• <span class="font-medium">Fuel Type:</span> Gas</p>
+        </div>
 
 
-                        <div class=" space-y-4">
-                            <h3 class="text-md font-semibold">1. Rental Term, Booking Details & Extension Clause</h3>
-                            <p class="text-sm">This Agreement covers the rental period as set out above.</p>
-                            <p class="text-sm font-medium">Extension Clause:</p>
-                            <p class="text-sm">If the Renter does not return the Rental Vehicle by the scheduled end
-                                date/time, the rental period shall automatically extend on a day-to-day basis at the
-                                same daily rental rate... </p>
-                        </div>
-
-                        <div class=" space-y-2">
-                            <h3 class="text-md font-semibold">2. Payment Model Options</h3>
-                            <p class="text-sm">• Option 1 – Direct Payment Model: The Renter shall make all payments
-                                directly to the Owner...</p>
-                            <p class="text-sm">• Option 2 – Fleet Program Payment Model: The Renter participates in a
-                                Fleet Program...</p>
-                        </div>
-
-                        <div class=" space-y-2">
-                            <h3 class="text-md font-semibold">3. Fuel Policy</h3>
-                            <p class="text-sm">• Fuel Level at Pickup: The fuel tank should be full at the time of
-                                pickup...</p>
-                            <p class="text-sm">• Fuel Level at Drop-off: Upon return, the fuel level will be jointly
-                                recorded...</p>
-                            <p class="text-sm">• Fuel Discrepancy: If the fuel level at drop-off is lower than at
-                                pickup...</p>
-                        </div>
-
-                        <div class=" ">
-                            <h3 class="text-md font-semibold">4. Accident and Non-Drivable Vehicle Provision</h3>
-                            <p class="text-sm">In the event of an accident that renders the Rental Vehicle
-                                non-drivable, responsibility for damage shall be determined...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">5. Scope of Use</h3>
-                            <p class="text-sm">• The Rental Vehicle may be used for ridesharing, carshare, or other
-                                fleet programs...</p>
-                            <p class="text-sm">Prohibited Uses: – Racing, towing, off-roading...</p>
-                            <p class="text-sm">Additional Provisions: – Acknowledgment of Existing Damage...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">6. Vehicle Tracking and Disabling</h3>
-                            <p class="text-sm">The Rental Vehicle is equipped with GPS tracking, AirTags, and
-                                geofencing technology...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">7. Recovery Compensation Policy</h3>
-                            <p class="text-sm">If the Renter fails to return the vehicle to its designated location,
-                                the following fees shall apply...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">8. Additional Responsibilities & Liabilities</h3>
-                            <p class="text-sm">• Security Deposit & Damage Coverage...</p>
-                            <p class="text-sm">• Smoking & Pet Policy...</p>
-                            <p class="text-sm">• Traffic Violations...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">9. Governing Law and Dispute Resolution</h3>
-                            <p class="text-sm">This Agreement shall be governed by the laws of the applicable
-                                jurisdiction...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">10. Termination of Agreement</h3>
-                            <p class="text-sm">This Agreement may be terminated immediately if...</p>
-                        </div>
-
-                        <div class="">
-                            <h3 class="text-md font-semibold">11. Indemnification, Liability & Security</h3>
-                            <p class="text-sm">The Renter agrees to indemnify, defend, and hold harmless the Owner...
-                            </p>
-                        </div>
+        <div class=" ">
+            <h3 class="text-md font-semibold mb-2">Driver Details</h3>
+            <p class="text-sm">• <span class="font-medium">Driver Full Name:</span> Jhone Doe</p>
+        </div>
 
 
-                        <div class=" space-y-4">
-                            <p class="text-sm font-medium">IN WITNESS WHEREOF, the parties hereto have executed this
-                                Agreement as of the date set forth below.</p>
-                            <div>
-                                <p class="text-sm font-medium">ACCEPTED BY OWNER:</p>
-                                <p class="text-sm">Name: Fairpy INC</p>
-                                <p class="text-sm">Date: 10-02-2025</p>
-                                <p class="text-sm">Signature: __________</p>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium">ACCEPTED BY RENTER:</p>
-                                <p class="text-sm">Name: Jhone Doe</p>
-                                <p class="text-sm">Date: 10-02-2025</p>
-                                <p class="text-sm">Signature: __________</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="border-t pt-3 p-6 bg-white flex-shrink-0">
+        <div class=" space-y-4">
+            <h3 class="text-md font-semibold">1. Rental Term, Booking Details & Extension Clause</h3>
+            <p class="text-sm">This Agreement covers the rental period as set out above.</p>
+            <p class="text-sm font-medium">Extension Clause:</p>
+            <p class="text-sm">If the Renter does not return the Rental Vehicle by the scheduled end
+                date/time, the rental period shall automatically extend on a day-to-day basis at the
+                same daily rental rate... </p>
+        </div>
+
+        <div class=" space-y-2">
+            <h3 class="text-md font-semibold">2. Payment Model Options</h3>
+            <p class="text-sm">• Option 1 – Direct Payment Model: The Renter shall make all payments
+                directly to the Owner...</p>
+            <p class="text-sm">• Option 2 – Fleet Program Payment Model: The Renter participates in a
+                Fleet Program...</p>
+        </div>
+
+        <div class=" space-y-2">
+            <h3 class="text-md font-semibold">3. Fuel Policy</h3>
+            <p class="text-sm">• Fuel Level at Pickup: The fuel tank should be full at the time of
+                pickup...</p>
+            <p class="text-sm">• Fuel Level at Drop-off: Upon return, the fuel level will be jointly
+                recorded...</p>
+            <p class="text-sm">• Fuel Discrepancy: If the fuel level at drop-off is lower than at
+                pickup...</p>
+        </div>
+
+        <div class=" ">
+            <h3 class="text-md font-semibold">4. Accident and Non-Drivable Vehicle Provision</h3>
+            <p class="text-sm">In the event of an accident that renders the Rental Vehicle
+                non-drivable, responsibility for damage shall be determined...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">5. Scope of Use</h3>
+            <p class="text-sm">• The Rental Vehicle may be used for ridesharing, carshare, or other
+                fleet programs...</p>
+            <p class="text-sm">Prohibited Uses: – Racing, towing, off-roading...</p>
+            <p class="text-sm">Additional Provisions: – Acknowledgment of Existing Damage...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">6. Vehicle Tracking and Disabling</h3>
+            <p class="text-sm">The Rental Vehicle is equipped with GPS tracking, AirTags, and
+                geofencing technology...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">7. Recovery Compensation Policy</h3>
+            <p class="text-sm">If the Renter fails to return the vehicle to its designated location,
+                the following fees shall apply...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">8. Additional Responsibilities & Liabilities</h3>
+            <p class="text-sm">• Security Deposit & Damage Coverage...</p>
+            <p class="text-sm">• Smoking & Pet Policy...</p>
+            <p class="text-sm">• Traffic Violations...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">9. Governing Law and Dispute Resolution</h3>
+            <p class="text-sm">This Agreement shall be governed by the laws of the applicable
+                jurisdiction...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">10. Termination of Agreement</h3>
+            <p class="text-sm">This Agreement may be terminated immediately if...</p>
+        </div>
+
+        <div class="">
+            <h3 class="text-md font-semibold">11. Indemnification, Liability & Security</h3>
+            <p class="text-sm">The Renter agrees to indemnify, defend, and hold harmless the Owner...
+            </p>
+        </div>
 
 
-                    <div x-show="!signatureActive">
-                        <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg h-32 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
-                            @click="startSignature()">
-                            <template x-if="!signatureData">
-                                <div class="text-center text-gray-500">
-                                    <i class="fas fa-signature text-2xl mb-2"></i>
-                                    <p>Click to sign here</p>
-                                </div>
-                            </template>
-                            <template x-if="signatureData">
-                                <div class="text-center">
-                                    <img :src="signatureData" alt="Signature" class="max-h-24 mx-auto">
-                                    <p class="text-green-600 mt-2"><i class="fas fa-check-circle mr-1"></i> Signed</p>
-                                </div>
-                            </template>
-                        </div>
-
-                        <div class="flex justify-between mt-3">
-                            <button x-show="signatureData" @click="signatureData = null"
-                                class="text-sm text-red-500 hover:text-red-700">
-                                <i class="fas fa-trash-alt mr-1"></i> Clear Signature
-                            </button>
-
-                        </div>
-                    </div>
-
-                    <div x-show="signatureActive" class="signature-container">
-                        <div class="bg-white border-2 border-gray-300 rounded-lg overflow-hidden">
-                            <canvas x-ref="signatureCanvas" class="w-full h-48 bg-white touch-none"
-                                @mousedown="startDrawing($event)" @mousemove="draw($event)" @mouseup="stopDrawing()"
-                                @mouseleave="stopDrawing()" @touchstart="startDrawing($event)"
-                                @touchmove="draw($event)" @touchend="stopDrawing()">
-                            </canvas>
-                        </div>
-
-                        <div class="flex justify-between mt-3">
-                            <button @click="clearSignature()" class="text-sm text-red-500 hover:text-red-700">
-                                <i class="fas fa-eraser mr-1"></i> Clear
-                            </button>
-                            <button @click="saveSignature()" class="text-sm text-zinc-500 hover:text-zinc-500">
-                                <i class="fas fa-check mr-1"></i> Save Signature
-                            </button>
-                            <button @click="cancelSignature()" class="text-sm text-gray-500 hover:text-gray-700">
-                                <i class="fas fa-times mr-1"></i> Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-b-xl border-t flex-shrink-0">
-                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                        <button @click="acceptAgreement()"
-                            :class="!signatureData ? 'opacity-50 cursor-not-allowed' : ''" :disabled="!signatureData"
-                            class="flex-1 bg-zinc-500 hover:bg-zinc-500 text-white py-3 px-4 rounded-lg transition duration-200 font-medium flex items-center justify-center">
-                            <i class="fas fa-check-circle mr-2"></i> Accept & Continue
-                        </button>
-                        <button @click="agreementModalOpen = false"
-                            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-4 rounded-lg transition duration-200 font-medium">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
+        <div class=" space-y-4">
+            <p class="text-sm font-medium">IN WITNESS WHEREOF, the parties hereto have executed this
+                Agreement as of the date set forth below.</p>
+            <div>
+                <p class="text-sm font-medium">ACCEPTED BY OWNER:</p>
+                <p class="text-sm">Name: Fairpy INC</p>
+                <p class="text-sm">Date: 10-02-2025</p>
+                <p class="text-sm">Signature: __________</p>
             </div>
-        </div> --}}
+            <div>
+                <p class="text-sm font-medium">ACCEPTED BY RENTER:</p>
+                <p class="text-sm">Name: Jhone Doe</p>
+                <p class="text-sm">Date: 10-02-2025</p>
+                <p class="text-sm">Signature: __________</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="border-t pt-3 p-6 bg-white flex-shrink-0">
+
+
+    <div x-show="!signatureActive">
+        <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg h-32 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
+            @click="startSignature()">
+            <template x-if="!signatureData">
+                <div class="text-center text-gray-500">
+                    <i class="fas fa-signature text-2xl mb-2"></i>
+                    <p>Click to sign here</p>
+                </div>
+            </template>
+            <template x-if="signatureData">
+                <div class="text-center">
+                    <img :src="signatureData" alt="Signature" class="max-h-24 mx-auto">
+                    <p class="text-green-600 mt-2"><i class="fas fa-check-circle mr-1"></i> Signed</p>
+                </div>
+            </template>
+        </div>
+
+        <div class="flex justify-between mt-3">
+            <button x-show="signatureData" @click="signatureData = null"
+                class="text-sm text-red-500 hover:text-red-700">
+                <i class="fas fa-trash-alt mr-1"></i> Clear Signature
+            </button>
+
+        </div>
+    </div>
+
+    <div x-show="signatureActive" class="signature-container">
+        <div class="bg-white border-2 border-gray-300 rounded-lg overflow-hidden">
+            <canvas x-ref="signatureCanvas" class="w-full h-48 bg-white touch-none"
+                @mousedown="startDrawing($event)" @mousemove="draw($event)" @mouseup="stopDrawing()"
+                @mouseleave="stopDrawing()" @touchstart="startDrawing($event)"
+                @touchmove="draw($event)" @touchend="stopDrawing()">
+            </canvas>
+        </div>
+
+        <div class="flex justify-between mt-3">
+            <button @click="clearSignature()" class="text-sm text-red-500 hover:text-red-700">
+                <i class="fas fa-eraser mr-1"></i> Clear
+            </button>
+            <button @click="saveSignature()" class="text-sm text-zinc-500 hover:text-zinc-500">
+                <i class="fas fa-check mr-1"></i> Save Signature
+            </button>
+            <button @click="cancelSignature()" class="text-sm text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times mr-1"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="bg-gray-50 p-6 rounded-b-xl border-t flex-shrink-0">
+    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+        <button @click="acceptAgreement()"
+            :class="!signatureData ? 'opacity-50 cursor-not-allowed' : ''" :disabled="!signatureData"
+            class="flex-1 bg-zinc-500 hover:bg-zinc-500 text-white py-3 px-4 rounded-lg transition duration-200 font-medium flex items-center justify-center">
+            <i class="fas fa-check-circle mr-2"></i> Accept & Continue
+        </button>
+        <button @click="agreementModalOpen = false"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-4 rounded-lg transition duration-200 font-medium">
+            Cancel
+        </button>
+    </div>
+</div>
+</div>
+</div> --}}
     </div>
 
     {{-- <script>
