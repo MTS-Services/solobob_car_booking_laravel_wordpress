@@ -51,7 +51,12 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
 
    
     Route::get('/orders', OrderComponent::class)->name('orders');
-    Route::get('/payments', PaymentComponent::class)->name('payments');
+  
+
+     Route::group(['prefix' => 'payment-management'], function () {
+        Route::get('/', PaymentComponent::class)->name('payments');
+        Route::get('/details/{id}', PaymentDetailsComponent::class)->name('payment-details');
+    });
 
     // Product Management
     Route::prefix('product-management')->as('pm.')->group(function () {
@@ -68,33 +73,3 @@ Route::middleware(['auth', 'admin', 'verified'])->name('admin.')->prefix('admin'
     });
 });
 
-Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
-
-    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
-        Route::get('/category', ProductCategory::class)->name('product-category');
-    });
-
-    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
-        Route::get('/vehicle', VehicleMakes::class)->name('vehicle-makes');
-    });
-    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
-        Route::get('/vehiclefuel', Vehiclefuels::class)->name('vehicle-fuel');
-    });
-    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
-        Route::get('/vehiclemodel', VehicleModels::class)->name('vehicle-model');
-    });
-
-    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
-        Route::get('/vehicletransmission', VehicleTransmissions::class)->name('vehicle-transmission');
-    });
-
-    Route::group(['as' => 'pm.', 'prefix' => 'product-management'], function () {
-        Route::get('/vehicleproduct', Vehicles::class)->name('vehicle-product');
-    });
-
-    //   Route::get('/payments', PaymentComponent::class)->name('payments');
-    Route::group(['prefix' => 'payment-management'], function () {
-        Route::get('/', PaymentComponent::class)->name('payments');
-        Route::get('/details/{id}', PaymentDetailsComponent::class)->name('payment-details');
-    });
-});
