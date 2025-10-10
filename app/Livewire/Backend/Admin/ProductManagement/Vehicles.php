@@ -25,6 +25,8 @@ class Vehicles extends Component
 
     protected FileUploadService $fileUploadService;
 
+        public $perPage = 10;
+
     public $search = '';
     public $showModal = false;
     public $showDeleteModal = false;
@@ -425,7 +427,7 @@ class Vehicles extends Component
             })
             ->with(['category', 'owner', 'createdBy', 'updatedBy', 'deletedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         return view('livewire.backend.admin.product-management.vehicles', [
             'vehicles' => $vehicles,

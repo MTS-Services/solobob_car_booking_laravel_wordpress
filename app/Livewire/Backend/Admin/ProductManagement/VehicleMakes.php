@@ -22,6 +22,8 @@ class VehicleMakes extends Component
 
     use WithPagination;
 
+        public $perPage = 10;
+
     public $search = '';
     public $showModal = false;
     public $showDeleteModal = false;
@@ -174,7 +176,7 @@ class VehicleMakes extends Component
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         $columns = [
 

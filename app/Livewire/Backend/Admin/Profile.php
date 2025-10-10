@@ -7,17 +7,17 @@ use App\Models\User;
 use App\Services\FileUpload\FileUploadService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\Storage;
 
 #[Layout(
     'app',
     [
         'title' => 'admin.profile',
         'breadcrumb' => 'admin.profile',
-        'page_slug' => 'admin-profile'
+        'page_slug' => 'admin-profile',
     ]
 )]
 class Profile extends Component
@@ -25,15 +25,25 @@ class Profile extends Component
     use WithFileUploads;
 
     public $profile;
+
     public $newImage;
+
     public $name;
+
     public $email;
+
     public $number;
+
     public $date_of_birth;
+
     public $address;
+
     public $city;
+
     public $state;
+
     public $postal_code;
+
     public $is_default;
 
     protected $fileUploadService;
@@ -82,7 +92,7 @@ class Profile extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $this->profile->id,
+            'email' => 'required|email|max:255|unique:users,email,'.$this->profile->id,
             'newImage' => 'nullable|image|max:2048', // 2MB max
             'is_default' => 'nullable|boolean',
             'address' => 'nullable|string',
@@ -162,7 +172,7 @@ class Profile extends Component
     public function render()
     {
         return view('livewire.backend.admin.profile', [
-            'profile' => $this->profile
+            'profile' => $this->profile,
         ]);
     }
 }

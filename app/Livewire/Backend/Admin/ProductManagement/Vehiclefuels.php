@@ -22,6 +22,8 @@ class Vehiclefuels extends Component
       use WithPagination;
 
     public $search = '';
+        public $perPage = 10;
+
     public $showModal = false;
     public $showDeleteModal = false;
     public $showDetailsModal = false;
@@ -176,7 +178,7 @@ class Vehiclefuels extends Component
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
              $columns = [
 

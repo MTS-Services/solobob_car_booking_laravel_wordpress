@@ -17,15 +17,18 @@ use Livewire\Component;
 class VehicleDetails extends Component
 {
     public $vehicle;
+
     public $selectedImage = null;
+
+    public $perPage = 10;
 
     public function mount($id)
     {
-        $this->vehicle = Vehicle::with(['category', 'owner', 'createdBy', 'updatedBy', 'deletedBy', 'images' => function($query) {
-                $query->orderBy('sort_order');
-            }])
+        $this->vehicle = Vehicle::with(['category', 'owner', 'createdBy', 'updatedBy', 'deletedBy', 'images' => function ($query) {
+            $query->orderBy('sort_order');
+        }])
             ->findOrFail($id);
-        
+
         // Set the primary image or first image as selected
         if ($this->vehicle->images->isNotEmpty()) {
             $primaryImage = $this->vehicle->images->firstWhere('is_primary', true);

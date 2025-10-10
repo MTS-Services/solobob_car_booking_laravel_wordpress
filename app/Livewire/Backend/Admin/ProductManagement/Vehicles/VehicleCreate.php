@@ -28,6 +28,8 @@ class VehicleCreate extends Component
     // Form fields
     public $owner_id;
 
+    public $perPage = 10;
+
     public $category_id;
 
     public $sort_order = 0;
@@ -67,6 +69,7 @@ class VehicleCreate extends Component
     public $status = Vehicle::STATUS_AVAILABLE;
 
     public array $images = [];
+
     public $newImage; // Single or multiple image upload
 
     public function boot(FileUploadService $fileUploadService)

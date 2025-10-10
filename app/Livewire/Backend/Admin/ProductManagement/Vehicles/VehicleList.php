@@ -18,6 +18,8 @@ class VehicleList extends Component
 
     public $search = '';
 
+    public $perPage = 10;
+
     public $showDeleteModal = false;
 
     public $vehicleIdToDelete = null;
@@ -62,7 +64,7 @@ class VehicleList extends Component
             })
             ->with(['category', 'owner'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
         $columns = [
             ['key' => 'title', 'label' => 'Title', 'width' => '20%'],
             ['key' => 'license_plate', 'label' => 'License Plate', 'width' => '15%'],

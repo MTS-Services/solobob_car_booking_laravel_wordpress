@@ -27,6 +27,8 @@ class VehicleEdit extends Component
 
     public $vehicleId;
 
+    public $perPage = 10;
+
     // Form fields
     public $owner_id;
 
@@ -67,8 +69,11 @@ class VehicleEdit extends Component
     public $delivery_fee = '';
 
     public $status = Vehicle::STATUS_AVAILABLE;
+
     public array $images = [];
+
     public $existingImages = [];
+
     public $imagesToDelete = []; // Track images marked for deletion
 
     public function boot(FileUploadService $fileUploadService)
@@ -101,7 +106,7 @@ class VehicleEdit extends Component
         $this->delivery_available = $vehicle->delivery_available;
         $this->delivery_fee = $vehicle->delivery_fee;
         $this->status = $vehicle->status ?? Vehicle::STATUS_AVAILABLE;
-        
+
         // Load existing images
         $this->existingImages = $vehicle->images()->get()->toArray();
     }
@@ -109,15 +114,15 @@ class VehicleEdit extends Component
     public function markImageForDeletion($imageId)
     {
         // Just mark the image for deletion, don't actually delete it yet
-        if (!in_array($imageId, $this->imagesToDelete)) {
+        if (! in_array($imageId, $this->imagesToDelete)) {
             $this->imagesToDelete[] = $imageId;
         }
-        
+
         // Remove from existingImages array for UI purposes
-        $this->existingImages = array_filter($this->existingImages, function($image) use ($imageId) {
+        $this->existingImages = array_filter($this->existingImages, function ($image) use ($imageId) {
             return $image['id'] != $imageId;
         });
-        
+
         // Re-index array
         $this->existingImages = array_values($this->existingImages);
     }
@@ -149,7 +154,7 @@ class VehicleEdit extends Component
             'instant_booking' => 'nullable|boolean',
             'delivery_available' => 'nullable|boolean',
             'delivery_fee' => 'nullable|numeric|min:0',
-            'status' => 'required|in:' . implode(',', [Vehicle::STATUS_AVAILABLE, Vehicle::STATUS_RENTED, Vehicle::STATUS_MAINTENANCE, Vehicle::STATUS_INACTIVE]),
+            'status' => 'required|in:'.implode(',', [Vehicle::STATUS_AVAILABLE, Vehicle::STATUS_RENTED, Vehicle::STATUS_MAINTENANCE, Vehicle::STATUS_INACTIVE]),
             'images.*' => 'nullable|image|max:10240',
             'images' => 'nullable|array',
         ]);
@@ -182,7 +187,7 @@ class VehicleEdit extends Component
         $vehicle->update($updateData);
 
         // NOW delete the marked images (only on form submission)
-        if (!empty($this->imagesToDelete)) {
+        if (! empty($this->imagesToDelete)) {
             foreach ($this->imagesToDelete as $imageId) {
                 $image = VehicleImage::find($imageId);
                 if ($image && $image->vehicle_id == $this->vehicleId) {
@@ -195,9 +200,9 @@ class VehicleEdit extends Component
         }
 
         // Handle new image uploads
-        if (!empty($this->images)) {
+        if (! empty($this->images)) {
             $existingImagesCount = $vehicle->images()->count();
-            
+
             foreach ($this->images as $index => $image) {
                 $path = $this->fileUploadService->uploadImage(
                     file: $image,

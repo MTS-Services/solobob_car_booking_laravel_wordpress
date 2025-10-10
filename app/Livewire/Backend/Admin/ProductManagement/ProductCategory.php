@@ -3,9 +3,8 @@
 namespace App\Livewire\Backend\Admin\ProductManagement;
 
 use App\Models\Category;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
-
+use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout(
@@ -13,30 +12,35 @@ use Livewire\WithPagination;
     [
         'title' => 'product-category',
         'breadcrumb' => 'product-category',
-        'page_slug' => 'product-category'
+        'page_slug' => 'product-category',
     ]
 )]
 class ProductCategory extends Component
 {
-
     use WithPagination;
 
     public $search = '';
+
+    public $perPage = 10;
+
     public $showModal = false;
+
     public $showDeleteModal = false;
+
     public $showDetailsModal = false;
+
     public $detailsAdmin = null;
+
     public $editMode = false;
 
     // Form fields
     public $adminId;
+
     public $name = '';
+
     public $slug = '';
+
     public $status = Category::STATUS_ACTIVE;
-
-
-
-
 
     public function updatingSearch()
     {
@@ -88,8 +92,6 @@ class ProductCategory extends Component
         $this->showModal = true;
     }
 
-
-
     public function openDeleteModal($id)
     {
         $this->adminId = $id;
@@ -112,12 +114,10 @@ class ProductCategory extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug,' . ($this->editMode ? $this->adminId : 'NULL') . ',id',
-            'status' => 'required|in:' . Category::STATUS_ACTIVE . ',' . Category::STATUS_INACTIVE,
+            'slug' => 'required|string|max:255|unique:categories,slug,'.($this->editMode ? $this->adminId : 'NULL').',id',
+            'status' => 'required|in:'.Category::STATUS_ACTIVE.','.Category::STATUS_INACTIVE,
 
         ];
-
-
 
         $this->validate($rules);
 
@@ -130,7 +130,6 @@ class ProductCategory extends Component
                 'status' => $this->status,
                 'updated_by' => user()->id,
             ];
-
 
             $category->update($updateData);
 
@@ -145,7 +144,6 @@ class ProductCategory extends Component
 
             // Handle avatar upload for new admin
 
-
             Category::create($data);
 
             session()->flash('message', 'category created successfully.');
@@ -158,9 +156,8 @@ class ProductCategory extends Component
     {
         $category = Category::findOrFail($this->adminId);
 
-
         // Update deleted_by before soft deleting
-       // $category->update(['deleted_by' => user()->id]);
+        // $category->update(['deleted_by' => user()->id]);
         $category->delete(); // This will soft delete due to SoftDeletes trait
 
         session()->flash('message', 'Category deleted successfully.');
@@ -172,13 +169,13 @@ class ProductCategory extends Component
         $productCategories = Category::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('slug', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('slug', 'like', '%'.$this->search.'%');
                 });
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
         $columns = [
 
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
@@ -188,8 +185,8 @@ class ProductCategory extends Component
                 'label' => 'Status',
                 'width' => '10%',
                 'format' => function ($productCategorie) {
-                    return '<span class="badge badge-soft ' . $productCategorie->status_color . '">' . ucfirst($productCategorie->status_label) . '</span>';
-                }
+                    return '<span class="badge badge-soft '.$productCategorie->status_color.'">'.ucfirst($productCategorie->status_label).'</span>';
+                },
             ],
 
             [
@@ -198,7 +195,7 @@ class ProductCategory extends Component
                 'width' => '15%',
                 'format' => function ($productCategorie) {
                     return $productCategorie->created_at_formatted;
-                }
+                },
             ],
 
             [
@@ -207,16 +204,14 @@ class ProductCategory extends Component
                 'width' => '15%',
                 'format' => function ($productCategorie) {
                     return $productCategorie->createdBy?->name ?? 'System';
-                }
-            ]
+                },
+            ],
         ];
         $actions = [
             ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
             ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
             ['key' => 'id', 'label' => 'Delete', 'method' => 'openDeleteModal'],
         ];
-
-
 
         return view(
             'livewire.backend.admin.product-management.product-category',

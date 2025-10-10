@@ -26,6 +26,9 @@ class User extends Component
 
     public $search = '';
 
+        public $perPage = 10;
+
+
     public $showModal = false;
 
     public $showDeleteModal = false;
@@ -53,8 +56,7 @@ class User extends Component
 
     public $existingAvatar = null;
 
-    protected $queryString = ['search'];
-     public $perPage = 10;
+    protected $queryString = ['search']; 
 
     public function boot(FileUploadService $fileUploadService)
     {

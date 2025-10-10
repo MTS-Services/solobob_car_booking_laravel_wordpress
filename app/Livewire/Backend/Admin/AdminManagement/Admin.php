@@ -3,58 +3,75 @@
 namespace App\Livewire\Backend\Admin\AdminManagement;
 
 use App\Models\User;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Hash;
 use App\Services\FileUpload\FileUploadService;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 #[Layout(
     'app',
     [
         'title' => 'admin',
         'breadcrumb' => 'admin',
-        'page_slug' => 'admin'
+        'page_slug' => 'admin',
     ]
 )]
 class Admin extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     protected FileUploadService $fileUploadService;
 
     public $search = '';
+
     public $perPage = 10;
 
     public $showModal = false;
+
     public $showDeleteModal = false;
+
     public $showDetailsModal = false;
+
     public $detailsAdmin = null;
+
     public $editMode = false;
 
     // Form fields
     public $adminId;
+
     public $name = '';
+
     public $email = '';
+
     public $password = '';
+
     public $password_confirmation = '';
+
     public $number;
+
     public $date_of_birth;
+
     public $status = User::STATUS_ACTIVE;
+
     public $avatar;
+
     public $existingAvatar = null;
 
     // Trash modal properties
     public $showTrashModal = false;
+
     public $showForceDeleteModal = false;
+
     public $forceDeleteId = null;
+
     public $trashSearch = '';
 
     protected $queryString = [
         'search' => ['except' => ''],
     ];
+
     // Customization for pagination theme
     protected string $paginationTheme = 'tailwind';
 
@@ -182,7 +199,6 @@ class Admin extends Component
         $this->showForceDeleteModal = false;
     }
 
-
     public function forceDelete()
     {
         if ($this->forceDeleteId) {
@@ -216,10 +232,10 @@ class Admin extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_INACTIVE,
+            'status' => 'required|in:'.User::STATUS_ACTIVE.','.User::STATUS_SUSPENDED.','.User::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
             'date_of_birth' => 'nullable|date|before:today',
-            'number' => 'nullable'
+            'number' => 'nullable',
         ]);
 
         $data = [
@@ -255,9 +271,9 @@ class Admin extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->adminId,
+            'email' => 'required|email|unique:users,email,'.$this->adminId,
             'password' => 'nullable|string|min:8|confirmed',
-            'status' => 'required|in:' . User::STATUS_ACTIVE . ',' . User::STATUS_SUSPENDED . ',' . User::STATUS_INACTIVE,
+            'status' => 'required|in:'.User::STATUS_ACTIVE.','.User::STATUS_SUSPENDED.','.User::STATUS_INACTIVE,
             'avatar' => 'nullable|image|max:2048',
             'date_of_birth' => 'nullable|date|before:today',
             'number' => 'nullable',
@@ -310,6 +326,7 @@ class Admin extends Component
         if ($admin->id === user()->id) {
             session()->flash('error', 'You cannot delete your own account.');
             $this->closeDeleteModal();
+
             return;
         }
 
@@ -328,17 +345,16 @@ class Admin extends Component
         $admins = User::admin()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%')
-                        ->orWhere('number', 'like', '%' . $this->search . '%')
-                        ->orWhere('date_of_birth', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('email', 'like', '%'.$this->search.'%')
+                        ->orWhere('number', 'like', '%'.$this->search.'%')
+                        ->orWhere('date_of_birth', 'like', '%'.$this->search.'%');
                 });
             })
             ->with(['createdBy', 'updatedBy'])
             ->orderBy('name', 'asc')
             ->paginate($this->perPage);
 
-        
         $columns = [
             ['key' => 'name', 'label' => 'Name', 'width' => '20%'],
             ['key' => 'email', 'label' => 'Email', 'width' => '25%'],
@@ -347,8 +363,8 @@ class Admin extends Component
                 'label' => 'Status',
                 'width' => '10%',
                 'format' => function ($admin) {
-                    return '<span class="badge badge-soft ' . $admin->status_color . '">' . ucfirst($admin->status_label) . '</span>';
-                }
+                    return '<span class="badge badge-soft '.$admin->status_color.'">'.ucfirst($admin->status_label).'</span>';
+                },
             ],
             [
                 'key' => 'created_at',
@@ -356,7 +372,7 @@ class Admin extends Component
                 'width' => '15%',
                 'format' => function ($admin) {
                     return $admin->created_at_formatted;
-                }
+                },
             ],
 
             [
@@ -365,15 +381,15 @@ class Admin extends Component
                 'width' => '15%',
                 'format' => function ($admin) {
                     return $admin->createdBy?->name ?? 'System';
-                }
-            ]
+                },
+            ],
         ];
 
         $actions = [
             ['key' => 'id', 'label' => 'View', 'method' => 'openDetailsModal'],
             ['key' => 'id', 'label' => 'Edit', 'method' => 'openEditModal'],
             ['key' => 'id', 'label' => 'Delete', 'method' => 'openForceDeleteModal'],
-            
+
         ];
 
         return view('livewire.backend.admin.admin-management.admin', [

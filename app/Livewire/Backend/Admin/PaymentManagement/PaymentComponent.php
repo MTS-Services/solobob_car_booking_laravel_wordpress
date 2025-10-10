@@ -3,12 +3,10 @@
 namespace App\Livewire\Backend\Admin\PaymentManagement;
 
 use App\Models\Payment;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
-use Livewire\WithPagination;
 use Livewire\Attributes\Url;
-
-
+use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Layout(
     'app',
@@ -32,12 +30,16 @@ class PaymentComponent extends Component
     public $paymentMethod = '';
 
     public $showDetailsModal = false;
+
     public $detailsPayment = null;
 
     public $sortField;
 
-    public function mount() {
-        // 
+    public $perPage = 10;
+
+    public function mount()
+    {
+        //
     }
 
     public function updatingSearch()
@@ -61,12 +63,12 @@ class PaymentComponent extends Component
             ->with(['booking', 'user'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('id', 'like', '%' . $this->search . '%')
-                        ->orWhere('amount', 'like', '%' . $this->search . '%')
-                        ->orWhere('note', 'like', '%' . $this->search . '%')
+                    $q->where('id', 'like', '%'.$this->search.'%')
+                        ->orWhere('amount', 'like', '%'.$this->search.'%')
+                        ->orWhere('note', 'like', '%'.$this->search.'%')
                         ->orWhereHas('user', function ($q) {
-                            $q->where('name', 'like', '%' . $this->search . '%')
-                                ->orWhere('email', 'like', '%' . $this->search . '%');
+                            $q->where('name', 'like', '%'.$this->search.'%')
+                                ->orWhere('email', 'like', '%'.$this->search.'%');
                         });
                 });
             })
@@ -77,32 +79,33 @@ class PaymentComponent extends Component
                 $query->where('payment_method', $this->paymentMethod);
             })
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         $columns = [
-             ['key' => 'booking_id', 'label' => 'Booking Referece', 'width' => '20%', 'format' => function($v) {
+            ['key' => 'booking_id', 'label' => 'Booking Referece', 'width' => '20%', 'format' => function ($v) {
                 $url = route('admin.om.details', $v->booking_id);
-             return "<a href='{$url}' wire:navigate>View Booking</a>";
-             }],
-             
-             ['key' => 'type', 'label' => 'Payment Type', 'width' => '20%', 'format' => function($payments){
+
+                return "<a href='{$url}' wire:navigate>View Booking</a>";
+            }],
+
+            ['key' => 'type', 'label' => 'Payment Type', 'width' => '20%', 'format' => function ($payments) {
                 return $payments->getTypeLabelAttribute();
-             }],
-             ['key' => 'status', 'label' => 'Payment Status', 'width' => '20%', 'format' => function($payments){
+            }],
+            ['key' => 'status', 'label' => 'Payment Status', 'width' => '20%', 'format' => function ($payments) {
                 return $payments->getStatusLabelAttribute();
-             }],
-             ['key' => 'amount', 'label' => 'Amount', 'width' => '20%', 'format' => function($payments){
-                return '$'. $payments->amount_formatted;
-             }],
+            }],
+            ['key' => 'amount', 'label' => 'Amount', 'width' => '20%', 'format' => function ($payments) {
+                return '$'.$payments->amount_formatted;
+            }],
         ];
         $actions = [
-             ['key' => 'id', 'label' => 'View', 'route' => 'admin.deposit.detail'],
+            ['key' => 'id', 'label' => 'View', 'route' => 'admin.deposit.detail'],
         ];
 
         return view('livewire.backend.admin.payment-component', [
             'items' => $payments,
-            'columns'=> $columns,
-            'actions'=> $actions
+            'columns' => $columns,
+            'actions' => $actions,
         ]);
     }
 }

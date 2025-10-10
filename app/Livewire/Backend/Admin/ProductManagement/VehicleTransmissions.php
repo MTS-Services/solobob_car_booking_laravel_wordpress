@@ -3,8 +3,8 @@
 namespace App\Livewire\Backend\Admin\ProductManagement;
 
 use App\Models\VehicleTransmission;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout(
@@ -12,31 +12,33 @@ use Livewire\WithPagination;
     [
         'title' => 'vehicle-transmission',
         'breadcrumb' => 'vehicle-transmission',
-        'page_slug' => 'vehicle-transmission'
+        'page_slug' => 'vehicle-transmission',
     ]
 )]
 class VehicleTransmissions extends Component
 {
+    use WithPagination;
 
-    
-       use WithPagination;
+    public $perPage = 10;
 
     public $search = '';
+
     public $showModal = false;
+
     public $showDeleteModal = false;
+
     public $showDetailsModal = false;
+
     public $detailsVehicleTransmission = null;
+
     public $editMode = false;
 
     // Form fields
     public $adminId;
+
     public $name = '';
+
     public $slug = '';
-
- 
-  
-
-
 
     public function updatingSearch()
     {
@@ -46,12 +48,11 @@ class VehicleTransmissions extends Component
     public function resetFields()
     {
         $this->reset([
-            'name', 
+            'name',
             'slug',
-           
-       
+
         ]);
-       
+
         $this->resetValidation();
     }
 
@@ -86,8 +87,6 @@ class VehicleTransmissions extends Component
         $this->showModal = true;
     }
 
- 
-
     public function openDeleteModal($id)
     {
         $this->adminId = $id;
@@ -110,26 +109,21 @@ class VehicleTransmissions extends Component
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:categories,slug,' . ($this->editMode ? $this->adminId : 'NULL') . ',id',
-           
-           
+            'slug' => 'required|string|max:255|unique:categories,slug,'.($this->editMode ? $this->adminId : 'NULL').',id',
         ];
-
-       
 
         $this->validate($rules);
 
         if ($this->editMode) {
             $vehicleTransmission = VehicleTransmissions::findOrFail($this->adminId);
-            
+
             $updateData = [
                 'name' => $this->name,
                 'slug' => $this->slug,
-              
+
                 'updated_by' => user()->id,
             ];
 
-           
             $vehicleTransmission->update($updateData);
 
             session()->flash('message', 'category updated successfully.');
@@ -137,12 +131,11 @@ class VehicleTransmissions extends Component
             $data = [
                 'name' => $this->name,
                 'slug' => $this->slug,
-               
+
                 'created_by' => user()->id,
             ];
 
             // Handle avatar upload for new admin
-           
 
             VehicleTransmission::create($data);
 
@@ -160,6 +153,7 @@ class VehicleTransmissions extends Component
         if ($vehicleTransmission->id === user()->id) {
             session()->flash('error', 'You cannot delete your own account.');
             $this->closeDeleteModal();
+
             return;
         }
 
@@ -170,25 +164,24 @@ class VehicleTransmissions extends Component
         session()->flash('message', 'Admin deleted successfully.');
         $this->closeDeleteModal();
     }
-    
+
     public function render()
     {
-         $vehicleTransmission = VehicleTransmission::query()
+        $vehicleTransmission = VehicleTransmission::query()
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('slug', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('slug', 'like', '%'.$this->search.'%');
                 });
             })
             ->with(['createdBy', 'updatedBy'])
             ->latest()
-            ->paginate(10);
-     
+            ->paginate($this->perPage);
+
         return view('livewire.backend.admin.product-management.vehicle-transmissions',
             [
                 'vehicleTransmissions' => $vehicleTransmission,
-                
+
             ]);
     }
-   
 }
