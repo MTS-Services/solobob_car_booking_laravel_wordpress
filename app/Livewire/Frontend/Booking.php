@@ -198,7 +198,26 @@ class Booking extends Component
     {
         $this->pickupDate = '';
         $this->returnDate = '';
-        $this->dispatch('rental-range-changed', requiredDays: $this->getRequiredDays());
+    }
+
+    /**
+     * Auto-calculate return date when pickup date changes
+     */
+    public function updatedPickupDate($value)
+    {
+        if (!empty($value)) {
+            try {
+                $pickup = Carbon::parse($value);
+                $days = $this->rentalRange === 'weekly' ? 7 : 30;
+                $return = $pickup->copy()->addDays($days);
+                
+                $this->returnDate = $return->format('Y-m-d');
+            } catch (\Exception $e) {
+                $this->returnDate = '';
+            }
+        } else {
+            $this->returnDate = '';
+        }
     }
 
     /**
@@ -480,31 +499,9 @@ class Booking extends Component
         try {
             // Validate date fields
             $this->validate([
-                'pickupDate' => 'required|date|after_or_equal:today',
-                'returnDate' => 'required|date|after:pickupDate',
                 'pickupTime' => 'required|string',
                 'returnTime' => 'required|string',
             ]);
-
-            // Validate dates are selected
-            if (empty($this->pickupDate) || empty($this->returnDate)) {
-                $this->addError('dateRange', 'Please select both pickup and return dates from the calendar.');
-                return;
-            }
-
-            // Check if any date in range is disabled
-            $pickup = Carbon::parse($this->pickupDate);
-            $return = Carbon::parse($this->returnDate);
-
-            $current = $pickup->copy();
-            while ($current->lte($return)) {
-                if (in_array($current->format('Y-m-d'), $this->disabledDates)) {
-                    $this->addError('dateRange', 'Selected date range includes unavailable dates. Please choose different dates.');
-                    return;
-                }
-                $current->addDay();
-            }
-
             // Move to verification step
             if ($this->currentStep < 4) {
                 $this->currentStep++;

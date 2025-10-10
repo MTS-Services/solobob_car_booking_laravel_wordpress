@@ -218,9 +218,9 @@
                 <!-- Right Content - Forms -->
                 <div class="bg-white rounded-lg shadow-sm p-6 lg:col-span-2">
                     @switch($currentStep)
-                        {{-- STEP 2: Trip Date & Time Section - Replace your @case(2) section with this --}}
+                        {{-- STEP 2: Trip Date & Time Section --}}
                         @case(2)
-                            <div x-data="calendarComponent()" x-init="init()">
+                            <div>
                                 <h2 class="text-xl font-semibold mb-6">Trip Date & Time</h2>
 
                                 @if ($errors->has('dateRange'))
@@ -229,37 +229,74 @@
                                     </div>
                                 @endif
 
-                                <div class="flex items-center justify-between gap-5">
-                                    <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
-                                        <span class="label">Pickup Date</span>
-                                        <x-input type="text" x-model="pickupDateDisplay" readonly
-                                            placeholder="Select pickup date" class="cursor-pointer" />
+                                <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <p class="text-sm text-blue-700">
+                                        <strong>Note:</strong>
+                                        <span x-show="rentalRange === 'weekly'">
+                                            Weekly rentals are for 7 days. Select your pickup date and the return date will be
+                                            automatically set.
+                                        </span>
+                                        <span x-show="rentalRange === 'monthly'">
+                                            Monthly rentals are for 30 days. Select your pickup date and the return date will be
+                                            automatically set.
+                                        </span>
+                                    </p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <label class="block space-y-2">
+                                        <span class="text-sm font-medium">Pickup Date <span
+                                                class="text-red-500">*</span></span>
+                                        <x-input type="date" wire:model.live="pickupDate" min="{{ date('Y-m-d') }}"
+                                            placeholder="Select pickup date" />
+                                        @error('pickupDate')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </label>
-                                    <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
-                                        <span class="label">Pickup Time</span>
+
+                                    <label class="block space-y-2">
+                                        <span class="text-sm font-medium">Pickup Time <span
+                                                class="text-red-500">*</span></span>
                                         <x-input type="time" wire:model.live="pickupTime" />
+                                        @error('pickupTime')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </label>
                                 </div>
 
-                                <div class="flex items-center justify-between gap-5">
-                                    <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
-                                        <span class="label">Return Date</span>
-                                        <x-input type="text" x-model="returnDateDisplay" readonly
-                                            placeholder="Select return date" class="cursor-pointer" />
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <label class="block space-y-2">
+                                        <span class="text-sm font-medium">Return Date <span
+                                                class="text-red-500">*</span></span>
+                                        <x-input type="date" wire:model="returnDate" readonly
+                                            class="bg-gray-100 cursor-not-allowed" placeholder="Auto-calculated" />
+                                        @error('returnDate')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </label>
-                                    <label class="block text-sm font-medium mb-2 flex-1 space-y-2">
-                                        <span class="label">Return Time</span>
+
+                                    <label class="block space-y-2">
+                                        <span class="text-sm font-medium">Return Time <span
+                                                class="text-red-500">*</span></span>
                                         <x-input type="time" wire:model.live="returnTime" />
+                                        @error('returnTime')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
                                     </label>
                                 </div>
 
-                                <div class="mt-6 mb-4">
-                                    <!-- Calendar Container - will be populated by Flatpickr -->
-                                    <div wire:ignore>
-                                        <div id="inline-date-calendar" class="w-full"></div>
-                                        <p class="text-sm text-red-600 text-center mt-2" x-text="errorMessage"></p>
+                                @if (!empty($pickupDate) && !empty($returnDate))
+                                    <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                                        <p class="text-sm text-green-700">
+                                            <strong>Rental Duration:</strong>
+                                            {{ \Carbon\Carbon::parse($pickupDate)->format('M d, Y') }}
+                                            to
+                                            {{ \Carbon\Carbon::parse($returnDate)->format('M d, Y') }}
+                                            ({{ \Carbon\Carbon::parse($pickupDate)->diffInDays(\Carbon\Carbon::parse($returnDate)) }}
+                                            days)
+                                        </p>
                                     </div>
-                                </div>
+                                @endif
 
                                 <div class="flex gap-4 flex-col sm:flex-row mt-6">
                                     <button wire:click="nextStep" type="button"
@@ -272,331 +309,6 @@
                                     </a>
                                 </div>
                             </div>
-
-                            @push('styles')
-                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-                                <style>
-                                    /* Full width calendar styling */
-                                    #inline-date-calendar {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-calendar.inline {
-                                        width: 100% !important;
-                                        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-                                        display: block !important;
-                                        padding: 10px;
-                                        position: relative !important;
-                                    }
-
-                                    .flatpickr-calendar .flatpickr-rContainer {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-wrapper {
-                                        width: 100% !important;
-                                        display: block !important;
-                                    }
-
-                                    .flatpickr-calendar .flatpickr-innerContainer {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-months {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-month {
-                                        width: 100% !important;
-                                    }
-
-                                    .flatpickr-days {
-
-                                        width: 100% !important;
-                                    }
-
-                                    .dayContainer {
-                                        width: 100% !important;
-                                        min-width: 100% !important;
-                                        max-width: 100% !important;
-                                        display: flex !important;
-                                        flex-wrap: wrap !important;
-                                        justify-content: space-between !important;
-                                    }
-
-                                    .flatpickr-day {
-
-                                        flex: 0 0 14.28% !important;
-                                        max-width: 14.28% !important;
-                                        height: 42px !important;
-                                        line-height: 42px !important;
-                                        margin: 0 !important;
-                                    }
-
-                                    /* Highlight disabled dates */
-                                    .flatpickr-day.flatpickr-disabled,
-                                    .flatpickr-day.flatpickr-disabled:hover {
-                                        background: #fee2e2 !important;
-                                        color: #991b1b !important;
-                                        cursor: not-allowed !important;
-                                        border-color: #fecaca !important;
-                                        margin-top: 2px !important;
-                                    }
-
-                                    /* Selected range styling */
-                                    .flatpickr-day.selected,
-                                    .flatpickr-day.startRange,
-                                    .flatpickr-day.endRange {
-                                        background: #71717a !important;
-                                        border-color: #71717a !important;
-                                        color: white !important;
-                                    }
-
-                                    .flatpickr-day.selected.inRange,
-                                    .flatpickr-day.startRange.inRange,
-                                    .flatpickr-day.endRange.inRange,
-                                    .flatpickr-day.inRange {
-                                        background: #e4e4e7 !important;
-                                        border-color: #e4e4e7 !important;
-                                        color: #18181b !important;
-                                        box-shadow: -5px 0 0 #e4e4e7, 5px 0 0 #e4e4e7 !important;
-                                    }
-
-                                    .flatpickr-day.selected.startRange,
-                                    .flatpickr-day.startRange.startRange,
-                                    .flatpickr-day.endRange.startRange {
-                                        border-radius: 50px 0 0 50px !important;
-                                    }
-
-                                    .flatpickr-day.selected.endRange,
-                                    .flatpickr-day.startRange.endRange,
-                                    .flatpickr-day.endRange.endRange {
-                                        border-radius: 0 50px 50px 0 !important;
-                                    }
-
-                                    .flatpickr-day:hover:not(.flatpickr-disabled) {
-                                        background: #f4f4f5 !important;
-                                        border-color: #e4e4e7 !important;
-                                    }
-                                </style>
-                            @endpush
-
-                            @push('scripts')
-                                <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-                                <script>
-                                    function calendarComponent() {
-                                        return {
-                                            calendarInstance: null,
-                                            isUpdatingFromCalendar: false,
-                                            pickupDateDisplay: '',
-                                            returnDateDisplay: '',
-                                            errorMessage: '',
-
-                                            init() {
-                                                this.pickupDateDisplay = this.formatDisplayDate(@this.pickupDate);
-                                                this.returnDateDisplay = this.formatDisplayDate(@this.returnDate);
-
-                                                this.$nextTick(() => {
-                                                    this.initializeCalendar();
-                                                });
-
-                                                Livewire.on('rental-range-changed', () => {
-                                                    this.destroyCalendar();
-                                                    this.pickupDateDisplay = '';
-                                                    this.returnDateDisplay = '';
-                                                    this.errorMessage = '';
-                                                    @this.pickupDate = '';
-                                                    @this.returnDate = '';
-                                                    setTimeout(() => {
-                                                        this.initializeCalendar();
-                                                    }, 100);
-                                                });
-                                            },
-
-                                            formatDisplayDate(dateStr) {
-                                                if (!dateStr) return '';
-                                                const date = new Date(dateStr);
-                                                const d = String(date.getDate()).padStart(2, '0');
-                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                const y = date.getFullYear();
-                                                return `${d}/${m}/${y}`;
-                                            },
-
-                                            initializeCalendar() {
-                                                const calendarElement = document.getElementById('inline-date-calendar');
-                                                if (!calendarElement) return;
-
-                                                const disabledDates = @json($disabledDates ?? []);
-                                                const requiredDays = {{ $requiredDays ?? 7 }};
-                                                const currentPickupDate = @this.pickupDate || '';
-                                                const currentReturnDate = @this.returnDate || '';
-
-                                                this.destroyCalendar();
-
-                                                let defaultDates = [];
-                                                if (currentPickupDate && currentReturnDate) {
-                                                    defaultDates = [currentPickupDate, currentReturnDate];
-                                                }
-
-                                                this.calendarInstance = flatpickr("#inline-date-calendar", {
-                                                    inline: true,
-                                                    mode: "range",
-                                                    dateFormat: "Y-m-d",
-                                                    minDate: "today",
-                                                    showMonths: 1,
-                                                    disable: disabledDates,
-                                                    static: true,
-                                                    defaultDate: defaultDates,
-
-                                                    onReady: (selectedDates, dateStr, instance) => {
-                                                        const calendar = instance.calendarContainer;
-                                                        if (calendar) {
-                                                            calendar.style.width = '100%';
-                                                            calendar.style.display = 'block';
-                                                        }
-                                                        if (defaultDates.length > 0) {
-                                                            instance.setDate(defaultDates, false);
-                                                        }
-                                                    },
-
-                                                    onChange: (selectedDates, dateStr, instance) => {
-                                                        this.isUpdatingFromCalendar = true;
-
-                                                        // Clear error when starting new selection
-                                                        this.errorMessage = '';
-
-                                                        if (selectedDates.length === 2) {
-                                                            const start = selectedDates[0];
-                                                            const end = selectedDates[1];
-
-                                                            // Calculate days - set to midnight for accurate calculation
-                                                            const startDate = new Date(start.getFullYear(), start.getMonth(), start
-                                                                .getDate());
-                                                            const endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-
-                                                            const MS_PER_DAY = 1000 * 60 * 60 * 24;
-                                                            const diffTime = endDate.getTime() - startDate.getTime();
-                                                            const diffDays = Math.round(diffTime / MS_PER_DAY) + 1;
-
-                                                            // ONLY show error if days don't match required days
-                                                            if (diffDays !== requiredDays) {
-                                                                const rentalType = requiredDays === 7 ? 'Weekly' : 'Monthly';
-                                                                this.errorMessage =
-                                                                    `${rentalType} rentals must be exactly ${requiredDays} days. You selected ${diffDays} ${diffDays === 1 ? 'day' : 'days'}.`;
-                                                                instance.clear();
-                                                                this.pickupDateDisplay = '';
-                                                                this.returnDateDisplay = '';
-                                                                @this.pickupDate = '';
-                                                                @this.returnDate = '';
-                                                                this.isUpdatingFromCalendar = false;
-                                                                return;
-                                                            }
-
-                                                            // Check if any date in range is disabled
-                                                            let hasDisabledDate = false;
-                                                            let currentDate = new Date(startDate);
-
-                                                            while (currentDate <= endDate) {
-                                                                const year = currentDate.getFullYear();
-                                                                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                                                                const day = String(currentDate.getDate()).padStart(2, '0');
-                                                                const dateString = `${year}-${month}-${day}`;
-
-                                                                if (disabledDates.includes(dateString)) {
-                                                                    hasDisabledDate = true;
-                                                                    break;
-                                                                }
-                                                                currentDate.setDate(currentDate.getDate() + 1);
-                                                            }
-
-                                                            if (hasDisabledDate) {
-                                                                this.errorMessage =
-                                                                    'Selected dates include unavailable dates. Please choose different dates.';
-                                                                instance.clear();
-                                                                this.pickupDateDisplay = '';
-                                                                this.returnDateDisplay = '';
-                                                                @this.pickupDate = '';
-                                                                @this.returnDate = '';
-                                                                this.isUpdatingFromCalendar = false;
-                                                                return;
-                                                            }
-
-                                                            // Valid selection - clear error and update dates
-                                                            this.errorMessage = '';
-
-                                                            const formatStorageDate = (date) => {
-                                                                const y = date.getFullYear();
-                                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const d = String(date.getDate()).padStart(2, '0');
-                                                                return `${y}-${m}-${d}`;
-                                                            };
-
-                                                            const formatDisplayDate = (date) => {
-                                                                const d = String(date.getDate()).padStart(2, '0');
-                                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const y = date.getFullYear();
-                                                                return `${d}/${m}/${y}`;
-                                                            };
-
-                                                            this.pickupDateDisplay = formatDisplayDate(start);
-                                                            this.returnDateDisplay = formatDisplayDate(end);
-                                                            @this.pickupDate = formatStorageDate(start);
-                                                            @this.returnDate = formatStorageDate(end);
-
-                                                            setTimeout(() => {
-                                                                this.isUpdatingFromCalendar = false;
-                                                            }, 100);
-
-                                                        } else if (selectedDates.length === 1) {
-                                                            const date = selectedDates[0];
-
-                                                            const formatStorageDate = (date) => {
-                                                                const y = date.getFullYear();
-                                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const d = String(date.getDate()).padStart(2, '0');
-                                                                return `${y}-${m}-${d}`;
-                                                            };
-
-                                                            const formatDisplayDate = (date) => {
-                                                                const d = String(date.getDate()).padStart(2, '0');
-                                                                const m = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const y = date.getFullYear();
-                                                                return `${d}/${m}/${y}`;
-                                                            };
-
-                                                            this.pickupDateDisplay = formatDisplayDate(date);
-                                                            this.returnDateDisplay = '';
-                                                            @this.pickupDate = formatStorageDate(date);
-                                                            @this.returnDate = '';
-
-                                                            setTimeout(() => {
-                                                                this.isUpdatingFromCalendar = false;
-                                                            }, 100);
-
-                                                        } else {
-                                                            this.pickupDateDisplay = '';
-                                                            this.returnDateDisplay = '';
-                                                            @this.pickupDate = '';
-                                                            @this.returnDate = '';
-
-                                                            setTimeout(() => {
-                                                                this.isUpdatingFromCalendar = false;
-                                                            }, 100);
-                                                        }
-                                                    }
-                                                });
-                                            },
-
-                                            destroyCalendar() {
-                                                if (this.calendarInstance) {
-                                                    this.calendarInstance.destroy();
-                                                    this.calendarInstance = null;
-                                                }
-                                            }
-                                        }
-                                    }
-                                </script>
-                            @endpush
                         @break
 
                         @case(3)
