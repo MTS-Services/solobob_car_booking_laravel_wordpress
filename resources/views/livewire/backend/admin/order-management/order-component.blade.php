@@ -12,12 +12,12 @@
         </div>
 
         {{-- Table Section --}}
-      <x-backend.table :columns="$columns" :data="$orders" :actions="$actions" search-property="search"
+        <x-backend.table :columns="$columns" :data="$orders" :actions="$actions" search-property="search"
             per-page-property="perPage" empty-message="No admins found." />
 
     </section>
 
-  {{-- Details Modal --}}
+    {{-- Details Modal --}}
     @if ($showDetailsModal && $detailsOrder)
         <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeDetailsModal">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
@@ -27,14 +27,14 @@
 
                 {{-- Modal --}}
                 <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-2xl w-full border border-zinc-800">
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-3xl w-full border border-zinc-800">
                     {{-- Header --}}
                     <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-zinc-100">{{ __('Order Details') }}</h3>
                         <button wire:click="closeDetailsModal"
                             class="text-zinc-400 hover:text-zinc-300 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
@@ -45,7 +45,7 @@
                     <div class="px-6 py-6 space-y-6">
                         {{-- Profile Section --}}
                         <div class="flex items-center gap-4">
-                            
+
                             <div>
                                 <h4 class="text-xl font-semibold text-zinc-100">Reference</h4>
                                 <p class="text-zinc-400">{{ $detailsOrder->booking_reference }}</p>
@@ -69,13 +69,13 @@
                                             'bg-amber-500/20 text-amber-400 border-amber-500/30',
                                         \App\Models\Booking::BOOKING_STATUS_DEPOSITED =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
-                                         \App\Models\Booking::BOOKING_STATUS_DELIVERED =>
+                                        \App\Models\Booking::BOOKING_STATUS_DELIVERED =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
-                                         \App\Models\Booking::BOOKING_STATUS_RETURNED =>
+                                        \App\Models\Booking::BOOKING_STATUS_RETURNED =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
-                                         \App\Models\Booking::BOOKING_STATUS_CANCELLED =>
+                                        \App\Models\Booking::BOOKING_STATUS_CANCELLED =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
-                                         \App\Models\Booking::BOOKING_STATUS_REJECTED =>
+                                        \App\Models\Booking::BOOKING_STATUS_REJECTED =>
                                             'bg-red-500/20 text-red-400 border-red-500/30',
                                     ];
                                     $colorClass =
@@ -87,13 +87,13 @@
                                     {{ $detailsOrder->getStatusLabelAttribute() }}
                                 </span>
                             </div>
-                            
+
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Email </p>
                                 <p class="text-zinc-200 font-medium">{{ $detailsOrder->user->email }}</p>
                             </div>
-                            
+
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Vehicle </p>
                                 <p class="text-zinc-200 font-medium">{{ $detailsOrder->vehicle->title }}</p>
@@ -101,20 +101,22 @@
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Booking Date </p>
-                                 <p class="text-zinc-200 font-medium">{{ $detailsOrder->created_at_formatted }}</p>
+                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->created_at_formatted }}</p>
                                 <p class="text-xs text-zinc-400 mt-1">{{ $detailsOrder->created_at_human }}</p>
                             </div>
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Pickup Date </p>
-                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->humanReadableDateTime($detailsOrder->pickup_date) }}</p>
+                                <p class="text-zinc-200 font-medium">
+                                    {{ $detailsOrder->humanReadableDateTime($detailsOrder->pickup_date) }}</p>
                             </div>
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Return Date </p>
-                                <p class="text-zinc-200 font-medium">{{ $detailsOrder->humanReadableDateTime($detailsOrder->return_date) }}</p>
+                                <p class="text-zinc-200 font-medium">
+                                    {{ $detailsOrder->humanReadableDateTime($detailsOrder->return_date) }}</p>
                             </div>
 
-                            
+
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Return Location</p>
                                 <p class="text-zinc-200 font-medium">{{ $detailsOrder->return_location }}</p>
@@ -122,12 +124,21 @@
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Bills</p>
-                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Sub Total :</span> {{ $detailsOrder->subtotal }}</p>
-                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Delivery Fee :</span> {{ $detailsOrder->delivery_fee }}</p>
-                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Service Fee :</span> {{ $detailsOrder->service_fee }}</p>
-                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Tax :</span> {{ $detailsOrder->tax_amount }}</p>
-                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Security Deposit :</span> {{ $detailsOrder->security_deposite }}</p>
-                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Grand Total :</span> {{ $detailsOrder->total_amount }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Sub
+                                        Total :</span> {{ $detailsOrder->subtotal }}</p>
+                                <p class="text-zinc-200 font-medium"> <span
+                                        class="text-zinc-200 font-[400] pr-1">Delivery Fee :</span>
+                                    {{ $detailsOrder->delivery_fee }}</p>
+                                <p class="text-zinc-200 font-medium"> <span
+                                        class="text-zinc-200 font-[400] pr-1">Service Fee :</span>
+                                    {{ $detailsOrder->service_fee }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Tax
+                                        :</span> {{ $detailsOrder->tax_amount }}</p>
+                                <p class="text-zinc-200 font-medium"> <span
+                                        class="text-zinc-200 font-[400] pr-1">Security Deposit :</span>
+                                    {{ $detailsOrder->security_deposite }}</p>
+                                <p class="text-zinc-200 font-medium"> <span class="text-zinc-200 font-[400] pr-1">Grand
+                                        Total :</span> {{ $detailsOrder->total_amount }}</p>
                             </div>
 
 
@@ -210,48 +221,48 @@
 
 
 
-{{-- Edit & Update Modal --}}
-    @if($showDetailsModal && 1== 2)
-   <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeModal">
-        <div class="flex items-center justify-center min-h-screen px-4 py-6">
-            <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity" wire:click="closeModal">
-            </div>
+    {{-- Edit & Update Modal --}}
+    @if ($showDetailsModal && 1 == 2)
+        <div class="fixed inset-0 z-50 overflow-y-auto" wire:keydown.escape="closeModal">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-zinc-950/60 backdrop-blur-sm transition-opacity" wire:click="closeModal">
+                </div>
 
-            <div
-                class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full border border-zinc-800">
-                <form wire:submit="save">
-                    <div class="px-6 py-4 border-b border-zinc-800">
-                        <h3 class="text-lg font-semibold text-zinc-100">
-                            {{ $editMode ? __('Edit Admin') : __('Create New Admin') }}
-                        </h3>
-                    </div>
-
-                    <div class="px-6 py-4 space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
-                            <input type="text"
-                                class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                                placeholder="Enter admin name">
-                            @error('name')
-                                <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
-                            @enderror
+                <div
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full border border-zinc-800">
+                    <form wire:submit="save">
+                        <div class="px-6 py-4 border-b border-zinc-800">
+                            <h3 class="text-lg font-semibold text-zinc-100">
+                                {{ $editMode ? __('Edit Admin') : __('Create New Admin') }}
+                            </h3>
                         </div>
 
-                    </div>
+                        <div class="px-6 py-4 space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
+                                <input type="text"
+                                    class="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-2.5 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                                    placeholder="Enter admin name">
+                                @error('name')
+                                    <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                                @enderror
+                            </div>
 
-                    <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
-                        <button type="button" wire:click="closeModal"
-                            class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors duration-200">
-                            {{ $editMode ? __('Update') : __('Create') }}
-                        </button>
-                    </div>
-                </form>
+                        </div>
+
+                        <div class="px-6 py-4 bg-zinc-800/30 border-t border-zinc-800 flex justify-end gap-3">
+                            <button type="button" wire:click="closeModal"
+                                class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors duration-200">
+                                {{ $editMode ? __('Update') : __('Create') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div> 
-    @endif 
+    @endif
 </div>

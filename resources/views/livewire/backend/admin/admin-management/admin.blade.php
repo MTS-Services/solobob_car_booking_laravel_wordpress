@@ -18,7 +18,7 @@
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-accent">{{ __('Admin List') }}</h2>
                 <div class="flex items-center gap-2">
-                  
+
                     <button wire:click="openCreateModal"
                         class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-500 hover:bg-zinc-600 text-zinc-100 rounded-lg transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
@@ -39,7 +39,7 @@
 
     </section>
 
-   
+
     {{-- Force Delete Confirmation Modal --}}
     @if ($showForceDeleteModal)
         <div class="fixed inset-0 z-[60] overflow-y-auto" wire:keydown.escape="closeForceDeleteModal">
@@ -96,13 +96,13 @@
                     wire:click="closeDetailsModal"></div>
 
                 <div
-                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-2xl w-full border border-zinc-800">
+                    class="relative bg-zinc-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all max-w-3xl w-full border border-zinc-800">
                     <div class="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-zinc-100">{{ __('Admin Details') }}</h3>
                         <button wire:click="closeDetailsModal"
                             class="text-zinc-400 hover:text-zinc-300 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
@@ -126,9 +126,8 @@
                                 @if ($detailsAdmin->email_verified_at)
                                     <span
                                         class="inline-flex items-center mt-1 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2">
                                             <polyline points="20 6 9 17 4 12"></polyline>
                                         </svg>
                                         Email Verified
@@ -150,9 +149,9 @@
 
                             <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-500 uppercase tracking-wider mb-1">Status</p>
-                               
+
                                 <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border  {{ $detailsAdmin->status_color  }}">
+                                    class="text-emerald-300 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border  {{ $detailsAdmin->status_color }}">
                                     {{ $detailsAdmin->status_label }}
                                 </span>
                             </div>
@@ -409,5 +408,5 @@
         </div>
     @endif
 
-    
+
 </div>
