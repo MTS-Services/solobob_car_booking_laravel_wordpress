@@ -103,6 +103,9 @@ class Booking extends Component
 
     public bool $smsAlerts = false;
 
+    // Signature
+    public string $userSignature = '';
+
     // License Details
     #[Rule('nullable|date')]
     public string $licenseIssueDate = '';
@@ -239,6 +242,16 @@ class Booking extends Component
     }
 
     /**
+     * Save signature from modal
+     */
+    public function saveSignature($signatureData)
+    {
+        $this->userSignature = $signatureData;
+        $this->termsAccepted = true;
+        $this->dispatch('close-terms-modal');
+    }
+
+    /**
      * Save verification data temporarily and move to next step
      * Data is NOT saved to database yet - only stored in session
      */
@@ -247,6 +260,12 @@ class Booking extends Component
         try {
             // Validate all fields
             $this->validate();
+
+            // Check if signature exists
+            if (empty($this->userSignature)) {
+                session()->flash('error', 'Please sign the terms and conditions.');
+                return;
+            }
 
             // Store uploaded files temporarily in session
             // We'll move them to permanent storage after payment
@@ -291,6 +310,7 @@ class Booking extends Component
                     // Terms and SMS
                     'termsAccepted' => $this->termsAccepted,
                     'smsAlerts' => $this->smsAlerts,
+                    'signature' => $this->userSignature,
                 ],
                 'temp_booking_data' => [
                     'vehicle_id' => $this->vehicle->id,
@@ -378,6 +398,19 @@ class Booking extends Component
                 false
             );
 
+            // Save signature as image
+            $signaturePath = null;
+            if (!empty($verificationData['signature'])) {
+                $signatureData = $verificationData['signature'];
+                $signatureData = str_replace('data:image/png;base64,', '', $signatureData);
+                $signatureData = str_replace(' ', '+', $signatureData);
+                $signatureImage = base64_decode($signatureData);
+                
+                $signatureName = 'signature_' . time() . '.png';
+                $signaturePath = 'documents/signatures/' . $signatureName;
+                Storage::disk('public')->put($signaturePath, $signatureImage);
+            }
+
             // Get the latest sort_order for this user
             $latestSortOrder = UserDocuments::where('user_id', user()->id)
                 ->max('sort_order') ?? 0;
@@ -430,6 +463,7 @@ class Booking extends Component
                 // Terms and preferences
                 'terms_accepted' => $verificationData['termsAccepted'],
                 'sms_alerts' => $verificationData['smsAlerts'],
+                'signature' => $signaturePath,
 
                 // Pricing based on rental range
                 'rental_rate' => $bookingData['rental_range'] === 'weekly'
@@ -483,6 +517,9 @@ class Booking extends Component
             }
             if (isset($addressProofPath)) {
                 $fileUploadService->delete($addressProofPath);
+            }
+            if (isset($signaturePath)) {
+                Storage::disk('public')->delete($signaturePath);
             }
 
             Log::error('Booking completion error: ' . $e->getMessage());
