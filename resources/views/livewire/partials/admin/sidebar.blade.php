@@ -69,6 +69,16 @@
                         'icon' => 'user',
                         'active' => 'users',
                     ],
+                    [
+                        'name' => 'User Reviews',
+                        'route' => route('admin.user-reviews'),
+                        'icon' => 'user',
+                        'active' => 'user-reviews',
+                    ],
+
+                    
+ 
+
                     // [
                     //     'name' => 'Pending Users',
                     //     'route' => '#',

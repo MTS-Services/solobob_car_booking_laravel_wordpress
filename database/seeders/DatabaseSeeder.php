@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             BookingStatusTimelineSeeder::class,
             RentalCheckinsSeeder::class,
 
+            ReviewSeeder::class,
+
             // PaymentSeeder::class,
         ]);
     }
