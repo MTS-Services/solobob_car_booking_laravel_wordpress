@@ -4,21 +4,23 @@ namespace App\Livewire\Backend\User;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout(
     'app',
     [
         'title' => 'User Security',
         'breadcrumb' => 'User Security',
-        'page_slug' => 'user-security'
+        'page_slug' => 'user-security',
     ]
 )]
 class Security extends Component
 {
     public $current_password;
+
     public $password;
+
     public $password_confirmation;
 
     public function updatePassword()
@@ -30,7 +32,6 @@ class Security extends Component
 
         $user = User::findOrFail(user()->id);
 
-        
         $user->update([
             'password' => Hash::make($this->password),
         ]);

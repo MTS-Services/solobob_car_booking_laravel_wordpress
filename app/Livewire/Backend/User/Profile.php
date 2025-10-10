@@ -4,7 +4,6 @@ namespace App\Livewire\Backend\User;
 
 use App\Models\Addresse;
 use App\Models\User;
-use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -19,15 +18,22 @@ class Profile extends Component
 {
     // Basic Information
     public $name = '';
+
     public $email = '';
+
     public $number = '';
 
     // Address Information
     public $address_id = null;
+
     public $address = '';
+
     public $city = '';
+
     public $state = '';
+
     public $postal_code = '';
+
     public $address_type = 0; // Default to 'personal'
 
     // Store original email to track changes
@@ -36,7 +42,7 @@ class Profile extends Component
     protected function rules()
     {
         $userId = user()->id;
-        
+
         return [
             'name' => 'required|string|max:255',
             'email' => "required|email|max:255|unique:users,email,{$userId}",
@@ -55,7 +61,7 @@ class Profile extends Component
         $user = User::find(user()->id);
 
         // Ensure user is authenticated
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
@@ -87,7 +93,7 @@ class Profile extends Component
         // Get the authenticated user model instance
         $user = User::find(user()->id);
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
@@ -124,7 +130,7 @@ class Profile extends Component
             } else {
                 // Set all other addresses as not default
                 Addresse::where('user_id', $user->id)->update(['is_default' => false]);
-                
+
                 // Create new address
                 Addresse::create([
                     'user_id' => $user->id,
@@ -139,11 +145,12 @@ class Profile extends Component
         }
 
         // If email changed, redirect to email verification page
-       if ($emailChanged) {
+        if ($emailChanged) {
             // Send email verification notification
             $user->sendEmailVerificationNotification();
-            
+
             session()->flash('success', 'Email updated! Please check your inbox to verify your new email address.');
+
             return $this->redirect(route('verification.notice'), navigate: true);
         }
         // Update the original email for future comparisons

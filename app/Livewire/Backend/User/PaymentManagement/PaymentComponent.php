@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Backend\User\PaymentManagement;
 
-use Livewire\Component;
 use App\Models\Payment;
 use Livewire\Attributes\Layout;
-use Livewire\WithPagination;
 use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Layout(
     'app',
@@ -18,7 +18,6 @@ use Livewire\Attributes\Url;
 )]
 class PaymentComponent extends Component
 {
-
     use WithPagination;
 
     #[Url]
@@ -31,14 +30,16 @@ class PaymentComponent extends Component
     public $paymentMethod = '';
 
     public $showDetailsModal = false;
+
     public $detailsPayment = null;
 
     public $sortField;
 
+    public $perPage = 10;
 
     public function mount()
     {
-        // 
+        //
     }
 
     public function updatingSearch()
@@ -68,23 +69,25 @@ class PaymentComponent extends Component
             session()->flash('error', $e->getMessage());
         }
     }
+
     public function closeDetailsModal()
     {
         $this->showDetailsModal = false;
         $this->detailsPayment = null;
     }
+
     public function render()
     {
         $payments = Payment::query()->self()
             ->with(['booking', 'user'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('id', 'like', '%' . $this->search . '%')
-                        ->orWhere('amount', 'like', '%' . $this->search . '%')
-                        ->orWhere('note', 'like', '%' . $this->search . '%')
+                    $q->where('id', 'like', '%'.$this->search.'%')
+                        ->orWhere('amount', 'like', '%'.$this->search.'%')
+                        ->orWhere('note', 'like', '%'.$this->search.'%')
                         ->orWhereHas('user', function ($q) {
-                            $q->where('name', 'like', '%' . $this->search . '%')
-                                ->orWhere('email', 'like', '%' . $this->search . '%');
+                            $q->where('name', 'like', '%'.$this->search.'%')
+                                ->orWhere('email', 'like', '%'.$this->search.'%');
                         });
                 });
             })
@@ -95,7 +98,7 @@ class PaymentComponent extends Component
                 $query->where('payment_method', $this->paymentMethod);
             })
             ->latest()
-            ->paginate(5);
+            ->paginate($this->perPage);
 
         return view('livewire.backend.user.payment-management.payment-component', [
             'payments' => $payments,
