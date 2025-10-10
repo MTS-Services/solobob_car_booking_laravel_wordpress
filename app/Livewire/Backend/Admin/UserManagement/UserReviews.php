@@ -22,6 +22,13 @@ class UserReviews extends Component
 {
     public $perPage = 10;
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Renders the user reviews page.
+ *
+ * @return \Illuminate\View\View
+ */
+/*******  2a9a13c0-75bb-491a-8449-96f1c597e8af  *******/
     public function render()
     {
         $reviews = Review::query()
@@ -30,17 +37,29 @@ class UserReviews extends Component
             ->paginate($this->perPage);
 
         $columns = [
-            ['key' => 'user_id', 'label' => 'User Name', 'width' => '20%'],
+            ['key' => 'user.name', 'label' => 'User Name', 'width' => '20%'],
             ['key' => 'title', 'label' => 'Title', 'width' => '30%'],
             
             [
-                'key' => 'created_by',
-                'label' => 'Created By',
-                'width' => '15%',
-                'format' => function ($review) {
-                    return $review->createdBy?->name ?? 'System';
-                }
-            ]
+           'key' => 'status',
+           'label' => 'Status',
+           'width' => '15%',
+           'format' => function ($review) {
+               return '<span class="badge badge-soft ' . $review->status_color . '">' . $review->status_label . '</span>';
+           }
+
+        ],
+
+        [
+            'key' => 'created_at',
+            'label' => 'Created At',
+            'width' => '15%',
+            'format' => function ($review) {
+                return $review->createdBy?->name ?? 'system';
+            }
+        ]
+
+               
         ];
 
         $actions = [
@@ -54,5 +73,23 @@ class UserReviews extends Component
             'columns' => $columns,
             'actions' => $actions,
         ]);
+    }
+
+
+  public $selectedReview;
+
+public function openDetailsModal($id)
+{
+    $this->selectedReview = Review::with('user')->findOrFail($id);
+    $this->dispatch('open-modal', name: 'viewReviewModal');
+}
+
+    public function openEditModal($id)
+    {
+        dd("Edit Review ID:{$id}");
+    }
+    public function openForceDeleteModal($id)
+    {
+        dd("delete Review ID:{$id}");
     }
 }

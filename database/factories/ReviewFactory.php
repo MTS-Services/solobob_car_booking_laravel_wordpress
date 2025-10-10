@@ -19,25 +19,21 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
-
-
-      
-    $bookingId = Booking::query()->inRandomOrder()->value('id') ?? Booking::factory()->create()->id;
-    $userId = User::query()->inRandomOrder()->value('id') ?? User::factory()->create()->id;
-
-
+        $bookingId = Booking::query()->inRandomOrder()->value('id') ?? Booking::factory()->create()->id;
+        $userId = User::query()->inRandomOrder()->value('id') ?? User::factory()->create()->id;
 
         return [
-            'booking_id' => Booking::inRandomOrder()->first()->id,
-            'user_id' => User::inRandomOrder()->first()->id,
-            'rating' => $this->faker->numberBetween(1, 5),
-            'title' => $this->faker->sentence(),
-            'comment' => $this->faker->sentence(),
-            'review_status' => $this->faker->randomElement([Review::STATUS_PENDING, Review::STATUS_PUBLISHED, Review::STATUS_FLAGGED]),
-       
-            Review::STATUS_PENDING,
-            Review::STATUS_PUBLISHED, 
-            Review::STATUS_FLAGGED      
+            'booking_id' => $bookingId,
+            'user_id'    => $userId,
+            'rating'     => $this->faker->numberBetween(1, 5),
+            'title'      => $this->faker->sentence(),
+            'comment'    => $this->faker->sentence(),
+            // ✅ Single random value, not array
+            'status'     => $this->faker->randomElement([
+                Review::STATUS_PENDING,
+                Review::STATUS_PUBLISHED,
+                Review::STATUS_FLAGGED,
+            ]),
         ];
     }
 }

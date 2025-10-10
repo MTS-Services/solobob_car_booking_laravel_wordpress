@@ -30,7 +30,7 @@ class Review extends BaseModel
         'rating',
         'title',
         'comment',
-        'review_status',
+        'status',
 
         'created_by',
         'updated_by',
@@ -44,8 +44,8 @@ class Review extends BaseModel
     {
         parent::__construct($attributes);
         $this->appends = array_merge(parent::getAppends(), [
-            'review_status_label',
-            'review_status_color',
+            'status_label',
+            'status_color',
         ]);
     }
 
@@ -72,19 +72,19 @@ class Review extends BaseModel
     }
     public function scopePending($query)
     {
-        return $query->where('review_status', self::STATUS_PENDING);
+        return $query->where('status', self::STATUS_PENDING);
     }
     public function scopeFlagged($query)
     {
-        return $query->where('review_status', self::STATUS_FLAGGED);
+        return $query->where('status', self::STATUS_FLAGGED);
     }
     public function scopePublished($query)
     {
-        return $query->where('review_status', self::STATUS_PUBLISHED);
+        return $query->where('status', self::STATUS_PUBLISHED);
     }
     public function scopeRemoved($query)
     {
-        return $query->where('review_status', self::STATUS_REMOVED);
+        return $query->where('status', self::STATUS_REMOVED);
     }
 
     /* ================================================================
@@ -93,7 +93,7 @@ class Review extends BaseModel
 
     public function getReviewStatusLabelAttribute()
     {
-        return match ($this->review_status) {
+        return match ($this->status) {
             self::STATUS_PENDING => 'Pending',
             self::STATUS_PUBLISHED => 'Published',
             self::STATUS_FLAGGED => 'Flagged',
@@ -103,7 +103,7 @@ class Review extends BaseModel
     }
     public function getReviewStatusColorAttribute()
     {
-        return match ((int)$this->review_status) {
+        return match ((int)$this->status) {
             self::STATUS_PENDING => 'badge-warning',
             self::STATUS_PUBLISHED => 'badge-success',
             self::STATUS_FLAGGED => 'badge-danger',

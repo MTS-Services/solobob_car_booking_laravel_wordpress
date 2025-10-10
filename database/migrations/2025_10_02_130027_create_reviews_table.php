@@ -19,8 +19,6 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sort_order')->default(0);
-
-            // Relationships
             $table->unsignedBigInteger('booking_id')->unique();
             $table->unsignedBigInteger('user_id');
 
@@ -30,7 +28,7 @@ return new class extends Migration
             $table->text('comment')->nullable();
 
             // Review status
-            $table->tinyInteger('review_status')->default(Review::STATUS_PENDING);
+            $table->tinyInteger('status')->default(Review::STATUS_PENDING);
 
             // Common columns
             $table->timestamps();
