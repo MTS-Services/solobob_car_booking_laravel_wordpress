@@ -829,43 +829,39 @@ window.addEventListener('resize', () => {
 
                         @case(4)
                             <div x-data="{
-                                paymentMethod: 'paypal',
-                                rentalRange: 'weekly',
-                                upfrontAmountWeekly: 550,
-                                upfrontAmountMonthly: 2100,
-                                vehicle: {
-                                    title: 'Toyota Camry 2023',
-                                    weekly_rate: 400,
-                                    monthly_rate: 1500,
-                                    security_deposit_weekly: 150,
-                                    security_deposit_monthly: 600
-                                }
+                                paymentMethod: 'paypal'
                             }" class="max-w-2xl mx-auto">
                                 <h2 class="text-xl font-semibold mb-6">Payment Details</h2>
 
                                 <div class="bg-gray-50 rounded-lg p-4 mb-6">
                                     <h4 class="font-semibold mb-2">Booking Summary</h4>
-                                    <p class="text-sm text-gray-600" x-text="vehicle.title"></p>
-                                    <p class="text-sm text-gray-600">Oct 10 - Oct 17, 2025</p>
+                                    <p class="text-sm text-gray-600">{{ $vehicle?->title ?? 'Unknown' }}</p>
+                                    <p class="text-sm text-gray-600">
+                                        {{ !empty($pickupDate) ? \Carbon\Carbon::parse($pickupDate)->format('M d, Y') : 'TBD' }}
+                                        -
+                                        {{ !empty($returnDate) ? \Carbon\Carbon::parse($returnDate)->format('M d, Y') : 'TBD' }}
+                                    </p>
                                     <div class="border-t mt-3 pt-3">
                                         <div class="flex justify-between text-sm mb-1">
                                             <span>Rental Cost</span>
-                                            <span x-show="rentalRange == 'weekly'" x-text="`$${vehicle.weekly_rate}`"></span>
-                                            <span x-show="rentalRange == 'monthly'"
-                                                x-text="`$${vehicle.monthly_rate}`"></span>
+                                            <span
+                                                x-show="'{{ $rentalRange }}' == 'weekly'">${{ $vehicle?->weekly_rate ?? 0 }}</span>
+                                            <span
+                                                x-show="'{{ $rentalRange }}' == 'monthly'">${{ $vehicle?->monthly_rate ?? 0 }}</span>
                                         </div>
                                         <div class="flex justify-between text-sm mb-1">
                                             <span>Security Deposit</span>
-                                            <span x-show="rentalRange == 'weekly'"
-                                                x-text="`$${vehicle.security_deposit_weekly}`"></span>
-                                            <span x-show="rentalRange == 'monthly'"
-                                                x-text="`$${vehicle.security_deposit_monthly}`"></span>
+                                            <span
+                                                x-show="'{{ $rentalRange }}' == 'weekly'">${{ $vehicle?->security_deposit_weekly ?? 0 }}</span>
+                                            <span
+                                                x-show="'{{ $rentalRange }}' == 'monthly'">${{ $vehicle?->security_deposit_monthly ?? 0 }}</span>
                                         </div>
                                         <div class="flex justify-between font-semibold mt-2 pt-2 border-t">
                                             <span>Total Due Now</span>
-                                            <span x-show="rentalRange == 'weekly'" x-text="`$${upfrontAmountWeekly}`"></span>
-                                            <span x-show="rentalRange == 'monthly'"
-                                                x-text="`$${upfrontAmountMonthly}`"></span>
+                                            <span
+                                                x-show="'{{ $rentalRange }}' == 'weekly'">${{ $upfrontAmountWeekly }}</span>
+                                            <span
+                                                x-show="'{{ $rentalRange }}' == 'monthly'">${{ $upfrontAmountMonthly }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -874,6 +870,7 @@ window.addEventListener('resize', () => {
                                     <h2 class="text-2xl font-bold text-center mb-6">Select Payment Method</h2>
 
                                     <div class="space-y-4 mb-8">
+                                        <!-- PayPal Option -->
                                         <label @click="paymentMethod = 'paypal'"
                                             class="flex items-center p-4 border rounded-lg cursor-pointer transition duration-150 ease-in-out"
                                             :class="{
@@ -883,12 +880,12 @@ window.addEventListener('resize', () => {
                                             <input type="radio" name="payment_method" value="paypal" class="hidden" />
                                             <svg class="w-6 h-6 mr-3 text-zinc-600" fill="currentColor" viewBox="0 0 24 24">
                                                 <path
-                                                    d="M7.746 17.616c.158 0 .285-.12.285-.265 0-.146-.127-.265-.285-.265h-.546c-2.43 0-4.498-1.574-4.708-3.793h.606c.157 0 .285-.12.285-.264 0-.145-.128-.265-.285-.265h-.64c.21-2.218 2.278-3.792 4.708-3.792h.546c.158 0 .285-.12.285-.265 0-.146-.127-.265-.285-.265h-.546C4.846 9.07 2.76 10.644 2.55 12.863h-.606c-.157 0-.285.12-.285.264 0 .146.128.265.285.265h.64c-.21 2.219 1.858 3.793 4.288 3.793h.546zM15.5 6.784h-3.414c-.158 0-.285.12-.285.265 0 .145.127.265.285.265h3.414c1.13 0 2.05.918 2.05 2.046v.818c0 .145.128.265.285.265s.285-.12.285-.265v-.818c0-1.442-1.17-2.614-2.614-2.614zM21.5 10.74c-.158 0-.285.12-.285.265v1.637c0 .145.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM15.5 13.99c-.158 0-.285.12-.285.265v1.637c0 .146.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM17.616 12.364c-.158 0-.285.12-.285.265v1.637c0 .146.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM19.73 10.24c-.158 0-.285.12-.285.265v1.637c0 .145.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM12.086 17.616c.158 0 .285-.12.285-.265 0-.146-.127-.265-.285-.265h-2.14c-1.13 0-2.05-.918-2.05-2.046v-.818c0-.145-.128-.265-.285-.265s-.285.12-.285.265v.818c0 1.442 1.17 2.614 2.614 2.614h2.14zM10.5 6.784c-.158 0-.285.12-.285.265v1.637c0 .145.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM8.384 10.74c.158 0 .285.12.285.265v1.637c0 .145-.127.265-.285.265s-.285-.12-.285-.265v-1.637c0-.145.127-.265.285-.265zM10.5 13.99c-.158 0-.285.12-.285.265v1.637c0 .146.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM12.616 10.24c.158 0 .285.12.285.265v1.637c0 .145-.127.265-.285.265s-.285-.12-.285-.265v-1.637c0-.145.127-.265.285-.265zM14.73 13.49c.158 0 .285.12.285.265v1.637c0 .146-.127-.265-.285-.265s-.285-.12-.285-.265v-1.637c0-.145.127-.265.285-.265zM16.846 9.74c-.158 0-.285.12-.285.265v1.637c0 .145.127.265.285.265s.285-.12.285-.265v-1.637c0-.145-.127-.265-.285-.265zM18.96 13.99c.158 0 .285-.12.285-.265 0-.146-.127-.265-.285-.265h-2.14c-1.13 0-2.05-.918-2.05-2.046v-.818c0-.145-.128-.265-.285-.265s-.285.12-.285.265v.818c0 1.442 1.17 2.614 2.614 2.614h2.14z">
-                                                </path>
+                                                    d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.76-4.852a.932.932 0 0 1 .922-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.778-4.471z" />
                                             </svg>
                                             <span class="font-semibold text-gray-800">Pay with PayPal</span>
                                         </label>
 
+                                        <!-- Stripe Option -->
                                         <label @click="paymentMethod = 'stripe'"
                                             class="flex items-center p-4 border rounded-lg cursor-pointer transition duration-150 ease-in-out"
                                             :class="{
@@ -896,32 +893,74 @@ window.addEventListener('resize', () => {
                                                 'border-gray-300 hover:border-zinc-400': paymentMethod !== 'stripe'
                                             }">
                                             <input type="radio" name="payment_method" value="stripe" class="hidden" />
-                                            <svg class="w-6 h-6 mr-3 text-zinc-600" fill="currentColor"
-                                                viewBox="0 0 24 24">
+                                            <svg class="w-6 h-6 mr-3 text-zinc-600" fill="currentColor" viewBox="0 0 24 24">
                                                 <path
-                                                    d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1.615 15.35c-2.43 0-4.62-.977-6.077-2.756a.75.75 0 0 1 1.184-.937c1.175 1.48 3.003 2.378 4.893 2.378 2.06 0 3.73-.83 3.73-2.222 0-1.258-1.077-1.896-3.17-2.52l-1.058-.328c-2.26-.7-4.13-1.85-4.13-4.116 0-2.302 2.15-3.868 4.793-3.868 2.35 0 4.31.956 5.61 2.39a.75.75 0 0 1-1.157.96c-1.085-1.29-2.77-2.025-4.453-2.025-1.87 0-3.395.786-3.395 1.955 0 1.096.953 1.637 2.924 2.253l1.057.327c2.4.742 4.09 1.96 4.09 4.254 0 2.457-2.215 4.148-5.116 4.148z">
-                                                </path>
+                                                    d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z" />
                                             </svg>
                                             <span class="font-semibold text-gray-800">Pay with Stripe</span>
                                         </label>
                                     </div>
 
-                                    {{-- <div x-show="paymentMethod === 'stripe'" x-transition
-                                        class="mt-4 p-4 border border-purple-300 bg-purple-50 rounded-lg">
-                                        <p class="text-sm text-gray-700 font-medium">
-                                            Card details entry would go here (e.g., Stripe Elements).
+                                    <!-- Payment Method Info -->
+                                    <div x-show="paymentMethod === 'paypal'" x-transition
+                                        class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                        <p class="text-sm text-blue-700">
+                                            <strong>PayPal:</strong> You will be redirected to PayPal to complete your payment
+                                            securely.
                                         </p>
-                                    </div> --}}
+                                    </div>
 
-                                    <div class="mt-6">
-                                        <button type="submit"
-                                            class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-medium">
-                                            <span>
-                                                Complete Booking - $
-                                                <span x-show="rentalRange == 'weekly'" x-text="upfrontAmountWeekly"></span>
-                                                <span x-show="rentalRange == 'monthly'" x-text="upfrontAmountMonthly"></span>
+                                    <div x-show="paymentMethod === 'stripe'" x-transition
+                                        class="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                        <p class="text-sm text-purple-700">
+                                            <strong>Stripe:</strong> You will be redirected to Stripe's secure payment page.
+                                        </p>
+                                    </div>
+
+                                    <!-- Complete Booking Button -->
+                                    <div class="space-y-4">
+                                        <button type="button" wire:click="completeBooking" wire:loading.attr="disabled"
+                                            class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <span wire:loading.remove wire:target="completeBooking">
+                                                Complete Booking - $<span
+                                                    x-show="'{{ $rentalRange }}' == 'weekly'">{{ $upfrontAmountWeekly }}</span><span
+                                                    x-show="'{{ $rentalRange }}' == 'monthly'">{{ $upfrontAmountMonthly }}</span>
+                                            </span>
+                                            <span wire:loading wire:target="completeBooking"
+                                                class="flex items-center justify-center">
+                                                <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
+                                                </svg>
+                                                Processing Payment...
                                             </span>
                                         </button>
+
+                                        <button type="button" wire:click="previousStep"
+                                            class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition font-medium">
+                                            Back to Verification
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Security Notice -->
+                                <div class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <div class="flex items-start">
+                                        <svg class="w-5 h-5 text-green-600 mr-2 mt-0.5" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                            </path>
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-800">Secure Payment</p>
+                                            <p class="text-xs text-gray-600 mt-1">Your payment information is encrypted and
+                                                secure. We never store your credit card details.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

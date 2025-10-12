@@ -5,6 +5,10 @@ namespace App\Livewire\Frontend;
 use App\Models\Vehicle;
 use App\Models\Booking as BookingModel;
 use App\Models\UserDocuments;
+use App\Models\BillingInformation;
+use App\Models\Addresse;
+use App\Models\BookingStatusTimeline;
+use App\Models\BookingRelation;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -28,6 +32,7 @@ class Booking extends Component
     use WithFileUploads;
 
     public ?Vehicle $vehicle;
+    public string $vehicleSlug = ''; // Store slug to reload vehicle
     public int $currentStep = 2;
     public string $rentalRange = 'weekly';
     public int $upfrontAmountWeekly = 0;
@@ -118,9 +123,8 @@ class Booking extends Component
 
     public function mount($slug)
     {
-        $this->vehicle = Vehicle::with(['images', 'relations.make', 'relations.model', 'category', 'bookings.timeline'])
-            ->where('slug', $slug)
-            ->first();
+        $this->vehicleSlug = $slug;
+        $this->loadVehicle();
 
         if (!$this->vehicle) {
             abort(404);
@@ -131,6 +135,16 @@ class Booking extends Component
 
         $this->loadDisabledDates();
         $this->prefillUserData();
+    }
+
+    /**
+     * Load vehicle from database
+     */
+    protected function loadVehicle()
+    {
+        $this->vehicle = Vehicle::with(['images', 'relations.make', 'relations.model', 'category', 'bookings.timeline'])
+            ->where('slug', $this->vehicleSlug)
+            ->first();
     }
 
     /**
@@ -213,7 +227,7 @@ class Booking extends Component
                 $pickup = Carbon::parse($value);
                 $days = $this->rentalRange === 'weekly' ? 7 : 30;
                 $return = $pickup->copy()->addDays($days);
-                
+
                 $this->returnDate = $return->format('Y-m-d');
             } catch (\Exception $e) {
                 $this->returnDate = '';
@@ -252,8 +266,7 @@ class Booking extends Component
     }
 
     /**
-     * Save verification data temporarily and move to next step
-     * Data is NOT saved to database yet - only stored in session
+     * Save verification data and upload files immediately
      */
     public function saveVerificationData()
     {
@@ -267,22 +280,60 @@ class Booking extends Component
                 return;
             }
 
-            // Store uploaded files temporarily in session
-            // We'll move them to permanent storage after payment
+            // Reload vehicle to ensure it's available
+            $this->loadVehicle();
+
+            // Initialize FileUploadService
+            $fileUploadService = app(\App\Services\FileUpload\FileUploadService::class);
+
+            // ========================================
+            // UPLOAD FILES IMMEDIATELY
+            // ========================================
+            $licensePath = $fileUploadService->uploadImage(
+                $this->license,
+                'documents/licenses',
+                800,
+                null,
+                'public',
+                true
+            );
+
+            $selfiePath = $fileUploadService->uploadImage(
+                $this->selfie,
+                'documents/selfies',
+                800,
+                null,
+                'public',
+                true
+            );
+
+            $addressProofPath = $fileUploadService->upload(
+                $this->addressProof,
+                'documents/address-proofs',
+                'public',
+                false
+            );
+
+            // Save signature as image
+            $signaturePath = null;
+            if (!empty($this->userSignature)) {
+                $signatureData = str_replace('data:image/png;base64,', '', $this->userSignature);
+                $signatureData = str_replace(' ', '+', $signatureData);
+                $signatureImage = base64_decode($signatureData);
+
+                $signatureName = 'signature_' . time() . '_' . user()->id . '.png';
+                $signaturePath = 'documents/signatures/' . $signatureName;
+                Storage::disk('public')->put($signaturePath, $signatureImage);
+            }
+
+            // Store data in session with uploaded file paths
             session([
                 'temp_verification_data' => [
-                    // Temporary file paths (still in Livewire's temp storage)
-                    'license' => $this->license->getRealPath(),
-                    'license_name' => $this->license->getClientOriginalName(),
-                    'license_mime' => $this->license->getMimeType(),
-
-                    'selfie' => $this->selfie->getRealPath(),
-                    'selfie_name' => $this->selfie->getClientOriginalName(),
-                    'selfie_mime' => $this->selfie->getMimeType(),
-
-                    'addressProof' => $this->addressProof->getRealPath(),
-                    'addressProof_name' => $this->addressProof->getClientOriginalName(),
-                    'addressProof_mime' => $this->addressProof->getMimeType(),
+                    // Already uploaded file paths
+                    'licensePath' => $licensePath,
+                    'selfiePath' => $selfiePath,
+                    'addressProofPath' => $addressProofPath,
+                    'signaturePath' => $signaturePath,
 
                     // License dates
                     'licenseIssueDate' => $this->licenseIssueDate,
@@ -310,221 +361,278 @@ class Booking extends Component
                     // Terms and SMS
                     'termsAccepted' => $this->termsAccepted,
                     'smsAlerts' => $this->smsAlerts,
-                    'signature' => $this->userSignature,
                 ],
                 'temp_booking_data' => [
                     'vehicle_id' => $this->vehicle->id,
+                    'vehicle_slug' => $this->vehicleSlug,
                     'pickup_date' => $this->pickupDate,
                     'return_date' => $this->returnDate,
                     'pickup_time' => $this->pickupTime,
                     'return_time' => $this->returnTime,
                     'rental_range' => $this->rentalRange,
+                    'pickup_location_id' => $this->vehicle->pickup_location_id ?? null,
+                    'weekly_rate' => $this->vehicle->weekly_rate,
+                    'monthly_rate' => $this->vehicle->monthly_rate,
+                    'security_deposit_weekly' => $this->vehicle->security_deposit_weekly,
+                    'security_deposit_monthly' => $this->vehicle->security_deposit_monthly,
                 ]
             ]);
 
             // Move to payment step
             $this->currentStep = 4;
 
-            session()->flash('success', 'Verification data validated. Please proceed with payment.');
+            session()->flash('success', 'Verification data saved. Please proceed with payment.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
-            Log::error('Verification data validation error: ' . $e->getMessage());
-            session()->flash('error', 'An error occurred while validating your data. Please try again.');
+            Log::error('Verification data save error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            session()->flash('error', 'An error occurred: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Complete booking - Save everything to database after payment
-     * This should be called from step 4 after payment is successful
-     */
+
+    // TEMPORARY DEBUG VERSION - Replace completeBooking() with this to find the issue
+
     public function completeBooking()
     {
+        Log::info('========== BOOKING STARTED ==========');
+
+        // Check authentication
+        if (!Auth::check()) {
+            Log::error('User not authenticated');
+            session()->flash('error', 'Please login to complete booking.');
+            return;
+        }
+
+        Log::info('User authenticated', ['user_id' => user()->id]);
+
         try {
             DB::beginTransaction();
+            Log::info('Transaction started');
 
-            // Get temporary data from session
+            // Get data from session
             $verificationData = session('temp_verification_data');
             $bookingData = session('temp_booking_data');
 
+            Log::info('Session data retrieved', [
+                'has_verification_data' => !empty($verificationData),
+                'has_booking_data' => !empty($bookingData),
+            ]);
+
             if (!$verificationData || !$bookingData) {
-                throw new \Exception('Session data expired. Please start over.');
+                Log::error('Session data missing');
+                session()->flash('error', 'Session data expired. Please start over.');
+                $this->currentStep = 2;
+                return;
             }
 
-            // Initialize FileUploadService
-            $fileUploadService = app(\App\Services\FileUpload\FileUploadService::class);
-
-            // Now permanently upload files using FileUploadService
-            $licensePath = $fileUploadService->uploadImage(
-                new \Illuminate\Http\UploadedFile(
-                    $verificationData['license'],
-                    $verificationData['license_name'],
-                    $verificationData['license_mime'],
-                    null,
-                    true
-                ),
-                'documents/licenses',
-                800,
-                null,
-                'public',
-                true
-            );
-
-            $selfiePath = $fileUploadService->uploadImage(
-                new \Illuminate\Http\UploadedFile(
-                    $verificationData['selfie'],
-                    $verificationData['selfie_name'],
-                    $verificationData['selfie_mime'],
-                    null,
-                    true
-                ),
-                'documents/selfies',
-                800,
-                null,
-                'public',
-                true
-            );
-
-            $addressProofPath = $fileUploadService->upload(
-                new \Illuminate\Http\UploadedFile(
-                    $verificationData['addressProof'],
-                    $verificationData['addressProof_name'],
-                    $verificationData['addressProof_mime'],
-                    null,
-                    true
-                ),
-                'documents/address-proofs',
-                'public',
-                false
-            );
-
-            // Save signature as image
-            $signaturePath = null;
-            if (!empty($verificationData['signature'])) {
-                $signatureData = $verificationData['signature'];
-                $signatureData = str_replace('data:image/png;base64,', '', $signatureData);
-                $signatureData = str_replace(' ', '+', $signatureData);
-                $signatureImage = base64_decode($signatureData);
-                
-                $signatureName = 'signature_' . time() . '.png';
-                $signaturePath = 'documents/signatures/' . $signatureName;
-                Storage::disk('public')->put($signaturePath, $signatureImage);
-            }
-
-            // Get the latest sort_order for this user
-            $latestSortOrder = UserDocuments::where('user_id', user()->id)
+            // 1. CREATE BILLING INFORMATION
+            Log::info('Creating billing information');
+            $latestBillingSortOrder = BillingInformation::where('user_id', user()->id)
                 ->max('sort_order') ?? 0;
 
-            // Create user documents record
+            $billingInfo = BillingInformation::create([
+                'user_id' => user()->id,
+                'sort_order' => $latestBillingSortOrder + 1,
+                'first_name' => $verificationData['firstName'],
+                'last_name' => $verificationData['lastName'],
+                'email' => $verificationData['email'],
+                'date_of_birth' => $verificationData['dob'],
+                'created_by' => user()->id,
+            ]);
+            Log::info('Billing info created', ['id' => $billingInfo->id]);
+
+            // 2. CREATE RESIDENTIAL ADDRESS
+            Log::info('Creating residential address');
+            $latestAddressSortOrder = Addresse::where('user_id', user()->id)
+                ->max('sort_order') ?? 0;
+
+            $residentialAddress = Addresse::create([
+                'user_id' => user()->id,
+                'sort_order' => $latestAddressSortOrder + 1,
+                'address_type' => Addresse::RESIDENTIAL,
+                'address' => $verificationData['address'],
+                'city' => $verificationData['city'],
+                'state' => $verificationData['state'],
+                'postal_code' => $verificationData['zip'],
+                'is_default' => false,
+                'created_by' => user()->id,
+            ]);
+            Log::info('Residential address created', ['id' => $residentialAddress->id]);
+
+            // 3. CREATE PARKING ADDRESS
+            Log::info('Creating parking address');
+            $parkingAddress = Addresse::create([
+                'user_id' => user()->id,
+                'sort_order' => $latestAddressSortOrder + 2,
+                'address_type' => Addresse::PARKING,
+                'address' => $verificationData['parkingAddress'],
+                'city' => $verificationData['parkingCity'],
+                'state' => $verificationData['parkingState'],
+                'postal_code' => $verificationData['parkingZip'],
+                'is_default' => false,
+                'created_by' => user()->id,
+            ]);
+            Log::info('Parking address created', ['id' => $parkingAddress->id]);
+
+            // 4. CREATE USER DOCUMENTS
+            Log::info('Creating user documents');
+            $latestDocSortOrder = UserDocuments::where('user_id', user()->id)
+                ->max('sort_order') ?? 0;
+
             $userDocument = UserDocuments::create([
                 'user_id' => user()->id,
-                'sort_order' => $latestSortOrder + 1,
-                'licence' => $licensePath,
-                'selfe_licence' => $selfiePath,
-                'address_proof' => $addressProofPath,
+                'sort_order' => $latestDocSortOrder + 1,
+                'licence' => $verificationData['licensePath'],
+                'selfe_licence' => $verificationData['selfiePath'],
+                'address_proof' => $verificationData['addressProofPath'],
                 'issue_date' => $verificationData['licenseIssueDate'] ?: null,
                 'expiry_date' => $verificationData['licenseExpiryDate'] ?: null,
                 'verification_status' => UserDocuments::VERIFICATION_PENDING,
                 'verified_at' => null,
                 'created_by' => user()->id,
             ]);
+            Log::info('User document created', ['id' => $userDocument->id]);
 
-            // Create booking record
-            $booking = BookingModel::create([
-                'user_id' => user()->id,
-                'vehicle_id' => $bookingData['vehicle_id'],
-
-                // Dates and times
-                'pickup_date' => $bookingData['pickup_date'],
-                'return_date' => $bookingData['return_date'],
-                'pickup_time' => $bookingData['pickup_time'],
-                'return_time' => $bookingData['return_time'],
-                'booking_date' => now(),
-
-                // Billing information
-                'first_name' => $verificationData['firstName'],
-                'last_name' => $verificationData['lastName'],
-                'email' => $verificationData['email'],
-                'date_of_birth' => $verificationData['dob'],
-
-                // Residential address
-                'residential_address' => $verificationData['address'],
-                'residential_city' => $verificationData['city'],
-                'residential_state' => $verificationData['state'],
-                'residential_zip' => $verificationData['zip'],
-
-                // Parking address
-                'parking_address' => $verificationData['parkingAddress'],
-                'parking_city' => $verificationData['parkingCity'],
-                'parking_state' => $verificationData['parkingState'],
-                'parking_zip' => $verificationData['parkingZip'],
-                'same_as_residential' => $verificationData['sameAsResidential'],
-
-                // Terms and preferences
-                'terms_accepted' => $verificationData['termsAccepted'],
-                'sms_alerts' => $verificationData['smsAlerts'],
-                'signature' => $signaturePath,
-
-                // Pricing based on rental range
-                'rental_rate' => $bookingData['rental_range'] === 'weekly'
-                    ? $this->vehicle->weekly_rate
-                    : $this->vehicle->monthly_rate,
-                'security_deposit' => $bookingData['rental_range'] === 'weekly'
-                    ? $this->vehicle->security_deposit_weekly
-                    : $this->vehicle->security_deposit_monthly,
-                'subtotal' => $bookingData['rental_range'] === 'weekly'
-                    ? $this->vehicle->weekly_rate
-                    : $this->vehicle->monthly_rate,
-                'total_amount' => ($bookingData['rental_range'] === 'weekly'
-                    ? $this->vehicle->weekly_rate + $this->vehicle->security_deposit_weekly
-                    : $this->vehicle->monthly_rate + $this->vehicle->security_deposit_monthly),
-
-                // Rental information
-                'rental_range' => $bookingData['rental_range'],
-
-                // Link to user documents
-                'user_document_id' => $userDocument->id,
-
-                // Status - NOW CONFIRMED after payment
-                'booking_status' => BookingModel::BOOKING_STATUS_PENDING,
-                'payment_status' => 'completed',
-
-                // Created by
-                'created_by' => user()->id,
+            // 5. PARSE DATES
+            Log::info('Parsing dates');
+            $pickupDateTime = Carbon::parse($bookingData['pickup_date'] . ' ' . $bookingData['pickup_time']);
+            $returnDateTime = Carbon::parse($bookingData['return_date'] . ' ' . $bookingData['return_time']);
+            Log::info('Dates parsed', [
+                'pickup' => $pickupDateTime->toDateTimeString(),
+                'return' => $returnDateTime->toDateTimeString(),
             ]);
 
+            // Generate reference
+            $bookingReference = 'BK-' . strtoupper(uniqid());
+            Log::info('Booking reference generated', ['reference' => $bookingReference]);
+
+            // Calculate amounts
+            $isWeekly = $bookingData['rental_range'] === 'weekly';
+            $rentalRate = $isWeekly ? floatval($bookingData['weekly_rate']) : floatval($bookingData['monthly_rate']);
+            $securityDeposit = $isWeekly ? floatval($bookingData['security_deposit_weekly']) : floatval($bookingData['security_deposit_monthly']);
+            $subtotal = $rentalRate;
+            $totalAmount = $subtotal + $securityDeposit;
+
+            Log::info('Amounts calculated', [
+                'rental_rate' => $rentalRate,
+                'security_deposit' => $securityDeposit,
+                'total' => $totalAmount,
+            ]);
+
+            // 6. CREATE BOOKING
+            Log::info('Creating booking record');
+            $latestBookingSortOrder = BookingModel::where('user_id', user()->id)
+                ->max('sort_order') ?? 0;
+
+            $bookingDataArray = [
+                'user_id' => user()->id,
+                'vehicle_id' => $bookingData['vehicle_id'],
+                'sort_order' => $latestBookingSortOrder + 1,
+                'booking_reference' => $bookingReference,
+                'pickup_date' => $pickupDateTime,
+                'return_date' => $returnDateTime,
+                'booking_date' => now(),
+                'pickup_location_id' => $bookingData['pickup_location_id'],
+                'return_location' => null,
+                'subtotal' => $subtotal,
+                'delivery_fee' => 0.00,
+                'service_fee' => 0.00,
+                'tax_amount' => 0.00,
+                'security_deposit' => $securityDeposit,
+                'total_amount' => $totalAmount,
+                'booking_status' => BookingModel::BOOKING_STATUS_PENDING,
+                'special_requests' => null,
+                'reason' => null,
+                'audit_by' => null,
+                'created_by' => user()->id,
+            ];
+
+            Log::info('Booking data prepared', $bookingDataArray);
+
+            $booking = BookingModel::create($bookingDataArray);
+
+            if (!$booking || !$booking->id) {
+                throw new \Exception('Booking creation failed - no ID returned');
+            }
+
+            Log::info('Booking created successfully', ['booking_id' => $booking->id]);
+
+            // 7. CREATE TIMELINE
+            Log::info('Creating booking timeline');
+            $latestTimelineSortOrder = BookingStatusTimeline::where('booking_id', $booking->id)
+                ->max('sort_order') ?? 0;
+
+            BookingStatusTimeline::create([
+                'booking_id' => $booking->id,
+                'sort_order' => $latestTimelineSortOrder + 1,
+                'booking_status' => BookingModel::BOOKING_STATUS_PENDING,
+                'created_by' => user()->id,
+            ]);
+            Log::info('Timeline created');
+
+            // 8. CREATE BOOKING RELATION
+            Log::info('Creating booking relation');
+            BookingRelation::create([
+                'booking_id' => $booking->id,
+                'billing_information_id' => $billingInfo->id,
+                'residential_address_id' => $residentialAddress->id,
+                'parking_address_id' => $parkingAddress->id,
+                'user_document_id' => $userDocument->id,
+                'signature_path' => $verificationData['signaturePath'],
+                'terms_accepted' => $verificationData['termsAccepted'],
+                'sms_alerts' => $verificationData['smsAlerts'],
+                'terms_accepted_at' => now(),
+                'same_as_residential' => $verificationData['sameAsResidential'],
+                'rental_range' => $bookingData['rental_range'],
+            ]);
+            Log::info('Booking relation created');
+
             DB::commit();
+            Log::info('Transaction committed');
 
-            // Clear session data
+            // Clear session
             session()->forget(['temp_verification_data', 'temp_booking_data']);
+            Log::info('Session cleared');
 
-            // Store final booking ID
-            session(['current_booking_id' => $booking->id]);
+            // Store booking reference
+            session([
+                'current_booking_id' => $booking->id,
+                'booking_reference' => $bookingReference,
+            ]);
+            Log::info('Booking reference stored in session');
 
-            session()->flash('success', 'Booking completed successfully!');
+            session()->flash('success', 'Booking completed successfully! Reference: ' . $bookingReference);
+            Log::info('Success message flashed');
 
-            // Redirect to confirmation page
-            return redirect()->route('booking-confirmation', $booking->id);
+            Log::info('========== BOOKING COMPLETED SUCCESSFULLY ==========');
+
+            // Redirect
+            return $this->redirect(route('booking-confirmation', ['id' => $booking->id]), navigate: true);
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+
+            Log::error('DATABASE ERROR', [
+                'message' => $e->getMessage(),
+                'sql' => $e->getSql(),
+                'bindings' => $e->getBindings(),
+            ]);
+
+            session()->flash('error', 'Database error: ' . $e->getMessage());
+            return;
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // Clean up uploaded files if any error occurs
-            if (isset($licensePath)) {
-                $fileUploadService->delete($licensePath);
-            }
-            if (isset($selfiePath)) {
-                $fileUploadService->delete($selfiePath);
-            }
-            if (isset($addressProofPath)) {
-                $fileUploadService->delete($addressProofPath);
-            }
-            if (isset($signaturePath)) {
-                Storage::disk('public')->delete($signaturePath);
-            }
+            Log::error('GENERAL ERROR', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-            Log::error('Booking completion error: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
-            session()->flash('error', $e->getMessage());
+            session()->flash('error', 'Error: ' . $e->getMessage());
+            return;
         }
     }
 
@@ -534,12 +642,19 @@ class Booking extends Component
     public function nextStep()
     {
         try {
-            // Validate date fields
+            if (!user()) {
+                return redirect()->route('login');
+            }
+
+            // ✅ Validate date fields
             $this->validate([
+                'pickupDate' => 'required|date|after_or_equal:today',
+                'returnDate' => 'required|date|after:pickupDate',
                 'pickupTime' => 'required|string',
                 'returnTime' => 'required|string',
             ]);
-            // Move to verification step
+
+            // ✅ Move to next step if not beyond limit
             if ($this->currentStep < 4) {
                 $this->currentStep++;
             }
@@ -547,6 +662,7 @@ class Booking extends Component
             throw $e;
         }
     }
+
 
     /**
      * Move to previous step
