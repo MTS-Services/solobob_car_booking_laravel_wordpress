@@ -27,7 +27,7 @@ class BookingSeeder extends Seeder
             return;
         }
 
-        foreach (range(1, 4) as $i) {
+        foreach (range(1, 20) as $i) {
             $user = $users->random();
             $vehicle = $vehicles->random();
             
