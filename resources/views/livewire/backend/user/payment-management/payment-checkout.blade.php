@@ -188,7 +188,7 @@
                     {{-- Price Breakdown --}}
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between text-gray-100">
-                            <span class="text-gray-100">Rental Subtotal (x{{ $booking->rental_duration_days ?? 0 }} days)</span>
+                            <span class="text-gray-100">Rental Subtotal (x{{ number_format($booking->rental_duration_days ?? 0,2 )}} days)</span>
                             <span
                                 class="font-medium text-lg text-gray-50">${{ number_format($booking->subtotal ?? 0, 2) }}</span>
                         </div>
