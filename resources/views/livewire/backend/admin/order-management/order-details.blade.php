@@ -6,18 +6,42 @@
                 <h2 class="text-xl font-bold text-text-primary">{{ __('Order Details') }}</h2>
                 <p class="text-sm text-zinc-500 mt-1">Reference: {{ $detailsOrder->booking_reference }}</p>
             </div>
-            <div class="flex gap-2">
-                @if ($detailsOrder->booking_status == 0)
-                    <button wire:click="acceptOrder" 
-                        class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors">
-                        Accept Order
-                    </button>
-                    <button wire:click="openRejectModal" 
-                        class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors">
-                        Reject Order
-                    </button>
-                @endif
-            </div>
+           <div class="flex gap-2">
+    @if ($detailsOrder->booking_status == 0)
+        {{-- Accept Order Button --}}
+        <button wire:click="acceptOrder" 
+                wire:loading.attr="disabled" 
+                wire:target="acceptOrder"
+                class="relative px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors flex items-center justify-center gap-2">
+            
+            {{-- Loader --}}
+            <svg wire:loading wire:target="acceptOrder" class="animate-spin h-5 w-5 text-white" 
+                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+
+            <span wire:loading.remove wire:target="acceptOrder">Accept Order</span>
+        </button>
+
+        {{-- Reject Order Button --}}
+        <button wire:click="openRejectModal" 
+                wire:loading.attr="disabled" 
+                wire:target="openRejectModal"
+                class="relative px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors flex items-center justify-center gap-2">
+            
+            {{-- Loader --}}
+            <svg wire:loading wire:target="openRejectModal" class="animate-spin h-5 w-5 text-white" 
+                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+
+            <span wire:loading.remove wire:target="openRejectModal">Reject Order</span>
+        </button>
+    @endif
+</div>
+
         </div>
 
         {{-- Flash Messages --}}

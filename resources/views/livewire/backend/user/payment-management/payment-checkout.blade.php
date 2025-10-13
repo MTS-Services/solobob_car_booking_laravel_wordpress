@@ -112,7 +112,7 @@
                         </div>
                         <div class="bg-zinc-700/50 rounded-lg p-4 border border-zinc-600">
                             <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Duration</p>
-                            <p class="text-zinc-100 font-medium text-lg">{{ $booking->rental_duration_days ?? 0 }} Days
+                            <p class="text-zinc-100 font-medium text-lg">{{ number_format($booking->rental_duration_days ?? 0, 2) }} Days
                             </p>
                         </div>
                         <div class="bg-zinc-700/50 rounded-lg p-4 border border-zinc-600">
