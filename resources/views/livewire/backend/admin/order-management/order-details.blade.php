@@ -92,7 +92,7 @@
 
                         <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                             <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Status</p>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $detailsOrder->booking_status_color }}">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium badge badge-soft {{ $detailsOrder->booking_status_color }}">
                                 {{ $detailsOrder->booking_status_label }}
                             </span>
                         </div>
@@ -110,6 +110,10 @@
                         <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                             <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Rental Duration</p>
                             <p class="text-zinc-100 font-medium">{{ $detailsOrder->rental_duration_days ?? 0 }} Days</p>
+                        </div>
+                        <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                            <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Booking Reference</p>
+                            <p class="text-zinc-100 font-medium">{{ $detailsOrder->booking_reference ?? 'N/A' }}</p>
                         </div>
 
                         <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
