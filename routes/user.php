@@ -5,6 +5,7 @@ use App\Livewire\Backend\User\Deposit;
 use App\Livewire\Backend\User\DepositDetail;
 use App\Livewire\Backend\User\MyBookings;
 use App\Livewire\Backend\User\MyBookingsDetails;
+use App\Livewire\Backend\User\PaymentManagement\PaymentCheckout;
 use App\Livewire\Backend\User\PaymentManagement\PaymentComponent;
 use App\Livewire\Backend\User\PaymentManagement\PaymentDetailsComponent;
 use App\Livewire\Backend\User\Profile;
@@ -30,7 +31,8 @@ Route::middleware(['auth', 'verified'])->name('user.')->prefix('user')->group(fu
         Route::get('/list', PaymentComponent::class)->name('payments');
         Route::get('/details/{id}', PaymentDetailsComponent::class)->name('payment-details');
     });
-
+  Route::get('/booking/{reference}/checkout', PaymentCheckout::class)
+    ->name('booking.checkout');
 
 
 });

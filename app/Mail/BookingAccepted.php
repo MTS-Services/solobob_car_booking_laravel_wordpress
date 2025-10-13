@@ -23,7 +23,7 @@ class BookingAccepted extends Mailable
     {
         $this->booking = $booking;
         // Create URL with booking reference
-        $this->bookingUrl = url('/booking/' . $booking->booking_reference);
+          $this->bookingUrl = route('user.booking.checkout', ['reference' => $booking->booking_reference]);
     }
 
     /**
