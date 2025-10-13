@@ -14,7 +14,7 @@
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                       
+
                         <button
                             class="bg-white text-black px-8 py-3 rounded-full font-semibold border border-zinc-500 hover:bg-gray-50 transition w-full sm:w-auto">
                             SEE PRICING & AVAILABILITY
@@ -27,54 +27,59 @@
                 <div class="w-full max-w-xl py-8 flex h-[100%] justify-center items-center flex-col">
                     <h2 class="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 text-center">GET IN TOUCH</h2>
 
-                 <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
+                    <form class="space-y-4 w-[100%]" wire:submit="contactSubmit">
                         @if (session()->has('submit_message'))
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <p class="text-primary"> {{ session('submit_message') }} </p>
                             </div>
                         @endif
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           <div>
-                             <input type="text" placeholder="First Name" wire:model="form.first_name"
-                                class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
-                              @if ($errors->has('form.first_name'))
-                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.first_name') }}</small>
+                            <div>
+                                <input type="text" placeholder="First Name" wire:model="form.first_name"
+                                    class="w-full px-3 py-2 border @if (!$errors->has('form.first_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-white focus:outline-none focus:border-zinc-600">
+                                @if ($errors->has('form.first_name'))
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                        {{ $errors->first('form.first_name') }}</small>
                                 @endif
-                           </div>
-                                <div>
-                                    <input type="text" placeholder="Last Name" wire:model="form.last_name"
-                                class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
-                                @if ($errors->has('form.last_name'))
-                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.last_name') }}</small>
-                                @endif
-                                </div>
                             </div>
+                            <div>
+                                <input type="text" placeholder="Last Name" wire:model="form.last_name"
+                                    class="w-full px-3 py-2 border @if (!$errors->has('form.last_name')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  border-gray-300 rounded bg-white text-gray-700 focus:outline-none focus:border-zinc-600">
+                                @if ($errors->has('form.last_name'))
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                        {{ $errors->first('form.last_name') }}</small>
+                                @endif
+                            </div>
+                        </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <input type="email" placeholder="Email" wire:model="form.email"
-                                class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
-                                 @if ($errors->has('form.email'))
-                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.last_name') }}</small>
+                                    class="w-full px-3 py-2 border  @if (!$errors->has('form.email')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  rounded bg-white  focus:outline-none focus:border-zinc-600">
+                                @if ($errors->has('form.email'))
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                        {{ $errors->first('form.last_name') }}</small>
                                 @endif
                             </div>
                             <div>
-                                 <input type="tel" placeholder="Phone Number" wire:model="form.phone"
-                                class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
+                                <input type="tel" placeholder="Phone Number" wire:model="form.phone"
+                                    class="w-full px-3 py-2 border @if (!$errors->has('form.phone')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif  bg-white focus:outline-none focus:border-zinc-600">
                                 @if ($errors->has('form.phone'))
-                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.phone') }}</small>
-                                    @endif
+                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                        {{ $errors->first('form.phone') }}</small>
+                                @endif
                             </div>
                         </div>
 
-                       <div>
-                         <textarea placeholder="Message" rows="4" wire:model="form.message"
-                            class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
-                                @if ($errors->has('form.message'))
-                                    <small class="p-0 m-0 text-red-500 font-[500] text-[12px]"> {{ $errors->first('form.message') }}</small>
-                                    @endif
-                       </div>
-                            <button type="submit"
+                        <div>
+                            <textarea placeholder="Message" rows="4" wire:model="form.message"
+                                class="w-full px-3 py-2 border bg-white @if (!$errors->has('form.message')) border-gray-300   text-gray-700 @else  border-red-500   text-red-500 @endif rounded bg-whitefocus:outline-none focus:border-zinc-600"></textarea>
+                            @if ($errors->has('form.message'))
+                                <small class="p-0 m-0 text-red-500 font-[500] text-[12px]">
+                                    {{ $errors->first('form.message') }}</small>
+                            @endif
+                        </div>
+                        <button type="submit"
                             class="w-full bg-zinc-500 text-white py-3 rounded font-semibold hover:bg-yellow-800 transition">
                             SUBMIT
                         </button>
@@ -107,7 +112,8 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
+                <div
+                    class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
                             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
@@ -116,11 +122,12 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold text-black mb-4">Gig Drivers</h3>
-                       
+
                     </div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
+                <div
+                    class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
                             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
@@ -129,11 +136,12 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold text-black mb-4">Local Businesses</h3>
-                    
+
                     </div>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
+                <div
+                    class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow mx-10 lg:mx-0">
                     <div class="flex flex-col items-center">
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4">
                             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" stroke="white">
@@ -142,7 +150,7 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold text-black mb-4">Short-Term Personal Use</h3>
-                     
+
                     </div>
                 </div>
             </div>

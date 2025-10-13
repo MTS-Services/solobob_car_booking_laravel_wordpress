@@ -254,22 +254,22 @@
                     @if ($detailsOrder->billingInformation)
                         @php $billing = $detailsOrder->billingInformation; @endphp
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">First Name</p>
                                 <p class="text-zinc-100 font-medium">{{ $billing->first_name }}</p>
                             </div>
 
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Last Name</p>
                                 <p class="text-zinc-100 font-medium">{{ $billing->last_name }}</p>
                             </div>
 
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Email</p>
                                 <p class="text-zinc-100 font-medium">{{ $billing->email }}</p>
                             </div>
 
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                 <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Date of Birth</p>
                                 <p class="text-zinc-100 font-medium">
                                     {{ \Carbon\Carbon::parse($billing->date_of_birth)->format('M d, Y') }}</p>
@@ -287,9 +287,9 @@
                         {{-- Residential Address --}}
                         @if ($detailsOrder->residentialAddress)
                             @php $residential = $detailsOrder->residentialAddress; @endphp
-                            <div class="bg-zinc-800/50 rounded-lg p-6 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-6 border border-zinc-700">
                                 <h4 class="text-lg font-semibold text-zinc-100 mb-4 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 mr-2 text-emerald-400" fill="none" stroke="white"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
@@ -324,9 +324,9 @@
                         {{-- Parking Address --}}
                         @if ($detailsOrder->parkingAddress)
                             @php $parking = $detailsOrder->parkingAddress; @endphp
-                            <div class="bg-zinc-800/50 rounded-lg p-6 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-6 border border-zinc-700">
                                 <h4 class="text-lg font-semibold text-zinc-100 mb-4 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="white"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
@@ -376,7 +376,7 @@
                         @php $doc = $detailsOrder->userDocument; @endphp
                         <div class="space-y-6">
                             {{-- Document Status --}}
-                            <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                            <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Verification
@@ -425,7 +425,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {{-- License --}}
                                 @if ($doc->licence)
-                                    <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                         <p class="text-xs text-zinc-400 uppercase tracking-wider mb-3">Driver's License
                                         </p>
                                         <div class="aspect-video bg-zinc-900 rounded-lg overflow-hidden mb-3">
@@ -434,7 +434,7 @@
                                         </div>
                                         <a href="{{ Storage::url($doc->licence) }}" target="_blank"
                                             class="text-emerald-400 hover:text-emerald-300 text-sm flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="white"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -449,7 +449,7 @@
 
                                 {{-- Selfie with License --}}
                                 @if ($doc->selfe_licence)
-                                    <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                         <p class="text-xs text-zinc-400 uppercase tracking-wider mb-3">Selfie with
                                             License</p>
                                         <div class="aspect-video bg-zinc-900 rounded-lg overflow-hidden mb-3">
@@ -458,7 +458,7 @@
                                         </div>
                                         <a href="{{ Storage::url($doc->selfe_licence) }}" target="_blank"
                                             class="text-emerald-400 hover:text-emerald-300 text-sm flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="white"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -473,7 +473,7 @@
 
                                 {{-- Address Proof --}}
                                 @if ($doc->address_proof)
-                                    <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                    <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                         <p class="text-xs text-zinc-400 uppercase tracking-wider mb-3">Address Proof
                                         </p>
                                         <div class="aspect-video bg-zinc-900 rounded-lg overflow-hidden mb-3">
@@ -493,7 +493,7 @@
                                         </div>
                                         <a href="{{ Storage::url($doc->address_proof) }}" target="_blank"
                                             class="text-emerald-400 hover:text-emerald-300 text-sm flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="white"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -507,7 +507,7 @@
 
                             {{-- Signature --}}
                             @if ($detailsOrder->relation?->signature_path)
-                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                     <p class="text-xs text-zinc-400 uppercase tracking-wider mb-3">Customer Signature
                                     </p>
                                     <div class="bg-white rounded-lg p-4 max-w-md">
@@ -515,8 +515,8 @@
                                             alt="Signature" class="w-full h-auto">
                                     </div>
                                     <div class="mt-3 flex items-center text-sm text-zinc-400">
-                                        <svg class="w-4 h-4 mr-2 text-emerald-400" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-4 h-4 mr-2 text-emerald-400" fill="none" stroke="white"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -528,10 +528,10 @@
 
                             {{-- SMS Alerts Preference --}}
                             @if ($detailsOrder->relation)
-                                <div class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
+                                <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                                     <div class="flex items-center">
                                         <svg class="w-5 h-5 mr-3 {{ $detailsOrder->relation->sms_alerts ? 'text-emerald-400' : 'text-zinc-500' }}"
-                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            fill="none" stroke="white" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z">
                                             </path>
