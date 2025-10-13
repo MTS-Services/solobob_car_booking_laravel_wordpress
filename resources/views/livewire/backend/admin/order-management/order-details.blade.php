@@ -7,7 +7,7 @@
                 <p class="text-sm text-zinc-500 mt-1">Reference: {{ $detailsOrder->booking_reference }}</p>
             </div>
             <div class="flex gap-2">
-                @if ($detailsOrder->booking_status == \App\Models\Booking::BOOKING_STATUS_PENDING)
+                @if ($detailsOrder->booking_status == 0)
                     <button wire:click="acceptOrder" 
                         class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors">
                         Accept Order
