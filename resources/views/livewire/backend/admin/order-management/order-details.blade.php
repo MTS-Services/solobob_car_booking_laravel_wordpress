@@ -348,11 +348,8 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <p class="text-xs text-zinc-400 uppercase tracking-wider mb-1">Verification Status</p>
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
-                                            {{ $doc->verification_status === \App\Models\UserDocuments::VERIFICATION_VERIFIED ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : '' }}
-                                            {{ $doc->verification_status === \App\Models\UserDocuments::VERIFICATION_PENDING ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : '' }}
-                                            {{ $doc->verification_status === \App\Models\UserDocuments::VERIFICATION_REJECTED ? 'bg-red-500/20 text-red-400 border border-red-500/30' : '' }}">
-                                            {{ ucfirst($doc->verification_status) }}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium badge badge-soft {{ $doc->verification_status_color }}">
+                                            {{ $doc->verification_status_label }}
                                         </span>
                                     </div>
                                     @if($doc->verified_at)
