@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified'])->name('user.')->prefix('user')->group(fu
         Route::get('/list', PaymentComponent::class)->name('payments');
         Route::get('/details/{id}', PaymentDetailsComponent::class)->name('payment-details');
     });
-  Route::get('/booking/{reference}/checkout', PaymentCheckout::class)
+  Route::get('/booking/checkout/{reference}', PaymentCheckout::class)
     ->name('booking.checkout');
 
 
