@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Booking;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
@@ -59,4 +60,5 @@ if (! function_exists('user')) {
         return Auth::user();
     }
 }
+
 
