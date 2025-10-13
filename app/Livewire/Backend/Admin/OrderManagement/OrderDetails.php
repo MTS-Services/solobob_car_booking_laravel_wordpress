@@ -3,9 +3,12 @@ namespace App\Livewire\Backend\Admin\OrderManagement;
 
 use App\Models\Booking;
 use App\Models\BookingStatusTimeline;
+use App\Mail\BookingAccepted;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 #[Layout(
     'app',
@@ -68,11 +71,35 @@ class OrderDetails extends Component
                 'created_by' => user()->id,
             ]);
 
+            // Send email to user
+            try {
+                Mail::to($order->user->email)->send(new BookingAccepted($order));
+                
+                Log::info('Booking accepted email sent', [
+                    'booking_id' => $order->id,
+                    'booking_reference' => $order->booking_reference,
+                    'user_email' => $order->user->email
+                ]);
+            } catch (\Exception $mailException) {
+                // Log the error but don't fail the transaction
+                Log::error('Failed to send booking accepted email', [
+                    'booking_id' => $order->id,
+                    'error' => $mailException->getMessage()
+                ]);
+                
+                // Still commit the transaction, just notify about email failure
+                session()->flash('warning', 'Order accepted successfully, but failed to send confirmation email.');
+            }
+
             DB::commit();
-            session()->flash('success', 'Order accepted successfully!');
+            session()->flash('success', 'Order accepted successfully! Confirmation email sent to customer.');
             $this->mount($this->detailsOrder->id);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Failed to accept order', [
+                'booking_id' => $this->detailsOrder->id,
+                'error' => $e->getMessage()
+            ]);
             session()->flash('error', 'Operation failed: ' . $e->getMessage());
         }
     }
